@@ -4,32 +4,42 @@ from ...ops.iou3d_nms import iou3d_nms_utils
 
 
 def class_agnostic_nms(box_scores, box_preds, nms_config, score_thresh=None):
-    # 1.首先根据置信度阈值过滤掉部分box
+    # 1.首先根据置信度阈值过滤掉部过滤掉大部分置信度低的box，加速后面的nms操作
     src_box_scores = box_scores
     if score_thresh is not None:
+        # 得到类别预测概率大于score_thresh的mask
         scores_mask = (box_scores >= score_thresh)
+        # 根据mask得到哪些anchor的类别预测大于score_thresh-->anchor类别
         box_scores = box_scores[scores_mask]
+        # 根据mask得到哪些anchor的类别预测大于score_thresh-->anchor回归的7个参数
         box_preds = box_preds[scores_mask]
 
+    # 初始化空列表，用来存放经过nms后保留下来的anchor
     selected = []
+    # 如果有anchor的类别预测大于score_thresh的话才进行nms，否则返回空
     if box_scores.shape[0] > 0:
-        # 如果剩余的box数量大于0.则选出分数前k个box
+        # 这里只保留最大的K个anchor置信度来进行nms操作，
+        # k取min(nms_config.NMS_PRE_MAXSIZE, box_scores.shape[0])的最小值
         box_scores_nms, indices = torch.topk(box_scores, k=min(nms_config.NMS_PRE_MAXSIZE, box_scores.shape[0]))
-        # 调用iou3d_nms_utils的nms_gpu函数进行nms，返回的是被保留下的box的索引，selected_scores = None
+
+        # box_scores_nms只是得到了类别的更新结果；
         # 此处更新box的预测结果 根据tokK重新选取并从大到小排序的结果 更新boxes的预测
         boxes_for_nms = box_preds[indices]
+        # 调用iou3d_nms_utils的nms_gpu函数进行nms，
+        # 返回的是被保留下的box的索引，selected_scores = None
+        # 根据返回索引找出box索引值
         keep_idx, selected_scores = getattr(iou3d_nms_utils, nms_config.NMS_TYPE)(
             boxes_for_nms[:, 0:7], box_scores_nms, nms_config.NMS_THRESH, **nms_config
         )
-        # 根据返回索引找出box索引值
         selected = indices[keep_idx[:nms_config.NMS_POST_MAXSIZE]]
 
     if score_thresh is not None:
         # 如果存在置信度阈值，scores_mask是box_scores在src_box_scores中的索引，即原始索引
         original_idxs = scores_mask.nonzero().view(-1)
-        # selected表示的box_scores的选择索引，经过这次索引，selected表示的是src_box_scores被选择的索
+        # selected表示的box_scores的选择索引，经过这次索引，
+        # selected表示的是src_box_scores被选择的box索引
         selected = original_idxs[selected]
-        # 总结：双重索引，值得学习
+
     return selected, src_box_scores[selected]
 
 

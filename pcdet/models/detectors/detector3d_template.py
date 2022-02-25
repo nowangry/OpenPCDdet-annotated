@@ -22,7 +22,7 @@ class Detector3DTemplate(nn.Module):
 
         self.module_topology = [
             'vfe', 'backbone_3d', 'map_to_bev_module', 'pfe',
-            'backbone_2d', 'dense_head',  'point_head', 'roi_head'
+            'backbone_2d', 'dense_head', 'point_head', 'roi_head'
         ]
 
     @property
@@ -192,28 +192,37 @@ class Detector3DTemplate(nn.Module):
         Returns:
 
         """
+        # post_process_cfg后处理参数，包含了nms类型、阈值、使用的设备、nms后最多保留的结果和输出的置信度等设置
         post_process_cfg = self.model_cfg.POST_PROCESSING
+        # 推理默认为1
         batch_size = batch_dict['batch_size']
+        # 保留计算recall的字典
         recall_dict = {}
+        # 预测结果存放在此
         pred_dicts = []
+        # 逐帧进行处理
         for index in range(batch_size):
             if batch_dict.get('batch_index', None) is not None:
                 assert batch_dict['batch_box_preds'].shape.__len__() == 2
                 batch_mask = (batch_dict['batch_index'] == index)
             else:
                 assert batch_dict['batch_box_preds'].shape.__len__() == 3
+                # 得到当前处理的是第几帧
                 batch_mask = index
-
+            # box_preds shape (所有anchor的数量, 7)
             box_preds = batch_dict['batch_box_preds'][batch_mask]
+            # 复制后，用于recall计算
             src_box_preds = box_preds
 
             if not isinstance(batch_dict['batch_cls_preds'], list):
+                # (所有anchor的数量, 3)
                 cls_preds = batch_dict['batch_cls_preds'][batch_mask]
-
+                # 同上
                 src_cls_preds = cls_preds
                 assert cls_preds.shape[1] in [1, self.num_class]
 
                 if not batch_dict['cls_preds_normalized']:
+                    # 损失函数计算使用的BCE，所以这里使用sigmoid激活函数得到类别概率
                     cls_preds = torch.sigmoid(cls_preds)
             else:
                 cls_preds = [x[batch_mask] for x in batch_dict['batch_cls_preds']]
@@ -221,6 +230,7 @@ class Detector3DTemplate(nn.Module):
                 if not batch_dict['cls_preds_normalized']:
                     cls_preds = [torch.sigmoid(x) for x in cls_preds]
 
+            # 是否使用多类别的NMS计算，否。
             if post_process_cfg.NMS_CONFIG.MULTI_CLASSES_NMS:
                 if not isinstance(cls_preds, list):
                     cls_preds = [cls_preds]
@@ -248,32 +258,43 @@ class Detector3DTemplate(nn.Module):
                 final_labels = torch.cat(pred_labels, dim=0)
                 final_boxes = torch.cat(pred_boxes, dim=0)
             else:
+                # 得到类别预测的最大概率，和对应的索引值
                 cls_preds, label_preds = torch.max(cls_preds, dim=-1)
                 if batch_dict.get('has_class_labels', False):
                     label_key = 'roi_labels' if 'roi_labels' in batch_dict else 'batch_pred_labels'
                     label_preds = batch_dict[label_key][index]
                 else:
+                    # 类别预测值加1
                     label_preds = label_preds + 1
+
+                # 无类别NMS操作
+                # selected : 返回了被留下来的anchor索引
+                # selected_scores : 返回了被留下来的anchor的置信度分数
                 selected, selected_scores = model_nms_utils.class_agnostic_nms(
+                    # 每个anchor的类别预测概率和anchor回归参数
                     box_scores=cls_preds, box_preds=box_preds,
                     nms_config=post_process_cfg.NMS_CONFIG,
                     score_thresh=post_process_cfg.SCORE_THRESH
                 )
-
+                # 无此项
                 if post_process_cfg.OUTPUT_RAW_SCORE:
                     max_cls_preds, _ = torch.max(src_cls_preds, dim=-1)
                     selected_scores = max_cls_preds[selected]
 
+                # 得到最终类别预测的分数
                 final_scores = selected_scores
+                # 根据selected得到最终类别预测的结果
                 final_labels = label_preds[selected]
+                # 根据selected得到最终box回归的结果
                 final_boxes = box_preds[selected]
 
+            # 如果没有GT的标签在batch_dict中，就不会计算recall值
             recall_dict = self.generate_recall_record(
                 box_preds=final_boxes if 'rois' not in batch_dict else src_box_preds,
                 recall_dict=recall_dict, batch_index=index, data_dict=batch_dict,
                 thresh_list=post_process_cfg.RECALL_THRESH_LIST
             )
-
+            # 生成最终预测的结果字典
             record_dict = {
                 'pred_boxes': final_boxes,
                 'pred_scores': final_scores,

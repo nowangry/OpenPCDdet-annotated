@@ -58,20 +58,21 @@ class AnchorHeadSingle(AnchorHeadTemplate):
         # 从字典中取出经过backbone处理过的信息
         # spatial_features_2d 维度 （batch_size, 384, 248, 216）
         spatial_features_2d = data_dict['spatial_features_2d']
-        # 每个坐标点上面6个先验框的类别预测 --> (batch_size, 18, 200, 176)
+        # 每个坐标点上面6个先验框的类别预测 --> (batch_size, 18, 248, 216)
         cls_preds = self.conv_cls(spatial_features_2d)
-        # 每个坐标点上面6个先验框的参数预测 --> (batch_size, 42, 200, 176)  其中每个先验框需要预测7个参数，分别是（x, y, z, w, l, h, θ）
+        # 每个坐标点上面6个先验框的参数预测 --> (batch_size, 42, 248, 216)
+        # 其中每个先验框需要预测7个参数，分别是（x, y, z, w, l, h, θ）
         box_preds = self.conv_box(spatial_features_2d)
-        # 维度调整，将类别放置在最后一维度   [N, H, W, C] --> (batch_size, 200, 176, 18)
+        # 维度调整，将类别放置在最后一维度   [N, H, W, C] --> (batch_size, 248, 216, 18)
         cls_preds = cls_preds.permute(0, 2, 3, 1).contiguous()
-        # 维度调整，将先验框调整参数放置在最后一维度   [N, H, W, C] --> (batch_size ,200, 176, 42)
+        # 维度调整，将先验框调整参数放置在最后一维度   [N, H, W, C] --> (batch_size ,248, 216, 42)
         box_preds = box_preds.permute(0, 2, 3, 1).contiguous()
         # 将类别和先验框调整预测结果放入前向传播字典中
         self.forward_ret_dict['cls_preds'] = cls_preds
         self.forward_ret_dict['box_preds'] = box_preds
         # 进行方向分类预测
         if self.conv_dir_cls is not None:
-            # # 每个先验框都要预测为两个方向中的其中一个方向 --> (batch_size, 12, 200, 176)
+            # # 每个先验框都要预测为两个方向中的其中一个方向 --> (batch_size, 12, 248, 216)
             dir_cls_preds = self.conv_dir_cls(spatial_features_2d)
             # 将类别和先验框方向预测结果放到最后一个维度中   [N, H, W, C] --> (batch_size, 248, 216, 12)
             dir_cls_preds = dir_cls_preds.permute(0, 2, 3, 1).contiguous()

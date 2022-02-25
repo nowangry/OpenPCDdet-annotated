@@ -91,6 +91,7 @@ def remove_points_in_boxes3d(points, boxes3d):
 
     return points.numpy() if is_numpy else points
 
+
 # 将相机坐标系下GT的box数据转换的点云坐标系
 def boxes3d_kitti_camera_to_lidar(boxes3d_camera, calib):
     """
@@ -106,9 +107,16 @@ def boxes3d_kitti_camera_to_lidar(boxes3d_camera, calib):
     xyz_camera, r = boxes3d_camera_copy[:, 0:3], boxes3d_camera_copy[:, 6:7]
     l, h, w = boxes3d_camera_copy[:, 3:4], boxes3d_camera_copy[:, 4:5], boxes3d_camera_copy[:, 5:6]
     # rect_to_lidar means rectified to lidar
-    # 由于xyz参数是基于2号相机坐标系下获得的，因此需要转换到点云坐标系下
+    # 由于xyz是在2号相机坐标系下，因此需要转换到点云坐标系下
     xyz_lidar = calib.rect_to_lidar(xyz_camera)
 
+    """
+    在相机坐标系下，以x向右，z向前，y向下，物体的朝向以顺时针为正，逆时针为负
+    
+    在点云坐标系下，以x向前，y向右，z向上，以x轴到y轴即逆时针为正，顺时针为负
+    
+    相机的roy_y转换到雷达中的yaw角关系则是 : -(r_y + pi/2)
+    """
     new_r = -(r + np.pi / 2)
     # 将xyz中的z轴坐标由物体标注框的底部移动到标注框的中心点
     xyz_lidar[:, 2] += h[:, 0] / 2

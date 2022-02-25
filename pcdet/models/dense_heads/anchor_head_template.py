@@ -201,9 +201,9 @@ class AnchorHeadTemplate(nn.Module):
         rad_pred_encoding = torch.sin(boxes1[..., dim:dim + 1]) * torch.cos(boxes2[..., dim:dim + 1])
         # (batch_size, 321408, 1)
         rad_tg_encoding = torch.cos(boxes1[..., dim:dim + 1]) * torch.sin(boxes2[..., dim:dim + 1])
-        # (batch_size, 321408, 7) 旋转角在前
+        # (batch_size, 321408, 7) 将编码后的结果放回
         boxes1 = torch.cat([boxes1[..., :dim], rad_pred_encoding, boxes1[..., dim + 1:]], dim=-1)
-        # (batch_size, 321408, 7) 旋转角在前
+        # (batch_size, 321408, 7) 将编码后的结果放回
         boxes2 = torch.cat([boxes2[..., :dim], rad_tg_encoding, boxes2[..., dim + 1:]], dim=-1)
         return boxes1, boxes2
 
@@ -212,9 +212,24 @@ class AnchorHeadTemplate(nn.Module):
         batch_size = reg_targets.shape[0]
         # (batch_size, 321408, 7)
         anchors = anchors.view(batch_size, -1, anchors.shape[-1])
-        # (batch_size, 321408)角度是直接相加的关系，在-pi到pi之间
+        # (batch_size, 321408)在-pi到pi之间
+        # 由于reg_targets[..., 6]是经过编码的旋转角度，如果要回到原始角度需要重新加回anchor的角度就可以
         rot_gt = reg_targets[..., 6] + anchors[..., 6]
-        # (batch_size, 321408)将角度限制在0到2*pi之间
+        """
+        offset_rot shape : (batch_size, 321408)
+        rot_gt - dir_offset  由于在openpcdet中x向前，y向左，z向上，
+        
+        减去dir_offset(45度)的原因可以参考这个issue:
+        https://github.com/open-mmlab/OpenPCDet/issues/818
+        说的呢就是因为大部分目标都集中在0度和180度，270度和90度，
+        这样就会导致网络在一些物体的预测上面不停的摇摆。所以为了解决这个问题，
+        将方向分类的角度判断减去45度再进行判断，
+        这里减掉45度之后，在预测推理的时候，同样预测的角度解码之后
+        也要减去45度再进行之后测nms等操作
+        
+        common_utils.limit_period:
+        将角度限制在0到2*pi之间 原数据的角度在-pi到pi之间
+        """
         offset_rot = common_utils.limit_period(rot_gt - dir_offset, 0, 2 * np.pi)
         # (batch_size, 321408) 取值为0和1，num_bins=2
         dir_cls_targets = torch.floor(offset_rot / (2 * np.pi / num_bins)).long()
@@ -237,7 +252,7 @@ class AnchorHeadTemplate(nn.Module):
         box_dir_cls_preds = self.forward_ret_dict.get('dir_cls_preds', None)
         # (batch_size, 321408, 7) 每个anchor和GT编码的结果
         box_reg_targets = self.forward_ret_dict['box_reg_targets']
-        # (batch_size, 321408)
+        # (batch_size, 321408) 得到每个box的类别
         box_cls_labels = self.forward_ret_dict['box_cls_labels']
         batch_size = int(box_preds.shape[0])
         # 获取所有anchor中属于前景anchor的mask  shape : (batch_size, 321408)
@@ -266,7 +281,7 @@ class AnchorHeadTemplate(nn.Module):
                                    box_preds.shape[-1] // self.num_anchors_per_location if not self.use_multihead else
                                    box_preds.shape[-1])
         # sin(a - b) = sinacosb-cosasinb
-        # (batch_size, 321408, 7)
+        # (batch_size, 321408, 7)    分别得到sinacosb和cosasinb
         box_preds_sin, reg_targets_sin = self.add_sin_difference(box_preds, box_reg_targets)
         loc_loss_src = self.reg_loss_func(box_preds_sin, reg_targets_sin, weights=reg_weights)
         loc_loss = loc_loss_src.sum() / batch_size
@@ -280,7 +295,7 @@ class AnchorHeadTemplate(nn.Module):
 
         # 如果存在方向预测，则添加方向损失
         if box_dir_cls_preds is not None:
-            # (batch_size, 321408, 2)
+            # (batch_size, 321408, 2) 此处生成每个anchor的方向分类
             dir_targets = self.get_direction_target(
                 anchors, box_reg_targets,
                 dir_offset=self.model_cfg.DIR_OFFSET,  # 方向偏移量 0.78539 = π/4
@@ -331,36 +346,65 @@ class AnchorHeadTemplate(nn.Module):
 
         """
         if isinstance(self.anchors, list):
+            # 是否使用多头预测，默认否
             if self.use_multihead:
                 anchors = torch.cat([anchor.permute(3, 4, 0, 1, 2, 5).contiguous().view(-1, anchor.shape[-1])
                                      for anchor in self.anchors], dim=0)
             else:
+                """
+                每个类别anchor的生成情况:
+                [(Z, Y, X, anchor尺度, 该尺度anchor方向, 7个回归参数)
+                (Z, Y, X, anchor尺度, 该尺度anchor方向, 7个回归参数)
+                (Z, Y, X, anchor尺度, 该尺度anchor方向, 7个回归参数)]
+                在倒数第三个维度拼接
+                anchors 维度 (Z, Y, X, 3个anchor尺度, 每个尺度两个方向, 7)
+                            (1, 248, 216, 3, 2, 7)
+                """
                 anchors = torch.cat(self.anchors, dim=-3)
         else:
-            anchors = self.anchors  # (1, 248, 216, 3, 2, 7])
-        num_anchors = anchors.view(-1, anchors.shape[-1]).shape[0]  # (211200,)
-        batch_anchors = anchors.view(1, -1, anchors.shape[-1]).repeat(batch_size, 1, 1)  # (1, 211200, 7)
+            anchors = self.anchors
+        # 计算一共有多少个anchor Z*Y*X*num_of_anchor_scale*anchor_rot
+        num_anchors = anchors.view(-1, anchors.shape[-1]).shape[0]
+        # (batch_size, Z*Y*X*num_of_anchor_scale*anchor_rot, 7)
+        batch_anchors = anchors.view(1, -1, anchors.shape[-1]).repeat(batch_size, 1, 1)
+
+        # 将预测结果都flatten为一维的
+        # (batch_size, Z*Y*X*num_of_anchor_scale*anchor_rot, 3)
         batch_cls_preds = cls_preds.view(batch_size, num_anchors, -1).float() \
             if not isinstance(cls_preds,
-                              list) else cls_preds  # cls_preds:（1, 200, 176, 18）--> batch_cls_preds:(1, 211200, 3)
+                              list) else cls_preds
+        # (batch_size, Z*Y*X*num_of_anchor_scale*anchor_rot, 7)
         batch_box_preds = box_preds.view(batch_size, num_anchors, -1) if not isinstance(box_preds, list) \
-            else torch.cat(box_preds, dim=1).view(batch_size, num_anchors, -1)  # (1, 200, 176, 42) --> (1, 211200, 7)
+            else torch.cat(box_preds, dim=1).view(batch_size, num_anchors, -1)
+        # 对7个预测的box参数进行解码操作
         batch_box_preds = self.box_coder.decode_torch(batch_box_preds, batch_anchors)
-
+        # 每个anchor的方向预测
         if dir_cls_preds is not None:
-            dir_offset = self.model_cfg.DIR_OFFSET  # 0.78539
+            # 0.78539 方向偏移
+            dir_offset = self.model_cfg.DIR_OFFSET
+            # 0
             dir_limit_offset = self.model_cfg.DIR_LIMIT_OFFSET  # 0
+            # 将方向预测结果flatten为一维的 (batch_size, Z*Y*X*num_of_anchor_scale*anchor_rot, 2)
             dir_cls_preds = dir_cls_preds.view(batch_size, num_anchors, -1) if not isinstance(dir_cls_preds, list) \
                 else torch.cat(dir_cls_preds, dim=1).view(batch_size, num_anchors, -1)  # (1, 321408, 2)
-            dir_labels = torch.max(dir_cls_preds, dim=-1)[1]  # (1, 321408) --> 这里是一个分类:正向和反向
-
-            period = (2 * np.pi / self.model_cfg.NUM_DIR_BINS)  # pi
+            # (batch_size, Z*Y*X*num_of_anchor_scale*anchor_rot)
+            # 取出所有anchor的方向分类 : 正向和反向
+            dir_labels = torch.max(dir_cls_preds, dim=-1)[1]
+            # pi
+            period = (2 * np.pi / self.model_cfg.NUM_DIR_BINS)
+            # 将角度在0到pi之间    在OpenPCDet中，坐标使用的是统一规范坐标，x向前，y向左，z向上
+            # 这里参考训练时候的原因，现将角度角度沿着x轴的逆时针旋转了45度得到dir_rot
             dir_rot = common_utils.limit_period(
                 batch_box_preds[..., 6] - dir_offset, dir_limit_offset, period
-            )  # 限制在0到pi之间
-            # 转化0.25pi到2.5pi
+            )
+            """
+            从新将角度旋转回到激光雷达坐标系中，所以需要加回来之前减去的45度，
+            如果dir_labels是1的话，说明方向在是180度的，因此需要将预测的角度信息加上180度，
+            否则预测角度即是所得角度
+            """
             batch_box_preds[..., 6] = dir_rot + dir_offset + period * dir_labels.to(batch_box_preds.dtype)
 
+        # PointPillars中无此项
         if isinstance(self.box_coder, box_coder_utils.PreviousResidualDecoder):
             batch_box_preds[..., 6] = common_utils.limit_period(
                 -(batch_box_preds[..., 6] + np.pi / 2), offset=0.5, period=np.pi * 2

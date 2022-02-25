@@ -40,9 +40,9 @@ class ResidualCoder(object):
         diagonal = torch.sqrt(dxa ** 2 + dya ** 2)
 
         # 计算loss的公式，Δx,Δy,Δz,Δw,Δl,Δh,Δθ
-        # ∆x = x ^ gt − xa ^ da
+        # ∆x = (x^gt − xa^da)/diagonal
         xt = (xg - xa) / diagonal
-        # ∆y = (y^gt − ya^da)/d^a
+        # ∆y = (y^gt − ya^da)/diagonal
         yt = (yg - ya) / diagonal
         # ∆z = (z^gt − za^ha)/h^a
         zt = (zg - za) / dza
@@ -72,32 +72,36 @@ class ResidualCoder(object):
         Returns:
 
         """
-        # 分割anchor
+        # 这里指torch.split的第二个参数   torch.split(tensor, split_size, dim=)  split_size是切分后每块的大小，不是切分为多少块！，多余的参数使用*cags接收
         xa, ya, za, dxa, dya, dza, ra, *cas = torch.split(anchors, 1, dim=-1)
-        # 分割编码后的box
+        # 分割编码后的box PointPillar为False
         if not self.encode_angle_by_sincos:
             xt, yt, zt, dxt, dyt, dzt, rt, *cts = torch.split(box_encodings, 1, dim=-1)
         else:
             xt, yt, zt, dxt, dyt, dzt, cost, sint, *cts = torch.split(box_encodings, 1, dim=-1)
         # 计算anchor对角线长度
         diagonal = torch.sqrt(dxa ** 2 + dya ** 2)  # (B, N, 1)-->(1, 321408, 1)
-        # loss计算的逆变换:g表示gt，a表示anchor
+        # loss计算中anchor与GT编码的运算:g表示gt，a表示anchor
+        # ∆x = (x^gt − xa^da)/diagonal --> x^gt = ∆x * diagonal + x^da
+        # 下同
         xg = xt * diagonal + xa
         yg = yt * diagonal + ya
         zg = zt * dza + za
-
+        # ∆l = log(l^gt / l^a)的逆运算 --> l^gt = exp(∆l) * l^a
+        # 下同
         dxg = torch.exp(dxt) * dxa
         dyg = torch.exp(dyt) * dya
         dzg = torch.exp(dzt) * dza
 
-        # 如果角度是cos和sin编码，采用新的解码方式
+        # 如果角度是cos和sin编码，采用新的解码方式 PointPillar为False
         if self.encode_angle_by_sincos:
             rg_cos = cost + torch.cos(ra)
             rg_sin = sint + torch.sin(ra)
             rg = torch.atan2(rg_sin, rg_cos)
         else:
+            # rts = [rg - ra] 角度的逆运算
             rg = rt + ra
-
+        # PointPillar无此项
         cgs = [t + a for t, a in zip(cts, cas)]
         return torch.cat([xg, yg, zg, dxg, dyg, dzg, rg, *cgs], dim=-1)
 
