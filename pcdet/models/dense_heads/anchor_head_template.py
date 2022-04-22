@@ -16,8 +16,8 @@ class AnchorHeadTemplate(nn.Module):
             model_cfg: AnchorHeadSingle的配置
             num_class: 3
             class_names: ['Car','Pedestrian','Cyclist']
-            grid_size: (432,493,1)
-            point_cloud_range:(0, -39.68, -3, 69.12, 39.68, 1)
+            grid_size: (432,493,1) (200,176,1)
+            point_cloud_range:[0, -39.68, -3, 69.12, 39.68, 1],[0, -40, -3, 70.4, 40, 1]
             predict_boxes_when_training:False
         """
         super().__init__()
@@ -53,9 +53,9 @@ class AnchorHeadTemplate(nn.Module):
             anchor_generator_config=anchor_generator_cfg
         )
         # config['feature_map_stride'] == 8
-        # e.g. size [[176,200],[176,200],[176,200]]
+        # e.g. size [[176,200],[176,200],[176,200]] or [[216,248],[216,248],[216,248]]
         feature_map_size = [grid_size[:2] // config['feature_map_stride'] for config in
-                            anchor_generator_cfg]  # [[216,248],[216,248],[216,248]]
+                            anchor_generator_cfg]
         # 计算所有3个类别的anchor和每个位置上的anchor数量
         anchors_list, num_anchors_per_location_list = anchor_generator.generate_anchors(feature_map_size)
 
@@ -66,6 +66,7 @@ class AnchorHeadTemplate(nn.Module):
                 new_anchors = torch.cat((anchors, pad_zeros), dim=-1)
                 anchors_list[idx] = new_anchors
         # list:3 [(1，248，216，1，2，7），(1，248，216，1，2，7），(1，248，216，1，2，7)], [2,2,2]
+        # list:3 [(1，200,176，1，2，7），(1，200,176，1，2，7），(1，200,176，1，2，7)], [2,2,2]
         return anchors_list, num_anchors_per_location_list
 
     def get_target_assigner(self, anchor_target_cfg):
@@ -259,9 +260,8 @@ class AnchorHeadTemplate(nn.Module):
         positives = box_cls_labels > 0
         # 设置回归参数为1.    [True, False] * 1. = [1., 0.]
         reg_weights = positives.float()  # (4, 211200) 只保留标签>0的值
-        # 同cls处理
-        pos_normalizer = positives.sum(1,
-                                       keepdim=True).float()  # (batch_size, 1) 所有正例的和 eg:[[162.],[166.],[155.],[108.]]
+        # 同cls处理 # (batch_size, 1) 所有正例的和 eg:[[162.],[166.],[155.],[108.]]
+        pos_normalizer = positives.sum(1,keepdim=True).float()
 
         reg_weights /= torch.clamp(pos_normalizer, min=1.0)  # (batch_size, 321408)
 
@@ -323,7 +323,8 @@ class AnchorHeadTemplate(nn.Module):
         cls_loss, tb_dict = self.get_cls_layer_loss()
         # 计算regression layer的loss
         box_loss, tb_dict_box = self.get_box_reg_layer_loss()
-        # 在tb_dict中添加tb_dict_box，在python的字典中添加值，如果添加的也是字典，用update方法，如果是键值对则采用赋值的方式
+        # 在tb_dict中添加tb_dict_box，在python的字典中添加值，
+        # 如果添加的也是字典，用update方法，如果是键值对则采用赋值的方式
         tb_dict.update(tb_dict_box)
         # rpn_loss是分类和回归的总损失
         rpn_loss = cls_loss + box_loss
@@ -404,12 +405,13 @@ class AnchorHeadTemplate(nn.Module):
             """
             batch_box_preds[..., 6] = dir_rot + dir_offset + period * dir_labels.to(batch_box_preds.dtype)
 
-        # PointPillars中无此项
+        # PointPillars、SECOND、PV-RCNN中无此项
         if isinstance(self.box_coder, box_coder_utils.PreviousResidualDecoder):
             batch_box_preds[..., 6] = common_utils.limit_period(
                 -(batch_box_preds[..., 6] + np.pi / 2), offset=0.5, period=np.pi * 2
             )
-
+        # batch_cls_preds shape（batch, H*W*num_anchor, 3）
+        # batch_box_preds shape（batch, H*W*num_anchor, 7）
         return batch_cls_preds, batch_box_preds
 
     def forward(self, **kwargs):

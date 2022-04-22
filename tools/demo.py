@@ -3,12 +3,14 @@ import glob
 from pathlib import Path
 
 try:
-    import open3d
+    import open3d1
     from visual_utils import open3d_vis_utils as V
+
     OPEN3D_FLAG = True
 except:
     import mayavi.mlab as mlab
     from visual_utils import visualize_utils as V
+
     OPEN3D_FLAG = False
 
 import numpy as np
@@ -62,12 +64,22 @@ class DemoDataset(DatasetTemplate):
 
 def parse_config():
     parser = argparse.ArgumentParser(description='arg parser')
-    parser.add_argument('--cfg_file', type=str, default='cfgs/kitti_models/pointpillar.yaml',
+    parser.add_argument('--cfg_file', type=str,
+                        # default='cfgs/kitti_models/pointrcnn.yaml',
+                        # default='cfgs/kitti_models/pv_rcnn.yaml',
+                        # default='/home/nathan/OpenPCDet/tools/cfgs/kitti_models/second.yaml',
+                        default='/home/nathan/OpenPCDet/tools/cfgs/kitti_models/pointpillar.yaml',
+                        # default='cfgs/kitti_models/CaDDN.yaml',
                         help='specify the config for demo')
-    parser.add_argument('--data_path', type=str, default='/home/nathan/OpenPCDet/data/kitti/training/velodyne',
+    parser.add_argument('--data_path', type=str, default='/home/nathan/OpenPCDet/data/kitti/testing/velodyne',
                         help='specify the point cloud data file or directory')
     parser.add_argument('--ckpt', type=str,
-                        default="/home/nathan/OpenPCDet/output/kitti_models/pointpillar/default/ckpt/checkpoint_epoch_79.pth", help='specify the pretrained model')
+                        # default="/home/nathan/OpenPCDet/tools/pointrcnn_7870.pth",
+                        # default="/home/nathan/OpenPCDet/weights/caddn_pcdet.pth",
+                        # default="/home/nathan/OpenPCDet/weights/pv_rcnn_8369.pth",
+                        # default="/home/nathan/OpenPCDet/weights/voxel_rcnn_car_84.54.pth",
+                        default="/home/nathan/OpenPCDet/weights/pointpillar_7728.pth",
+                        help='specify the pretrained model')
     parser.add_argument('--ext', type=str, default='.bin', help='specify the extension of your point cloud data file')
 
     args = parser.parse_args()
@@ -91,6 +103,8 @@ def main():
     model.load_params_from_file(filename=args.ckpt, logger=logger, to_cpu=True)
     model.cuda()
     model.eval()
+
+    num = 0
     with torch.no_grad():
         for idx, data_dict in enumerate(demo_dataset):
             logger.info(f'Visualized sample index: \t{idx + 1}')
@@ -98,13 +112,19 @@ def main():
             load_data_to_gpu(data_dict)
             pred_dicts, _ = model.forward(data_dict)
 
-            V.draw_scenes(
-                points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
-                ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels']
-            )
+            res = pred_dicts[0]["pred_boxes"][:, -1]
+            res_mask = res > 6.29
+            if res_mask.any():
+                print(res, num)
+            num = num + 1
 
-            if not OPEN3D_FLAG:
-                mlab.show(stop=True)
+            # V.draw_scenes(
+            #     points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
+            #     ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels']
+            # )
+
+            # if not OPEN3D_FLAG:
+            #     mlab.show(stop=True)
 
     logger.info('Demo done.')
 

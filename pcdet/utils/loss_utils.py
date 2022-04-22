@@ -60,7 +60,8 @@ class SigmoidFocalClassificationLoss(nn.Module):
         # 合并形式: L = -(y * log(y^) + (1 - y) * log(1 - y^)) <-->
         # 分段形式:y = 1, L = -y * log(y^); y = 0, L = -(1 - y) * log(1 - y^)
         # 这两种形式等价，只要是0和1的分类问题均可以写成两种等价形式，针对focal loss做类似处理
-        # 相对熵 = 信息熵 + 交叉熵， 且交叉熵是凸函数，求导时能够得到全局最优值-->(sigma(s)- y)x  https://zhuanlan.zhihu.com/p/35709485
+        # 相对熵 = 信息熵 + 交叉熵， 且交叉熵是凸函数，求导时能够得到全局最优值-->(sigma(s)- y)x
+        # https://zhuanlan.zhihu.com/p/35709485
         alpha_weight = target * self.alpha + (1 - target) * (1 - self.alpha)  # (4, 321408, 3)
         pt = target * (1.0 - pred_sigmoid) + (1.0 - target) * pred_sigmoid
         focal_weight = alpha_weight * torch.pow(pt, self.gamma)
@@ -233,19 +234,20 @@ def get_corner_loss_lidar(pred_bbox3d: torch.Tensor, gt_bbox3d: torch.Tensor):
         corner_loss: (N) float Tensor.
     """
     assert pred_bbox3d.shape[0] == gt_bbox3d.shape[0]
-
+    # 将预测box的7个坐标值转换到其在3D空间中对应的8个顶点
     pred_box_corners = box_utils.boxes_to_corners_3d(pred_bbox3d)
+    # 将GTBox的7个坐标值转换到其在3D空间中对应的8个顶点
     gt_box_corners = box_utils.boxes_to_corners_3d(gt_bbox3d)
-
+    # 再计算GTBox和预测的box的方向完全相反的情况
     gt_bbox3d_flip = gt_bbox3d.clone()
     gt_bbox3d_flip[:, 6] += np.pi
     gt_box_corners_flip = box_utils.boxes_to_corners_3d(gt_bbox3d_flip)
-    # (N, 8)
+    #  所有的box和GT取距离最小值，防止因为距离相反产生较大的loss(N, 8)
     corner_dist = torch.min(torch.norm(pred_box_corners - gt_box_corners, dim=2),
                             torch.norm(pred_box_corners - gt_box_corners_flip, dim=2))
     # (N, 8)
     corner_loss = WeightedSmoothL1Loss.smooth_l1_loss(corner_dist, beta=1.0)
-
+    # 对每个box的8个顶点的差距求均值
     return corner_loss.mean(dim=1)
 
 

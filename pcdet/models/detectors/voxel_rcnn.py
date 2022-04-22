@@ -7,6 +7,14 @@ class VoxelRCNN(Detector3DTemplate):
         self.module_list = self.build_networks()
 
     def forward(self, batch_dict):
+        """
+        1、MeanVFE
+        2、VoxelBackBone8x
+        3、HeightCompression
+        4、BaseBEVBackbone
+        5、AnchorHeadSingle
+        6、VoxelRCNNHead
+        """
         for cur_module in self.module_list:
             batch_dict = cur_module(batch_dict)
 

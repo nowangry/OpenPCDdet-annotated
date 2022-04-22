@@ -85,29 +85,43 @@ class BaseBEVBackbone(nn.Module):
         """
         Args:
             data_dict:
-                spatial_features : (4, 64, 496, 432)
+                spatial_features : (batch, c, W, H)
         Returns:
         """
         spatial_features = data_dict['spatial_features']
         ups = []
         ret_dict = {}
         x = spatial_features
+
+        # 对不同的分支部分分别进行conv和deconv的操作
         for i in range(len(self.blocks)):
+            """
+            SECOND中一共存在两个下采样分支，
+            分支一: (batch,C,200,176)
+            分支二: (batch,2C,100,88)
+            """
             x = self.blocks[i](x)
 
             stride = int(spatial_features.shape[2] / x.shape[2])
             ret_dict['spatial_features_%dx' % stride] = x
-            if len(self.deblocks) > 0:  # (4,64,248,216)-->(4,128,124,108)-->(4,256,62,54)
+
+            # 如果存在deconv，则对经过conv的结果进行反卷积操作
+            """
+            SECOND中存在两个下采样，则分别对两个下采样分支进行反卷积操作
+            分支一: (batch,C,200,176)-->(batch,2C,200,176)
+            分支二: (batch,2C,100,88)-->(batch,2C,200,176)
+            """
+            if len(self.deblocks) > 0:
                 ups.append(self.deblocks[i](x))
             else:
                 ups.append(x)
 
-        # 如果存在上采样层，将上采样结果连接
+        # 将上采样结果在通道维度拼接
         if len(ups) > 1:
             """
-            最终经过所有上采样层得到的3个尺度的的信息
-            每个尺度的 shape 都是 （batch_size, 128, 248, 216）
-            在第一个维度上进行拼接得到x  维度是 （batch_size, 384, 248, 216）
+            最终经过所有上采样层得到的2个尺度的的信息
+            每个尺度的 shape 都是 (batch, C, 200, 176)
+            在第一个维度上进行拼接得到x  维度是 (batch, 2C, 200, 176)
             """
             x = torch.cat(ups, dim=1)
         elif len(ups) == 1:

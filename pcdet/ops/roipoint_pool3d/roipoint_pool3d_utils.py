@@ -20,7 +20,7 @@ class RoIPointPool3d(nn.Module):
             boxes3d: (B, M, 7), [x, y, z, dx, dy, dz, heading]
 
         Returns:
-            pooled_features: (B, M, 512, 3 + C)
+            pooled_features: (B, M, 512, 3 + C)   --> (batch, num_of_roi, self.num_sampled_points, 3 + C)
             pooled_empty_flag: (B, M)
         """
         return RoIPointPool3dFunction.apply(
@@ -37,18 +37,21 @@ class RoIPointPool3dFunction(Function):
             points: (B, N, 3)
             point_features: (B, N, C)
             boxes3d: (B, num_boxes, 7), [x, y, z, dx, dy, dz, heading]
-            pool_extra_width:
-            num_sampled_points:
+            pool_extra_width: 0
+            num_sampled_points: 512
 
         Returns:
             pooled_features: (B, num_boxes, 512, 3 + C)
             pooled_empty_flag: (B, num_boxes)
         """
         assert points.shape.__len__() == 3 and points.shape[2] == 3
-        batch_size, boxes_num, feature_len = points.shape[0], boxes3d.shape[1], point_features.shape[2]
-        pooled_boxes3d = box_utils.enlarge_box3d(boxes3d.view(-1, 7), pool_extra_width).view(batch_size, -1, 7)
 
+        batch_size, boxes_num, feature_len = points.shape[0], boxes3d.shape[1], point_features.shape[2]
+        # 将每个box扩大0m
+        pooled_boxes3d = box_utils.enlarge_box3d(boxes3d.view(-1, 7), pool_extra_width).view(batch_size, -1, 7)
+        # (batch, num_of_roi, num_sample_points, 3 + C)
         pooled_features = point_features.new_zeros((batch_size, boxes_num, num_sampled_points, 3 + feature_len))
+        # (batch, num_of_roi)
         pooled_empty_flag = point_features.new_zeros((batch_size, boxes_num)).int()
 
         roipoint_pool3d_cuda.forward(

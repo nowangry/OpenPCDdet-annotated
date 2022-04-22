@@ -22,7 +22,10 @@ def parse_config():
     parser = argparse.ArgumentParser(description='arg parser')
     # parser.add_argument('--cfg_file', type=str, default=None, help='specify the config for training')
     # parser.add_argument('--cfg_file', type=str, default="cfgs/kitti_models/pointpillar.yaml", help='specify the config for training')
-    parser.add_argument('--cfg_file', type=str, default="cfgs/kitti_models/pointrcnn.yaml", help='specify the config for training')
+    # parser.add_argument('--cfg_file', type=str, default="/home/nathan/OpenPCDet/tools/cfgs/kitti_models/pointrcnn.yaml", help='specify the config for training')
+    # parser.add_argument('--cfg_file', type=str, default="/home/nathan/OpenPCDet/tools/cfgs/kitti_models/pv_rcnn.yaml", help='specify the config for training')
+    # parser.add_argument('--cfg_file', type=str, default="/home/nathan/OpenPCDet/tools/cfgs/kitti_models/second.yaml", help='specify the config for training')
+    parser.add_argument('--cfg_file', type=str, default="/home/nathan/OpenPCDet/tools/cfgs/kitti_models/voxel_rcnn_car.yaml", help='specify the config for training')
 
     parser.add_argument('--batch_size', type=int, default=2, required=False, help='batch size for training')
     parser.add_argument('--epochs', type=int, default=None, required=False, help='number of epochs to train for')
@@ -129,7 +132,8 @@ def main():
         model.load_params_from_file(filename=args.pretrained_model, to_cpu=dist_train, logger=logger)
 
     if args.ckpt is not None:
-        it, start_epoch = model.load_params_with_optimizer(args.ckpt, to_cpu=dist_train, optimizer=optimizer, logger=logger)
+        it, start_epoch = model.load_params_with_optimizer(args.ckpt, to_cpu=dist_train, optimizer=optimizer,
+                                                           logger=logger)
         last_epoch = start_epoch + 1
     else:
         ckpt_list = glob.glob(str(ckpt_dir / '*checkpoint_epoch_*.pth'))
@@ -189,7 +193,8 @@ def main():
     )
     eval_output_dir = output_dir / 'eval' / 'eval_with_train'
     eval_output_dir.mkdir(parents=True, exist_ok=True)
-    args.start_epoch = max(args.epochs - args.num_epochs_to_eval, 0)  # Only evaluate the last args.num_epochs_to_eval epochs
+    args.start_epoch = max(args.epochs - args.num_epochs_to_eval,
+                           0)  # Only evaluate the last args.num_epochs_to_eval epochs
 
     repeat_eval_ckpt(
         model.module if dist_train else model,

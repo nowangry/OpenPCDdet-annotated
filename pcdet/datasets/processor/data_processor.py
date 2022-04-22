@@ -138,17 +138,29 @@ class DataProcessor(object):
 
         if self.voxel_generator is None:
             self.voxel_generator = VoxelGeneratorWrapper(
+                # 给定每个voxel的长宽高  [0.05, 0.05, 0.1]
                 vsize_xyz=config.VOXEL_SIZE,  # [0.16, 0.16, 4]
-                coors_range_xyz=self.point_cloud_range,  # [0, -39.68, -3, 69.12, 39.68, 1]
+                # 给定点云的范围 [  0.  -40.   -3.   70.4  40.    1. ]
+                coors_range_xyz=self.point_cloud_range,
+                # 给定每个点云的特征维度，这里是x，y，z，r 其中r是激光雷达反射强度
                 num_point_features=self.num_point_features,
+                # 给定每个pillar/voxel中有采样多少个点，不够则补0
                 max_num_points_per_voxel=config.MAX_POINTS_PER_VOXEL,  # 32
+                # 最多选取多少个voxel，训练16000，推理40000
                 max_num_voxels=config.MAX_NUMBER_OF_VOXELS[self.mode],  # 16000
             )
 
+        # 使用spconv生成voxel输出
         points = data_dict['points']
         voxel_output = self.voxel_generator.generate(points)
+
+        # 假设一份点云数据是N*4，那么经过pillar生成后会得到三份数据
+        # voxels代表了每个生成的voxel数据，维度是[M, 5, 4]
+        # coordinates代表了每个生成的voxel所在的zyx轴坐标，维度是[M,3]
+        # num_points代表了每个生成的voxel中有多少个有效的点维度是[m,]，因为不满5会被0填充
         voxels, coordinates, num_points = voxel_output
 
+        # False
         if not data_dict['use_lead_xyz']:
             voxels = voxels[..., 3:]  # remove xyz in voxels(N, 3)
 

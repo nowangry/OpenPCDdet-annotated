@@ -4,19 +4,71 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da44b04f-ddf7-4896-950b-6ba6162715e9" name="Changes" comment="add note for pointpillars">
+    <list default="true" id="da44b04f-ddf7-4896-950b-6ba6162715e9" name="Changes" comment="add  pointpillars last node">
+      <change afterPath="$PROJECT_DIR$/revlk.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/cfgs/kitti_models/pv_rcnn_plusplus.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2022_2_21_16_38_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2022_2_21_16_38__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/datasets/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/datasets/augmentor/augmentor_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/augmentor/augmentor_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/datasets/augmentor/data_augmentor.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/augmentor/data_augmentor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/datasets/augmentor/database_sampler.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/augmentor/database_sampler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/datasets/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/datasets/kitti/kitti_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/kitti/kitti_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/datasets/processor/data_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/processor/data_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_2d/base_bev_backbone.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_2d/base_bev_backbone.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_2d/map_to_bev/height_compression.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_2d/map_to_bev/height_compression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_2d/map_to_bev/pointpillar_scatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_2d/map_to_bev/pointpillar_scatter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_3d/pfe/voxel_set_abstraction.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_3d/pfe/voxel_set_abstraction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_3d/pointnet2_backbone.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_3d/pointnet2_backbone.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_3d/spconv_backbone.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_3d/spconv_backbone.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_3d/vfe/mean_vfe.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_3d/vfe/mean_vfe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_3d/vfe/pillar_vfe.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_3d/vfe/pillar_vfe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_single.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_single.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_template.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_box.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_simple.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_template.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/anchor_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/anchor_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/axis_aligned_target_assigner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/axis_aligned_target_assigner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/models/detectors/detector3d_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/detectors/detector3d_template.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/detectors/point_rcnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/detectors/point_rcnn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/detectors/pv_rcnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/detectors/pv_rcnn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/detectors/second_net.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/detectors/second_net.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/detectors/voxel_rcnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/detectors/voxel_rcnn.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/models/model_utils/model_nms_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/model_utils/model_nms_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/roi_heads/pointrcnn_head.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/roi_heads/pointrcnn_head.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/roi_heads/pvrcnn_head.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/roi_heads/pvrcnn_head.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/roi_heads/roi_head_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/roi_heads/roi_head_template.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/roi_heads/target_assigner/proposal_target_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/roi_heads/target_assigner/proposal_target_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/models/roi_heads/voxelrcnn_head.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/roi_heads/voxelrcnn_head.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/ops/iou3d_nms/iou3d_nms_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/ops/iou3d_nms/iou3d_nms_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_batch/pointnet2_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_batch/pointnet2_modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_batch/pointnet2_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_batch/pointnet2_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_stack/pointnet2_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_stack/pointnet2_modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_stack/voxel_pool_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/ops/pointnet2/pointnet2_stack/voxel_pool_modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/ops/roiaware_pool3d/roiaware_pool3d_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/ops/roiaware_pool3d/roiaware_pool3d_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/ops/roipoint_pool3d/roipoint_pool3d_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/ops/roipoint_pool3d/roipoint_pool3d_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/utils/box_coder_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/utils/box_coder_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/utils/box_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/utils/box_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/cfgs/dataset_configs/kitti_dataset.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/dataset_configs/kitti_dataset.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/utils/calibration_kitti.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/utils/calibration_kitti.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/utils/common_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/utils/common_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/utils/loss_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/utils/loss_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/utils/object3d_kitti.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/utils/object3d_kitti.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcdet/version.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/version.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/cfgs/kitti_models/pointpillar.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/kitti_models/pointpillar.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/cfgs/kitti_models/pointrcnn.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/kitti_models/pointrcnn.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/cfgs/kitti_models/pv_rcnn.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/kitti_models/pv_rcnn.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/cfgs/kitti_models/second.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/kitti_models/second.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/cfgs/kitti_models/voxel_rcnn_car.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/kitti_models/voxel_rcnn_car.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/demo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/scripts/dist_train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/dist_train.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/train_utils/train_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/train_utils/train_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/visual_utils/open3d_vis_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visual_utils/open3d_vis_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/visual_utils/visualize_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/visual_utils/visualize_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +83,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -69,11 +126,56 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="last_opened_file_path" value="E:/git/ganshudianxin" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
-  <component name="RunManager" selected="Python.train">
+  <component name="RunManager" selected="Python.3d_scatter">
+    <configuration name="11111111111" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="OpenPCDdet-annotated" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/11111111111.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="3d_scatter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="OpenPCDdet-annotated" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/3d_scatter.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="demo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OpenPCDdet-annotated" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -89,7 +191,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/demo.py" />
-      <option name="PARAMETERS" value="--cfg_file cfgs/kitti_models/pointpillar.yaml --data_path /home/nathan/OpenPCDet/data/kitti/testing/velodyne --ckpt /home/nathan/OpenPCDet/tools/pointpillar_7728.pth" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -120,21 +222,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="show_3d_box_in_pc" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="revlk" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OpenPCDdet-annotated" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DISPLAY" value="localhost:10.0" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/vis" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/vis/show_3d_box_in_pc.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/revlk.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -167,9 +268,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.train" />
+        <item itemvalue="Python.3d_scatter" />
+        <item itemvalue="Python.11111111111" />
         <item itemvalue="Python.demo" />
-        <item itemvalue="Python.show_3d_box_in_pc" />
+        <item itemvalue="Python.train" />
+        <item itemvalue="Python.revlk" />
       </list>
     </recent_temporary>
   </component>
@@ -186,6 +289,37 @@
       <workItem from="1645579581703" duration="20170000" />
       <workItem from="1645666451304" duration="14591000" />
       <workItem from="1645752146318" duration="1677000" />
+      <workItem from="1646011035048" duration="1021000" />
+      <workItem from="1646016671951" duration="2818000" />
+      <workItem from="1646096849055" duration="733000" />
+      <workItem from="1646186451992" duration="19860000" />
+      <workItem from="1646273536806" duration="15506000" />
+      <workItem from="1646359133974" duration="12121000" />
+      <workItem from="1646616077807" duration="16269000" />
+      <workItem from="1646702358593" duration="4291000" />
+      <workItem from="1646706698968" duration="10628000" />
+      <workItem from="1646788495423" duration="5512000" />
+      <workItem from="1646816886761" duration="1695000" />
+      <workItem from="1646874804280" duration="1599000" />
+      <workItem from="1646964161969" duration="13452000" />
+      <workItem from="1647219921825" duration="17040000" />
+      <workItem from="1647306864189" duration="602000" />
+      <workItem from="1647308161455" duration="600000" />
+      <workItem from="1647309208245" duration="8000" />
+      <workItem from="1647323831036" duration="8308000" />
+      <workItem from="1647393192489" duration="9733000" />
+      <workItem from="1647480448443" duration="7863000" />
+      <workItem from="1647565596559" duration="269000" />
+      <workItem from="1647565886280" duration="9540000" />
+      <workItem from="1647841811310" duration="2392000" />
+      <workItem from="1647911482090" duration="8365000" />
+      <workItem from="1647997940513" duration="1197000" />
+      <workItem from="1648436382176" duration="2175000" />
+      <workItem from="1648605040529" duration="1362000" />
+      <workItem from="1648688867447" duration="4844000" />
+      <workItem from="1648775647420" duration="718000" />
+      <workItem from="1649383099039" duration="4625000" />
+      <workItem from="1649649052180" duration="2915000" />
     </task>
     <servers />
   </component>
@@ -193,111 +327,99 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/anchor_generator.py</url>
-          <line>123</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_single.py</url>
-          <line>92</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_template.py</url>
-          <line>324</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/axis_aligned_target_assigner.py</url>
-          <line>393</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/utils/box_coder_utils.py</url>
-          <line>60</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tools/train_utils/train_utils.py</url>
-          <line>30</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/datasets/kitti/kitti_dataset.py</url>
-          <line>598</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/datasets/kitti/kitti_dataset.py</url>
-          <line>40</line>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_template.py</url>
-          <line>216</line>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tools/visual_utils/open3d_vis_utils.py</url>
-          <line>79</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/vis/show_3d_box_in_pc.py</url>
           <line>238</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/vis/show_3d_box_in_pc.py</url>
           <line>162</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/utils/box_utils.py</url>
-          <line>122</line>
-          <option name="timeStamp" value="35" />
+          <url>file://$PROJECT_DIR$/pcdet/models/roi_heads/pointrcnn_head.py</url>
+          <line>147</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pcdet/models/detectors/point_rcnn.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pcdet/models/roi_heads/pointrcnn_head.py</url>
+          <line>173</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pcdet/models/roi_heads/pointrcnn_head.py</url>
+          <line>128</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pcdet/models/roi_heads/pointrcnn_head.py</url>
+          <line>179</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pcdet/models/roi_heads/pointrcnn_head.py</url>
+          <line>218</line>
+          <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_template.py</url>
-          <line>300</line>
-          <option name="timeStamp" value="36" />
+          <url>file://$PROJECT_DIR$/pcdet/models/detectors/second_net.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_template.py</url>
-          <line>404</line>
-          <option name="timeStamp" value="43" />
+          <url>file://$PROJECT_DIR$/revlk.py</url>
+          <line>226</line>
+          <option name="timeStamp" value="148" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pcdet/models/model_utils/model_nms_utils.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tools/train.py</url>
-          <line>117</line>
-          <option name="timeStamp" value="45" />
+          <url>file://$PROJECT_DIR$/tools/demo.py</url>
+          <line>112</line>
+          <option name="timeStamp" value="153" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="pred_dicts" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/openpcdet$BEV.coverage" NAME="BEV Coverage Results" MODIFIED="1641433119961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis" />
-    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$demo.coverage" NAME="demo Coverage Results" MODIFIED="1645687310528" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$draw3Dbox2img.coverage" NAME="draw3Dbox2img Coverage Results" MODIFIED="1646817887785" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis/KITTI_VIZ_3D" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$revlk.coverage" NAME="revlk Coverage Results" MODIFIED="1647594523610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$demo.coverage" NAME="demo Coverage Results" MODIFIED="1647931396366" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/openpcdet$main.coverage" NAME="main Coverage Results" MODIFIED="1640140230580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/openpcdet$anchor_generator.coverage" NAME="anchor_generator Coverage Results" MODIFIED="1640073540519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner" />
     <SUITE FILE_PATH="coverage/openpcdet$demo.coverage" NAME="demo Coverage Results" MODIFIED="1644995315452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
-    <SUITE FILE_PATH="coverage/openpcdet$draw3Dbox2img.coverage" NAME="draw3Dbox2img Coverage Results" MODIFIED="1641437228060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis/KITTI_VIZ_3D" />
     <SUITE FILE_PATH="coverage/openpcdet$mavayi.coverage" NAME="mavayi Coverage Results" MODIFIED="1641880544769" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis" />
-    <SUITE FILE_PATH="coverage/openpcdet$axis_aligned_target_assigner.coverage" NAME="axis_aligned_target_assigner Coverage Results" MODIFIED="1644983921542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$11111111111.coverage" NAME="11111111111 Coverage Results" MODIFIED="1649403977674" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/openpcdet$train.coverage" NAME="train Coverage Results" MODIFIED="1645431247670" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$open3d_vis_utils.coverage" NAME="open3d_vis_utils Coverage Results" MODIFIED="1645585855859" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/visual_utils" />
-    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$show_3d_box_in_pc.coverage" NAME="show_3d_box_in_pc Coverage Results" MODIFIED="1645601083016" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis" />
-    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$train.coverage" NAME="train Coverage Results" MODIFIED="1645756864227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$show_3d_box_in_pc.coverage" NAME="show_3d_box_in_pc Coverage Results" MODIFIED="1646817125809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis" />
+    <SUITE FILE_PATH="coverage/openpcdet$draw3Dbox2img.coverage" NAME="draw3Dbox2img Coverage Results" MODIFIED="1641437228060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis/KITTI_VIZ_3D" />
+    <SUITE FILE_PATH="coverage/openpcdet$axis_aligned_target_assigner.coverage" NAME="axis_aligned_target_assigner Coverage Results" MODIFIED="1644983921542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$3d_scatter.coverage" NAME="3d_scatter Coverage Results" MODIFIED="1649662453222" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$train.coverage" NAME="train Coverage Results" MODIFIED="1647929890268" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
   </component>
 </project>

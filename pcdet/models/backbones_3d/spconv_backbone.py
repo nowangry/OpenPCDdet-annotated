@@ -134,32 +134,45 @@ class VoxelBackBone8x(nn.Module):
             batch_dict:
                 encoded_spconv_tensor: sparse tensor
         """
-        # voxel_features, voxel_coords  shape (64000, 4)
+        # voxel_features, voxel_coords  shape (Batch * 16000, 4)
         voxel_features, voxel_coords = batch_dict['voxel_features'], batch_dict['voxel_coords']
         batch_size = batch_dict['batch_size']
+        # 根据voxel坐标，并将每个voxel放置voxel_coor对应的位置，建立成稀疏tensor
         input_sp_tensor = spconv.SparseConvTensor(
-            features=voxel_features,  # (64000, 4)   # 根据voxel特征和坐标以及空间形状和batch，建立稀疏tensor
-            indices=voxel_coords.int(),  # (64000, 4)
-            spatial_shape=self.sparse_shape,  # [41,1600,1408]
-            batch_size=batch_size  # 4
+            # (Batch * 16000, 4)
+            features=voxel_features,
+            # (Batch * 16000, 4) 其中4为 batch_idx, x, y, z
+            indices=voxel_coords.int(),
+            # [41,1600,1408] ZYX 每个voxel的长宽高为0.05，0.05，0.1 点云的范围为[0, -40, -3, 70.4, 40, 1]
+            spatial_shape=self.sparse_shape,
+            # 4
+            batch_size=batch_size
         )
+
+        """
+        稀疏卷积的计算中，feature，channel，shape，index这几个内容都是分开存放的，
+        在后面用out.dense才把这三个内容组合到一起了，变为密集型的张量
+        spconv卷积的输入也是一样，输入和输出更像是一个  字典或者说元组
+        注意卷积中pad与no_pad的区别
+        """
+
         # # 进行submanifold convolution
-        x = self.conv_input(input_sp_tensor)  # [batch_size, 4, [41, 1600, 1408]] --> [batch_size, 16, [41, 1600, 1408]]
+        # [batch_size, 4, [41, 1600, 1408]] --> [batch_size, 16, [41, 1600, 1408]]
+        x = self.conv_input(input_sp_tensor)
 
-        x_conv1 = self.conv1(x)  # [batch_size, 16, [41, 1600, 1408]] --> [batch_size, 16, [41, 1600, 1408]]
-        x_conv2 = self.conv2(x_conv1)  # [batch_size, 16, [41, 1600, 1408]] --> [batch_size, 32, [21, 800, 704]]
-        x_conv3 = self.conv3(x_conv2)  # [batch_size, 32, [21, 800, 704]] --> [batch_size, 64, [11, 400, 352]]
-        x_conv4 = self.conv4(x_conv3)  # [batch_size, 64, [11, 400, 352]] --> [batch_size, 64, [5, 200, 176]]
-        # spconv卷积的结果不像conv2d那么简单，batch_size，channal，shape这三个内容都是分开存放的，
-        # 在后面用out.dense才把这三个内容组合到一起了，变为密集型的张量
-        # spconv卷积的输入也是一样，输入和输出更像是一个字典或者说元组
-        # 注意卷积中pad与no_pad的区别
-
-
+        # [batch_size, 16, [41, 1600, 1408]] --> [batch_size, 16, [41, 1600, 1408]]
+        x_conv1 = self.conv1(x)
+        # [batch_size, 16, [41, 1600, 1408]] --> [batch_size, 32, [21, 800, 704]]
+        x_conv2 = self.conv2(x_conv1)
+        # [batch_size, 32, [21, 800, 704]] --> [batch_size, 64, [11, 400, 352]]
+        x_conv3 = self.conv3(x_conv2)
+        # [batch_size, 64, [11, 400, 352]] --> [batch_size, 64, [5, 200, 176]]
+        x_conv4 = self.conv4(x_conv3)
 
         # for detection head
         # [200, 176, 5] -> [200, 176, 2]
-        out = self.conv_out(x_conv4)  # [batch_size, 64, [5, 200, 176]] --> [batch_size, 128, [2, 200, 176]]
+        # [batch_size, 64, [5, 200, 176]] --> [batch_size, 128, [2, 200, 176]]
+        out = self.conv_out(x_conv4)
 
         batch_dict.update({
             'encoded_spconv_tensor': out,

@@ -5,7 +5,7 @@ class AnchorGenerator(object):
     def __init__(self, anchor_range, anchor_generator_config):
         super().__init__()
         self.anchor_generator_cfg = anchor_generator_config  # list:3
-        # 得到anchor在点云中的分布范围[0, -39.68, -3, 69.12, 39.68, 1]
+        # 得到anchor在点云中的分布范围[0, -39.68, -3, 69.12, 39.68, 1], [0, -40, -3, 70.4, 40, 1]
         self.anchor_range = anchor_range
         # 得到配置参数中所有尺度anchor的长宽高
         # list:3 --> 车、人、自行车[[[3.9, 1.6, 1.56]],[[0.8, 0.6, 1.73]],[[1.76, 0.6, 1.73]]]
@@ -62,7 +62,7 @@ class AnchorGenerator(object):
                 self.anchor_range[1] + y_offset, self.anchor_range[4] + 1e-5, step=y_stride, dtype=torch.float32,
             ).cuda()
             """
-            new_tensor函数可以返回一个新的张量数据，该张量数据与指定的有相同的属性
+            new_tensor函数可以返回一个新的张量数据，该张量数据与指定的tensor具有相同的属性
             如拥有相同的数据类型和张量所在的设备情况等属性；
             并使用anchor_height数值个来填充这个张量
             """

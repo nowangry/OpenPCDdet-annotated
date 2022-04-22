@@ -31,11 +31,15 @@ def points_in_boxes_gpu(points, boxes):
     :param boxes: (B, T, 7), num_valid_boxes <= T
     :return box_idxs_of_pts: (B, M), default background = -1
     """
+    # 确保batch维度是相等的
     assert boxes.shape[0] == points.shape[0]
+    # 确保GT的维度等于7, 点云的维度等于3即x，y，z
     assert boxes.shape[2] == 7 and points.shape[2] == 3
-    batch_size, num_points, _ = points.shape
 
+    batch_size, num_points, _ = points.shape
+    # box_idxs_of_pts shape : (1, 16384), 并设置成背景类别 -1
     box_idxs_of_pts = points.new_zeros((batch_size, num_points), dtype=torch.int).fill_(-1)
+    # 调用生成的.so文件来完成此操作
     roiaware_pool3d_cuda.points_in_boxes_gpu(boxes.contiguous(), points.contiguous(), box_idxs_of_pts)
 
     return box_idxs_of_pts

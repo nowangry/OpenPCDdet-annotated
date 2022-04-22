@@ -53,7 +53,7 @@ def rotate_points_along_z(points, angle):
     zeros = angle.new_zeros(points.shape[0])
     ones = angle.new_ones(points.shape[0])
     rot_matrix = torch.stack((
-        cosa,  sina, zeros,
+        cosa, sina, zeros,
         -sina, cosa, zeros,
         zeros, zeros, ones
     ), dim=1).view(-1, 3, 3).float()
@@ -84,9 +84,13 @@ def get_voxel_centers(voxel_coords, downsample_times, voxel_size, point_cloud_ra
 
     """
     assert voxel_coords.shape[1] == 3
-    voxel_centers = voxel_coords[:, [2, 1, 0]].float()  # (xyz)
+    # 获取每个voxel的xyz坐标
+    voxel_centers = voxel_coords[:, [2, 1, 0]].float()
+    # 得到经过指定下采样后，每个voxel的长宽高
     voxel_size = torch.tensor(voxel_size, device=voxel_centers.device).float() * downsample_times
+    # [0, -40, -3]
     pc_range = torch.tensor(point_cloud_range[0:3], device=voxel_centers.device).float()
+    # 得到每个voxel中心在点云中的xyz坐标 shape（N， 3）
     voxel_centers = (voxel_centers + 0.5) * voxel_size + pc_range
     return voxel_centers
 
@@ -246,18 +250,18 @@ def scatter_point_inds(indices, point_inds, shape):
     ndim = indices.shape[-1]
     flattened_indices = indices.view(-1, ndim)
     slices = [flattened_indices[:, i] for i in range(ndim)]
-    ret[slices] = point_inds
+    ret[slices] = point_inds  # 将非空的voxel找出来，在ret中设置为该voxel的索引，空的voxel数值设置为-1
     return ret
 
 
 def generate_voxel2pinds(sparse_tensor):
-    device = sparse_tensor.indices.device
-    batch_size = sparse_tensor.batch_size
-    spatial_shape = sparse_tensor.spatial_shape
-    indices = sparse_tensor.indices.long()
-    point_indices = torch.arange(indices.shape[0], device=device, dtype=torch.int32)
+    device = sparse_tensor.indices.device  # 获取该tensor所在设备
+    batch_size = sparse_tensor.batch_size  # batch size
+    spatial_shape = sparse_tensor.spatial_shape  # 稀疏卷积下采样后voxel特征层的尺度大小
+    indices = sparse_tensor.indices.long()  # batch_idx, z, y, x
+    point_indices = torch.arange(indices.shape[0], device=device, dtype=torch.int32)  # shape (num_of_voxel,)
     output_shape = [batch_size] + list(spatial_shape)
-    v2pinds_tensor = scatter_point_inds(indices, point_indices, output_shape)
+    v2pinds_tensor = scatter_point_inds(indices, point_indices, output_shape) # shape =  output_shape
     return v2pinds_tensor
 
 
@@ -270,6 +274,7 @@ def sa_create(name, var):
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
+
     def __init__(self):
         self.reset()
 

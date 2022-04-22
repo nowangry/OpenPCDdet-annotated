@@ -7,6 +7,11 @@ class PointRCNN(Detector3DTemplate):
         self.module_list = self.build_networks()
 
     def forward(self, batch_dict):
+        """
+        PointNet2MSG
+        PointHeadBox
+        PointRCNNHead
+        """
         for cur_module in self.module_list:
             batch_dict = cur_module(batch_dict)
 
@@ -23,8 +28,8 @@ class PointRCNN(Detector3DTemplate):
 
     def get_training_loss(self):
         disp_dict = {}
-        loss_point, tb_dict = self.point_head.get_loss()
-        loss_rcnn, tb_dict = self.roi_head.get_loss(tb_dict)
+        loss_point, tb_dict = self.point_head.get_loss()  # 第一阶段的loss
+        loss_rcnn, tb_dict = self.roi_head.get_loss(tb_dict)  # 第二阶段的loss
 
         loss = loss_point + loss_rcnn
         return loss, tb_dict, disp_dict

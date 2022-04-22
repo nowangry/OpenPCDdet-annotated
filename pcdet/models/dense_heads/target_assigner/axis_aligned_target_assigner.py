@@ -23,7 +23,7 @@ class AxisAlignedTargetAssigner(object):
         # ['Car', 'Pedestrian', 'Cyclist']
         self.anchor_class_names = [config['class_name'] for config in anchor_generator_cfg]
         # anchor_target_cfg.POS_FRACTION = -1 < 0 --> None
-        # 前景、背景采样系数 PointPillars不考虑
+        # 前景、背景采样系数 PointPillars、SECOND不考虑
         self.pos_fraction = anchor_target_cfg.POS_FRACTION if anchor_target_cfg.POS_FRACTION >= 0 else None
         # 总采样数  PointPillars不考虑
         self.sample_size = anchor_target_cfg.SAMPLE_SIZE  # 512
@@ -53,7 +53,7 @@ class AxisAlignedTargetAssigner(object):
         为每个前景的anchor分配类别和计算box的回归残差和回归权重
         Args:
             all_anchors: [(N, 7), ...]
-            gt_boxes_with_classes: (B, M, 8)  # 最后维度数据为 (x, y, z, w, l, h, θ，class)
+            gt_boxes_with_classes: (B, M, 8)  # 最后维度数据为 (x, y, z, l, w, h, θ，class)
         Returns:
             all_targets_dict = {
                 # 每个anchor的类别
@@ -100,7 +100,7 @@ class AxisAlignedTargetAssigner(object):
 
             target_list = []
             # 2.2 对每帧中的anchor和GT分类别，单独计算前背景
-            # 计算时候 每个类别的anchor是独立计算的 不同于在ssd中整体计算iou并取最大值
+            # 计算时候 每个类别的anchor是独立计算的
             for anchor_class_name, anchors in zip(self.anchor_class_names, all_anchors):
                 # anchor_class_name : 车 | 行人 | 自行车
                 # anchors : (1, 200, 176, 1, 2, 7)  7 --> (x, y, z, l, w, h, θ)
@@ -198,8 +198,8 @@ class AxisAlignedTargetAssigner(object):
             anchors: (107136, 7)
             gt_boxes: （该帧中该类别的GT数量，7）
             gt_classes: (该帧中该类别的GT数量, 1)
-            matched_threshold:0.6
-            unmatched_threshold:0.45
+            matched_threshold: 0.6
+            unmatched_threshold: 0.45
         Returns:
         前景anchor
             ret_dict = {
@@ -239,7 +239,7 @@ class AxisAlignedTargetAssigner(object):
             # 3.找到每个gt最匹配anchor的索引和iou
             # (num_of_gt,) 得到每个gt最匹配的anchor索引
             gt_to_anchor_argmax = anchor_by_gt_overlap.argmax(dim=0)
-            # （num_of_gt，）找到每个gt最匹配anchor的iou
+            # （num_of_gt，）找到每个gt最匹配anchor的iou数值
             gt_to_anchor_max = anchor_by_gt_overlap[gt_to_anchor_argmax, torch.arange(num_gt, device=anchors.device)]
             # 4.将GT中没有匹配到的anchor的iou数值设置为-1
             empty_gt_mask = gt_to_anchor_max == 0  # 得到没有匹配到anchor的gt的mask
@@ -299,7 +299,7 @@ class AxisAlignedTargetAssigner(object):
                     [71924,     3],
                     [78046,     7],
                     [80150,     6]], device='cuda:0')
-            在第0维度拥有相同gt索引的项，在该类所有anchor中同时拥有多个与之最为匹配的anchor
+            在第1维度拥有相同gt索引的项，在该类所有anchor中同时拥有多个与之最为匹配的anchor
             """
             # (num_of_multiple_best_matching_for_per_GT,)
             anchors_with_max_overlap = (anchor_by_gt_overlap == gt_to_anchor_max).nonzero()[:, 0]

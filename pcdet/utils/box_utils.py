@@ -40,7 +40,7 @@ def boxes_to_corners_3d(boxes3d):
     Returns:
     """
     boxes3d, is_numpy = common_utils.check_numpy_to_torch(boxes3d)
-
+    # shape (8, 3)
     template = boxes3d.new_tensor((
         [1, 1, -1], [1, -1, -1], [-1, -1, -1], [-1, 1, -1],
         [1, 1, 1], [1, -1, 1], [-1, -1, 1], [-1, 1, 1],
@@ -168,7 +168,8 @@ def enlarge_box3d(boxes3d, extra_width=(0, 0, 0)):
     """
     boxes3d, is_numpy = common_utils.check_numpy_to_torch(boxes3d)
     large_boxes3d = boxes3d.clone()
-
+    # 将每个GT_box的l，w, h都加长0.2米， [None, :]表示在None处添加一个维度，
+    # 使得可以使用广播（broadcasting）完成所有box长度的延长
     large_boxes3d[:, 3:6] += boxes3d.new_tensor(extra_width)[None, :]
     return large_boxes3d
 

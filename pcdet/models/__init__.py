@@ -8,9 +8,8 @@ from .detectors import build_detector
 try:
     import kornia
 except:
-    pass 
+    pass
     # print('Warning: kornia is not installed. This package is only required by CaDDN')
-
 
 
 def build_network(model_cfg, num_class, dataset):

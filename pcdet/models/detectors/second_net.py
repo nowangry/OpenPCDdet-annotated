@@ -5,7 +5,13 @@ class SECONDNet(Detector3DTemplate):
     def __init__(self, model_cfg, num_class, dataset):
         super().__init__(model_cfg=model_cfg, num_class=num_class, dataset=dataset)
         self.module_list = self.build_networks()
-
+    """
+    1、MeanVFE
+    2、VoxelBackBone8x
+    3、HeightCompression
+    4、BaseBEVBackbone
+    5、AnchorHeadSingle
+    """
     def forward(self, batch_dict):
         for cur_module in self.module_list:
             batch_dict = cur_module(batch_dict)

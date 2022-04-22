@@ -230,7 +230,7 @@ class Detector3DTemplate(nn.Module):
                 if not batch_dict['cls_preds_normalized']:
                     cls_preds = [torch.sigmoid(x) for x in cls_preds]
 
-            # 是否使用多类别的NMS计算，否。
+            # 是否使用多类别的NMS计算，否，不考虑不同类别的物体会在3D空间中重叠
             if post_process_cfg.NMS_CONFIG.MULTI_CLASSES_NMS:
                 if not isinstance(cls_preds, list):
                     cls_preds = [cls_preds]
@@ -261,6 +261,8 @@ class Detector3DTemplate(nn.Module):
                 # 得到类别预测的最大概率，和对应的索引值
                 cls_preds, label_preds = torch.max(cls_preds, dim=-1)
                 if batch_dict.get('has_class_labels', False):
+                    # 如果有roi_labels在里面字典里面，
+                    # 使用第一阶段预测的label为改预测结果的分类类别
                     label_key = 'roi_labels' if 'roi_labels' in batch_dict else 'batch_pred_labels'
                     label_preds = batch_dict[label_key][index]
                 else:

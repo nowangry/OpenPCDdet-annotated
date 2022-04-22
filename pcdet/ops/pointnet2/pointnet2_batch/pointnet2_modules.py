@@ -19,28 +19,28 @@ class _PointnetSAModuleBase(nn.Module):
     def forward(self, xyz: torch.Tensor, features: torch.Tensor = None, new_xyz=None) -> (torch.Tensor, torch.Tensor):
         """
         :param xyz: (B, N, 3) tensor of the xyz coordinates of the features
-        :param features: (B, N, C) tensor of the descriptors of the the features
+        :param features: (B, N, C) tensor of the descriptors of the features
         :param new_xyz:
         :return:
             new_xyz: (B, npoint, 3) tensor of the new features' xyz
             new_features: (B, npoint, \sum_k(mlps[k][-1])) tensor of the new_features descriptors
         """
         new_features_list = []
-
+        # shape ： (2, 16384, 3) --> (2, 3, 16384)
         xyz_flipped = xyz.transpose(1, 2).contiguous()
-        if new_xyz is None:
+        if new_xyz is None:# 完成最远点采样，并将采样的点放入new_xyz中
             new_xyz = pointnet2_utils.gather_operation(
                 xyz_flipped,
                 pointnet2_utils.farthest_point_sample(xyz, self.npoint)
             ).transpose(1, 2).contiguous() if self.npoint is not None else None
 
-        for i in range(len(self.groupers)):
+        for i in range(len(self.groupers)):# 完成MSG(Multi Scale Grouping) 两个半径
             new_features = self.groupers[i](xyz, new_xyz, features)  # (B, C, npoint, nsample)
-
+            # (batch_size, 4, n_points, n_sample) -> (batch_size, 32, n_points, n_sample)
             new_features = self.mlps[i](new_features)  # (B, mlp[-1], npoint, nsample)
             if self.pool_method == 'max_pool':
-                new_features = F.max_pool2d(
-                    new_features, kernel_size=[1, new_features.size(3)]
+                new_features = F.max_pool2d(# 取出每个点集中，最能代表该点集的点
+                    new_features, kernel_size=[1, new_features.size(3)]#( batch_size, 32, n_points, n_sample) -->( batch_size, 32, n_points, 1)
                 )  # (B, mlp[-1], npoint, 1)
             elif self.pool_method == 'avg_pool':
                 new_features = F.avg_pool2d(
@@ -48,10 +48,11 @@ class _PointnetSAModuleBase(nn.Module):
                 )  # (B, mlp[-1], npoint, 1)
             else:
                 raise NotImplementedError
-
+            # ( batch_size, 32, n_points, 1) --> ( batch_size, 32, n_points)
             new_features = new_features.squeeze(-1)  # (B, mlp[-1], npoint)
             new_features_list.append(new_features)
-
+        # new_xyz shape :（batch_size, n_points, feature）
+        # torch.cat(new_features_list, dim=1) shape :（batch_size, 32+96, n_points）
         return new_xyz, torch.cat(new_features_list, dim=1)
 
 
@@ -154,7 +155,7 @@ class PointnetFPModule(nn.Module):
             dist_recip = 1.0 / (dist + 1e-8)
             norm = torch.sum(dist_recip, dim=2, keepdim=True)
             weight = dist_recip / norm
-
+            # 知道了三个最近点的索引和当前自己的特征，通过距离插值来计算这三个未知点的特征
             interpolated_feats = pointnet2_utils.three_interpolate(known_feats, idx, weight)
         else:
             interpolated_feats = known_feats.expand(*known_feats.size()[0:2], unknown.size(1))

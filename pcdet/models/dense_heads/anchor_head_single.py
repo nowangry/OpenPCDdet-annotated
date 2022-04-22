@@ -8,11 +8,11 @@ class AnchorHeadSingle(AnchorHeadTemplate):
     """
     Args:
         model_cfg: AnchorHeadSingle的配置
-        input_channels: 384 输入通道数
+        input_channels: 384 | 512 输入通道数
         num_class: 3
         class_names: ['Car','Pedestrian','Cyclist']
-        grid_size: (432, 496, 1)
-        point_cloud_range: (0, -39.68, -3, 69.12, 39.68, 1)
+        grid_size: (X, Y, Z)
+        point_cloud_range: (0, -39.68, -3, 69.12, 39.68, 1) ，[0, -40, -3, 70.4, 40, 1]
         predict_boxes_when_training: False
     """
 
@@ -56,25 +56,25 @@ class AnchorHeadSingle(AnchorHeadTemplate):
 
     def forward(self, data_dict):
         # 从字典中取出经过backbone处理过的信息
-        # spatial_features_2d 维度 （batch_size, 384, 248, 216）
+        # spatial_features_2d 维度 （batch_size, C, W, H）
         spatial_features_2d = data_dict['spatial_features_2d']
-        # 每个坐标点上面6个先验框的类别预测 --> (batch_size, 18, 248, 216)
+        # 每个坐标点上面6个先验框的类别预测 --> (batch_size, 18, W, H)
         cls_preds = self.conv_cls(spatial_features_2d)
-        # 每个坐标点上面6个先验框的参数预测 --> (batch_size, 42, 248, 216)
+        # 每个坐标点上面6个先验框的参数预测 --> (batch_size, 42, W, H)
         # 其中每个先验框需要预测7个参数，分别是（x, y, z, w, l, h, θ）
         box_preds = self.conv_box(spatial_features_2d)
-        # 维度调整，将类别放置在最后一维度   [N, H, W, C] --> (batch_size, 248, 216, 18)
+        # 维度调整，将类别放置在最后一维度   [N, H, W, C] --> (batch_size, W, H, 18)
         cls_preds = cls_preds.permute(0, 2, 3, 1).contiguous()
-        # 维度调整，将先验框调整参数放置在最后一维度   [N, H, W, C] --> (batch_size ,248, 216, 42)
+        # 维度调整，将先验框调整参数放置在最后一维度   [N, H, W, C] --> (batch_size ,W, H, 42)
         box_preds = box_preds.permute(0, 2, 3, 1).contiguous()
         # 将类别和先验框调整预测结果放入前向传播字典中
         self.forward_ret_dict['cls_preds'] = cls_preds
         self.forward_ret_dict['box_preds'] = box_preds
         # 进行方向分类预测
         if self.conv_dir_cls is not None:
-            # # 每个先验框都要预测为两个方向中的其中一个方向 --> (batch_size, 12, 248, 216)
+            # # 每个先验框都要预测为两个方向中的其中一个方向 --> (batch_size, 12, W, H)
             dir_cls_preds = self.conv_dir_cls(spatial_features_2d)
-            # 将类别和先验框方向预测结果放到最后一个维度中   [N, H, W, C] --> (batch_size, 248, 216, 12)
+            # 将类别和先验框方向预测结果放到最后一个维度中   [N, H, W, C] --> (batch_size, W, H, 12)
             dir_cls_preds = dir_cls_preds.permute(0, 2, 3, 1).contiguous()
             # 将方向预测结果放入前向传播字典中
             self.forward_ret_dict['dir_cls_preds'] = dir_cls_preds
@@ -96,7 +96,7 @@ class AnchorHeadSingle(AnchorHeadTemplate):
             # 将GT分配结果放入前向传播字典中
             self.forward_ret_dict.update(targets_dict)
 
-        # 如果不是训练模式，则直接生成进行box的预测
+        # 如果不是训练模式，则直接生成进行box的预测，在PV-RCNN和Voxel-RCNN中在训练时候也要生成bbox用于refinement
         if not self.training or self.predict_boxes_when_training:
             # 根据预测结果解码生成最终结果
             batch_cls_preds, batch_box_preds = self.generate_predicted_boxes(

@@ -87,15 +87,16 @@ class StackSAModuleMSG(nn.Module):
             new_features: (M1 + M2 ..., \sum_k(mlps[k][-1])) tensor of the new_features descriptors
         """
         new_features_list = []
-        for k in range(len(self.groupers)):
+        for k in range(len(self.groupers)):  # 两个不同的半径下进行group操作（0.8m，1.6m）
             new_features, ball_idxs = self.groupers[k](
                 xyz, xyz_batch_cnt, new_xyz, new_xyz_batch_cnt, features
-            )  # (M1 + M2, C, nsample)
+            )  # new_features (batch*27648, 128+xyz, 16) 16为每个ball的最大采样数量  # (M1 + M2, C, nsample)  ball_idxs (batch*27648, 16)为每个grid point在ball内采样的16个点
             new_features = new_features.permute(1, 0, 2).unsqueeze(dim=0)  # (1, C, M1 + M2 ..., nsample)
-            new_features = self.mlps[k](new_features)  # (1, C, M1 + M2 ..., nsample)
+            new_features = self.mlps[k](
+                new_features)  # (1, C, M1 + M2 ..., nsample)  (1, 128+xyz, batch*27648, 16) -->64-->64
 
             if self.pool_method == 'max_pool':
-                new_features = F.max_pool2d(
+                new_features = F.max_pool2d(  # 在最后一个维度上进行maxpool操作 (1, 64,  batch*27648, 16) --> (1, 64,  batch*27648)
                     new_features, kernel_size=[1, new_features.size(3)]
                 ).squeeze(dim=-1)  # (1, C, M1 + M2 ...)
             elif self.pool_method == 'avg_pool':
@@ -108,7 +109,7 @@ class StackSAModuleMSG(nn.Module):
             new_features_list.append(new_features)
 
         new_features = torch.cat(new_features_list, dim=1)  # (M1 + M2 ..., C)
-
+        # (batch * 27648, 64*2)
         return new_xyz, new_features
 
 
@@ -215,7 +216,8 @@ class VectorPoolLocalInterpolateModule(nn.Module):
                 self.max_neighbour_distance, self.nsample, self.neighbor_type,
                 self.num_avg_length_of_neighbor_idxs, self.num_total_grids, self.neighbor_distance_multiplier
             )
-        self.num_avg_length_of_neighbor_idxs = max(self.num_avg_length_of_neighbor_idxs, num_avg_length_of_neighbor_idxs.item())
+        self.num_avg_length_of_neighbor_idxs = max(self.num_avg_length_of_neighbor_idxs,
+                                                   num_avg_length_of_neighbor_idxs.item())
 
         dist_recip = 1.0 / (dist + 1e-8)
         norm = torch.sum(dist_recip, dim=-1, keepdim=True)
@@ -225,12 +227,14 @@ class VectorPoolLocalInterpolateModule(nn.Module):
         idx.view(-1, 3)[empty_mask] = 0
 
         interpolated_feats = pointnet2_utils.three_interpolate(support_features, idx.view(-1, 3), weight.view(-1, 3))
-        interpolated_feats = interpolated_feats.view(idx.shape[0], idx.shape[1], -1)  # (M1 + M2 ..., num_total_grids, C)
+        interpolated_feats = interpolated_feats.view(idx.shape[0], idx.shape[1],
+                                                     -1)  # (M1 + M2 ..., num_total_grids, C)
         if self.use_xyz:
             near_known_xyz = support_xyz[idx.view(-1, 3).long()].view(-1, 3, 3)  # ( (M1 + M2 ...)*num_total_grids, 3)
             local_xyz = (new_xyz_grid_centers.view(-1, 1, 3) - near_known_xyz).view(-1, idx.shape[1], 9)
             if self.xyz_encoding_type == 'concat':
-                interpolated_feats = torch.cat((interpolated_feats, local_xyz), dim=-1)  # ( M1 + M2 ..., num_total_grids, 9+C)
+                interpolated_feats = torch.cat((interpolated_feats, local_xyz),
+                                               dim=-1)  # ( M1 + M2 ..., num_total_grids, 9+C)
             else:
                 raise NotImplementedError
 
@@ -346,9 +350,12 @@ class VectorPoolAggregationModule(nn.Module):
         """
         R = max_neighbour_distance
         device = point_centers.device
-        x_grids = torch.arange(-R + R / num_voxels[0], R - R / num_voxels[0] + 1e-5, 2 * R / num_voxels[0], device=device)
-        y_grids = torch.arange(-R + R / num_voxels[1], R - R / num_voxels[1] + 1e-5, 2 * R / num_voxels[1], device=device)
-        z_grids = torch.arange(-R + R / num_voxels[2], R - R / num_voxels[2] + 1e-5, 2 * R / num_voxels[2], device=device)
+        x_grids = torch.arange(-R + R / num_voxels[0], R - R / num_voxels[0] + 1e-5, 2 * R / num_voxels[0],
+                               device=device)
+        y_grids = torch.arange(-R + R / num_voxels[1], R - R / num_voxels[1] + 1e-5, 2 * R / num_voxels[1],
+                               device=device)
+        z_grids = torch.arange(-R + R / num_voxels[2], R - R / num_voxels[2] + 1e-5, 2 * R / num_voxels[2],
+                               device=device)
         x_offset, y_offset, z_offset = torch.meshgrid(x_grids, y_grids, z_grids)  # shape: [num_x, num_y, num_z]
         xyz_offset = torch.cat((
             x_offset.contiguous().view(-1, 1),

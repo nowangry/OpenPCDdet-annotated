@@ -247,13 +247,13 @@ class QueryAndGroup(nn.Module):
             new_features: (B, 3 + C, npoint, nsample)
         """
         idx = ball_query(self.radius, self.nsample, xyz, new_xyz)
-        xyz_trans = xyz.transpose(1, 2).contiguous()
-        grouped_xyz = grouping_operation(xyz_trans, idx)  # (B, 3, npoint, nsample)
-        grouped_xyz -= new_xyz.transpose(1, 2).unsqueeze(-1)
+        xyz_trans = xyz.transpose(1, 2).contiguous()# shape : (batch_size, 16384, 3) --> (batch_size, 3, 16384)
+        grouped_xyz = grouping_operation(xyz_trans, idx)  # (batch_size ,3, npoint, nsample)
+        grouped_xyz -= new_xyz.transpose(1, 2).unsqueeze(-1)#将每一组里面的点，减去该组的中心坐标
 
-        if features is not None:
-            grouped_features = grouping_operation(features, idx)
-            if self.use_xyz:
+        if features is not None:#将intensity进行相同的group操作
+            grouped_features = grouping_operation(features, idx)# shape ： （batch_size, 1 , npoint, nsample）
+            if self.use_xyz:#将feature和xyz拼接起来
                 new_features = torch.cat([grouped_xyz, grouped_features], dim=1)  # (B, C + 3, npoint, nsample)
             else:
                 new_features = grouped_features
@@ -261,7 +261,7 @@ class QueryAndGroup(nn.Module):
             assert self.use_xyz, "Cannot have not features and not use xyz as a feature!"
             new_features = grouped_xyz
 
-        return new_features
+        return new_features# shape ： （batch_size, 4 , npoint, nsample）
 
 
 class GroupAll(nn.Module):
