@@ -1,0 +1,49 @@
+EXP_NAME: DA-exp_1.3.1
+# 遗传算法。
+# car_pro_mean_list: 16%
+
+# 调整了lidar位置到[0, 0, 0]
+# 调整各loss的权重
+# 自然选择时仅使用fitness差的繁衍后代
+# Epsilon设为2厘米
+# 调整object_position: [1.622, 0, -1.73] (对抗物体x轴厚度为0.622)
+
+DA_PARAMETERS:
+    # 算法参数
+    DNA_SIZE: None  # DNA size
+    CROSS_RATE: 0.1
+    MUTATE_RATE: 0.2
+    MUTATE_STD: 0.05
+    POP_SIZE: 160
+    N_GENERATIONS: 200 # debug
+    LEFTOVER_RATE: 0.5
+
+ADV_PARAMETERS:
+    # 对抗攻击
+    Epsilon: 0.02 # 单位：米
+    Target_Label: 0  # ['Car', 'Pedestrian', 'Cyclist']
+    Top_M: 100
+
+    # 高斯噪声参数
+    GN_mean: 0.0
+    GN_std: 0.02 # 单位：米
+
+    # 不同loss的权值
+    weight_feat: 0.01 # loss_features
+    weight_box: 1  # loss_box
+
+
+# 对抗物体调整
+ADV_OBJECT:
+    object_position: [1.622, 0, -1.73]
+    lidar_position: [0, 0, 0]
+    scalar_rate: 0.062992 # 1.0/15.875
+
+PATH:
+    # 输出
+    result_output_dir_root: /data/dataset_wujunqi/EvolutionaryAlgorithm/
+
+    # 输入
+    mesh_path: ./data/inputs/cone_0001.ply
+    target_mesh_path: ./data/inputs/car_0004.off
+    PC_background_path: ./data/inputs/lidar_background-000306.bin

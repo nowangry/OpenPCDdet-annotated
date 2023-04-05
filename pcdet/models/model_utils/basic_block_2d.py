@@ -7,7 +7,7 @@ class BasicBlock2D(nn.Module):
         """
         Initializes convolutional block
         Args:
-            in_channels: int, Number of input channels
+            in_channels: int, Number of inputs channels
             out_channels: int, Number of output channels
             **kwargs: Dict, Extra arguments for nn.Conv2d
         """

@@ -210,12 +210,13 @@ class VectorPoolLocalInterpolateModule(nn.Module):
         Returns:
             new_features: (N1 + N2 ..., C_out)
         """
-        with torch.no_grad():
-            dist, idx, num_avg_length_of_neighbor_idxs = pointnet2_utils.three_nn_for_vector_pool_by_two_step(
-                support_xyz, xyz_batch_cnt, new_xyz, new_xyz_grid_centers, new_xyz_batch_cnt,
-                self.max_neighbour_distance, self.nsample, self.neighbor_type,
-                self.num_avg_length_of_neighbor_idxs, self.num_total_grids, self.neighbor_distance_multiplier
-            )
+        # with torch.no_grad(): # adv
+        dist, idx, num_avg_length_of_neighbor_idxs = pointnet2_utils.three_nn_for_vector_pool_by_two_step(
+            support_xyz, xyz_batch_cnt, new_xyz, new_xyz_grid_centers, new_xyz_batch_cnt,
+            self.max_neighbour_distance, self.nsample, self.neighbor_type,
+            self.num_avg_length_of_neighbor_idxs, self.num_total_grids, self.neighbor_distance_multiplier
+        )
+        # adv
         self.num_avg_length_of_neighbor_idxs = max(self.num_avg_length_of_neighbor_idxs,
                                                    num_avg_length_of_neighbor_idxs.item())
 

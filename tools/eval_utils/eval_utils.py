@@ -7,6 +7,7 @@ import tqdm
 
 from pcdet.models import load_data_to_gpu
 from pcdet.utils import common_utils
+import os
 
 
 def statistics_info(cfg, ret_dict, metric, disp_dict):
@@ -53,8 +54,57 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
     start_time = time.time()
     for i, batch_dict in enumerate(dataloader):
         load_data_to_gpu(batch_dict)
+
+        # Adv -----------------------------------------------------------------------
+        # torch.autograd.set_detect_anomaly(True)
+        # with torch.set_grad_enabled(cfg.IS_ADV):
+        #     load_data_to_gpu(batch_dict)
+        #     batch_dict['points'].requires_grad = True
+        #     pred_dicts, ret_dict = model(batch_dict)
+        #     model.zero_grad()
+
+            # # RPN loss for PointRCNN
+            # loss_rpn_cls = batch_dict['batch_cls_preds'].sum()
+            # loss_rpn_cls.backward()
+            # print(batch_dict['points'].grad)
+            # grad = torch.autograd.grad(loss_rpn_cls, batch_dict['points'], retain_graph=False, create_graph=False)[0]
+            # print(grad)
+
+            # grad = torch.autograd.grad(loss_rpn_cls, batch_dict['points'], retain_graph=False, create_graph=False)[0]
+
+            # # RCNN loss for PointRCNN
+            # loss_rcnn_cls = batch_dict['rcnn_cls'].sum()
+            # loss_rcnn_cls.backward()
+            # loss_adv = loss_rpn_cls + loss_rcnn_cls
+            # loss_adv.backward()
+
+            # # loss for PointPillar
+            # loss_adv_pred= pred_dicts[0]['pred_scores'].sum()
+            # loss_adv_pred.backward()
+
+
+            # loss for centerPoint
+
+
+
+            # inputs = batch_dict['points'].detach()
+            #
+            # Epsilon = 0.1
+            # adv_inputs = inputs + Epsilon * inputs.grad.sign()
+            #
+            # benign_pc_dir = r'/data/dataset_wujunqi/KITTI/object/training/velodyne'
+            # adv_pc_dir = r'/data/dataset_wujunqi/KITTI/object/training/velodyne-adv'
+            #
+            # for root, _, file_names in os.walk(benign_pc_dir):
+            #     pass
+            # adv_pc_path = os.path.join(adv_pc_dir, file_names[i] + '.bin')
+            # adv_inputs.detach().cpu().numpy().tofile(adv_pc_path)  # 保存对抗点云
+
+        # Adv -----------------------------------------------------------------------
+
+
         with torch.no_grad():
-            pred_dicts, ret_dict = model(batch_dict)
+            pred_dicts, ret_dict, batch_dict = model(batch_dict)
         disp_dict = {}
 
         statistics_info(cfg, ret_dict, metric, disp_dict)

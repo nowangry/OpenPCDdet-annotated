@@ -111,7 +111,7 @@ class SECONDHead(RoIHeadTemplate):
 
     def forward(self, batch_dict):
         """
-        :param input_data: input dict
+        :param input_data: inputs dict
         :return:
         """
         targets_dict = self.proposal_layer(

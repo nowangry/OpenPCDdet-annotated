@@ -18,10 +18,10 @@ class Sampler(nn.Module):
 
     def forward(self, input_features, grid):
         """
-        Samples input using sampling grid
+        Samples inputs using sampling grid
         Args:
             input_features: (B, C, D, H, W), Input frustum features
-            grid: (B, X, Y, Z, 3), Sampling grids for input features
+            grid: (B, X, Y, Z, 3), Sampling grids for inputs features
         Returns
             output_features: (B, C, X, Y, Z) Output voxel features
         """

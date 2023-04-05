@@ -5,6 +5,14 @@ from pathlib import Path
 import numpy as np
 from tqdm import tqdm
 
+import sys
+print('sys.path: {}'.format(sys.path))
+sys.path.append('/home/jqwu/Codes/OpenPCDdet-annotated/pcdet/datasets/')
+sys.path.append('/home/jqwu/Codes/OpenPCDdet-annotated/pcdet/')
+sys.path.append('/home/jqwu/Codes/OpenPCDdet-annotated/')
+print('sys.path: {}'.format(sys.path))
+# python -m pcdet.datasets.nuscenes.nuscenes_dataset --func create_nuscenes_infos     --cfg_file tools/cfgs/dataset_configs/nuscenes_dataset.yaml     --version v1.0-mini
+
 from ...ops.roiaware_pool3d import roiaware_pool3d_utils
 from ...utils import common_utils
 from ..dataset import DatasetTemplate

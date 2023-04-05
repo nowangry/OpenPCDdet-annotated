@@ -1,0 +1,71 @@
+# Debug
+EXP_NAME: DA-debug
+
+ADV_OBJECT_NAME: Cone
+TARGET_NAME: Car
+DA_PARAMETERS:
+    # 算法参数
+    DNA_SIZE: None  # DNA size
+    CROSS_RATE: 0.3
+    MUTATE_RATE: 0.2
+    MUTATE_STD: 0.05
+    POP_SIZE: 16
+    N_GENERATIONS: 50 # debug
+    LEFTOVER_RATE: 0.5
+
+    # 差分进化算法参数
+    F_mutation: 0.5
+
+ADV_PARAMETERS:
+    # 对抗攻击
+    Epsilon: 0.02 # 2厘米
+    Target_Label: 0  # ['Car', 'Pedestrian', 'Cyclist']
+    Top_M: 100
+
+    # 高斯噪声参数
+    GN_mean: 0.0
+    GN_std: 0.02 # 2厘米
+
+    # 不同loss的权值
+    weight_feat: 0.01 # loss_features
+    weight_box: 1  # loss_box
+
+
+# 对抗物体调整
+ADV_OBJECT:
+#    object_position: [3, 0, -1.73]
+    object_position: [3, 0, -1.23]
+    lidar_position: [0, 0, 0]
+#    scalar_rate: 0.062992 # 1.0/15.875
+    scalar_rate: 0.389256 # 1.0/2.569
+# 目标物体
+TARGET_OBJECT:
+    scalar_rate: 0.776156 # 5/6.442 车长5米
+LIDAR:
+    delta_azimuth: 0.2
+    delta_elevation: 0.8
+
+PATH:
+    # 输出
+    result_output_dir_root: /data/dataset_wujunqi/EvolutionaryAlgorithm/
+
+    # 输入
+#    mesh_path: ./data/inputs/cone_0001.ply
+    mesh_path: ./data/inputs/only_quad_sphere.ply
+    target_mesh_path: ./data/inputs/car_0004.off
+    PC_background_path: ./data/inputs/lidar_background-000306.bin
+
+VAL:
+    sample_num: 100
+    val_frequency: 5 # 每x次迭代跑一次验证
+
+EVAL:
+    sample_num: 100
+    random_seed: 10
+    object_location_area: # object变化范围
+        x: [ 1, 7 ]
+        y: [ -3, -1 ]
+        z: [ -0.8, -0.7 ]
+    lidar_location: [0, 0, 0] # lidar位置
+
+

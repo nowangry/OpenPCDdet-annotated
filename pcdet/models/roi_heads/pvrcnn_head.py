@@ -159,7 +159,7 @@ class PVRCNNHead(RoIHeadTemplate):
 
     def forward(self, batch_dict):
         """
-        :param input_data: input dict
+        :param input_data: inputs dict
         :return:
         """
         # 根据所有的预测结果生成proposal, rois: (B, num_rois, 7+C)

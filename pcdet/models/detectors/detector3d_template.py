@@ -215,7 +215,7 @@ class Detector3DTemplate(nn.Module):
             src_box_preds = box_preds
 
             if not isinstance(batch_dict['batch_cls_preds'], list):
-                # (所有anchor的数量, 3)
+                # (所有anchor的数量, 1)
                 cls_preds = batch_dict['batch_cls_preds'][batch_mask]
                 # 同上
                 src_cls_preds = cls_preds
@@ -262,7 +262,7 @@ class Detector3DTemplate(nn.Module):
                 cls_preds, label_preds = torch.max(cls_preds, dim=-1)
                 if batch_dict.get('has_class_labels', False):
                     # 如果有roi_labels在里面字典里面，
-                    # 使用第一阶段预测的label为改预测结果的分类类别
+                    # 使用第一阶段预测的label为该预测结果的分类类别
                     label_key = 'roi_labels' if 'roi_labels' in batch_dict else 'batch_pred_labels'
                     label_preds = batch_dict[label_key][index]
                 else:
@@ -384,7 +384,7 @@ class Detector3DTemplate(nn.Module):
     def load_params_from_file(self, filename, logger, to_cpu=False):
         if not os.path.isfile(filename):
             raise FileNotFoundError
-
+        # adv 注释
         logger.info('==> Loading parameters from checkpoint %s to %s' % (filename, 'CPU' if to_cpu else 'GPU'))
         loc_type = torch.device('cpu') if to_cpu else None
         checkpoint = torch.load(filename, map_location=loc_type)
@@ -399,14 +399,14 @@ class Detector3DTemplate(nn.Module):
         for key in state_dict:
             if key not in update_model_state:
                 logger.info('Not updated weight %s: %s' % (key, str(state_dict[key].shape)))
-
-        logger.info('==> Done (loaded %d/%d)' % (len(update_model_state), len(state_dict)))
+        # adv 注释
+        # logger.info('==> Done (loaded %d/%d)' % (len(update_model_state), len(state_dict)))
 
     def load_params_with_optimizer(self, filename, to_cpu=False, optimizer=None, logger=None):
         if not os.path.isfile(filename):
             raise FileNotFoundError
-
-        logger.info('==> Loading parameters from checkpoint %s to %s' % (filename, 'CPU' if to_cpu else 'GPU'))
+        # adv 注释
+        # logger.info('==> Loading parameters from checkpoint %s to %s' % (filename, 'CPU' if to_cpu else 'GPU'))
         loc_type = torch.device('cpu') if to_cpu else None
         checkpoint = torch.load(filename, map_location=loc_type)
         epoch = checkpoint.get('epoch', -1)

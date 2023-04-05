@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="61faac76-289b-4ded-9028-6c43536545b8" name="jqwu@202.120.57.161:22 password (1)">
+        <fileTransfer accessType="SFTP" host="202.120.57.161" port="22" sshConfigId="293363e1-7b9f-4600-8642-d6d583318860" sshConfig="jqwu@202.120.57.161:22 password" />
+      </webServer>
+      <webServer id="78784d8c-95c0-42f9-8ec7-8ab1860b95bb" name="jqwu@202.120.57.161:22 password (project level)">
+        <fileTransfer accessType="SFTP" host="202.120.57.161" port="22" sshConfigId="293363e1-7b9f-4600-8642-d6d583318860" sshConfig="jqwu@202.120.57.161:22 password" />
+      </webServer>
+    </option>
+  </component>
+</project>

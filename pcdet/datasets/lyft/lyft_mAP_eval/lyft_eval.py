@@ -29,7 +29,7 @@ prediction_result = {
 }
 
 
-input arguments:
+inputs arguments:
 
 --pred_file:  file with predictions
 --gt_file: ground truth file

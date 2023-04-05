@@ -87,7 +87,7 @@ class WeightedSmoothL1Loss(nn.Module):
                   | 0.5 * x ** 2 / beta   if abs(x) < beta
     smoothl1(x) = |
                   | abs(x) - 0.5 * beta   otherwise,
-    where x = input - target.
+    where x = inputs - target.
     """
 
     def __init__(self, beta: float = 1.0 / 9.0, code_weights: list = None):
@@ -194,7 +194,7 @@ class WeightedL1Loss(nn.Module):
 class WeightedCrossEntropyLoss(nn.Module):
     """
     二分类
-    Transform input to fit the formation of PyTorch official cross entropy loss
+    Transform inputs to fit the formation of PyTorch official cross entropy loss
     with anchor-wise weighting.
     """
 

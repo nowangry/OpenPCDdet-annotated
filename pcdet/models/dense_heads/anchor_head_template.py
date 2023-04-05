@@ -198,7 +198,7 @@ class AnchorHeadTemplate(nn.Module):
     def add_sin_difference(boxes1, boxes2, dim=6):
         # 针对角度添加sin损失，有效防止-pi和pi方向相反时损失过大
         assert dim != -1  # 角度=180°×弧度÷π   弧度=角度×π÷180°
-        # (batch_size, 321408, 1)  torch.sin() - torch.cos() 的 input (Tensor) 都是弧度制数据，不是角度制数据。
+        # (batch_size, 321408, 1)  torch.sin() - torch.cos() 的 inputs (Tensor) 都是弧度制数据，不是角度制数据。
         rad_pred_encoding = torch.sin(boxes1[..., dim:dim + 1]) * torch.cos(boxes2[..., dim:dim + 1])
         # (batch_size, 321408, 1)
         rad_tg_encoding = torch.cos(boxes1[..., dim:dim + 1]) * torch.sin(boxes2[..., dim:dim + 1])

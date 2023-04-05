@@ -208,7 +208,8 @@ class DataProcessor(object):
             choice = np.arange(0, len(points), dtype=np.int32)
             if num_points > len(points):
                 # 　随机采样缺少的点云索引
-                extra_choice = np.random.choice(choice, num_points - len(points), replace=False)
+                # extra_choice = np.random.choice(choice, num_points - len(points), replace=False)
+                extra_choice = np.random.choice(choice, num_points - len(points), replace=True) # adv 采样
                 # 拼接索引
                 choice = np.concatenate((choice, extra_choice), axis=0)
             # 将索引打乱

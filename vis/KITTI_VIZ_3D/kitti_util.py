@@ -275,7 +275,7 @@ def load_velo_scan(velo_filename):
 def project_to_image(pts_3d, P):
     ''' Project 3d points to image plane.
     Usage: pts_2d = projectToImage(pts_3d, P)
-      input: pts_3d: nx3 matrix
+      inputs: pts_3d: nx3 matrix
              P:      3x4 projection matrix
       output: pts_2d: nx2 matrix
       P(3x4) dot pts_3d_extended(4xn) = projected_pts_2d(3xn)

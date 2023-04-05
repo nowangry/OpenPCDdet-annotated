@@ -134,27 +134,29 @@ class PointRCNNHead(RoIHeadTemplate):
         # shape （batch * 16384, 130）--> （batch , 16384, 130）
         batch_point_features = point_features_all.view(batch_size, -1, point_features_all.shape[-1])
         # 不保存计算图  根据生成的proposal来池化每个roi内的特征
-        with torch.no_grad():
+        # adv
+        # with torch.no_grad():
             # pooled_features为(batch, num_of_roi, num_sample_points, 3 + C)
             # pooled_empty_flag:(B, num_rois)反映哪些proposal中没有点在其中
-            pooled_features, pooled_empty_flag = self.roipoint_pool3d_layer(
-                batch_points, batch_point_features, rois
-            )
+        pooled_features, pooled_empty_flag = self.roipoint_pool3d_layer(
+            batch_points, batch_point_features, rois
+        )
 
-            # canonical transformation (batch, num_of_roi, 3)
-            roi_center = rois[:, :, 0:3]
-            # 池化后的proposal转换到以自身ROI中心为坐标系
-            # （batch, num_rois, num_sampled_points, 3 + C = 133）
-            pooled_features[:, :, :, 0:3] -= roi_center.unsqueeze(dim=2)
-            # （batch, num_rois, num_sampled_points, 133） --> （batch * num_rois, num_sampled_points, 133）
-            pooled_features = pooled_features.view(-1, pooled_features.shape[-2], pooled_features.shape[-1])
-            # 上面完成平移操作后，下面完成旋转操作，使x方向朝向车头方向，y垂直于x，z向上
-            # （openpcdet中，x向前，y向左，z向上，x到y逆时针为正）
-            pooled_features[:, :, 0:3] = common_utils.rotate_points_along_z(
-                pooled_features[:, :, 0:3], -rois.view(-1, rois.shape[-1])[:, 6]
-            )
-            # 将proposal池化后没有点在内的proposal置0
-            pooled_features[pooled_empty_flag.view(-1) > 0] = 0
+        # canonical transformation (batch, num_of_roi, 3)
+        roi_center = rois[:, :, 0:3]
+        # 池化后的proposal转换到以自身ROI中心为坐标系
+        # （batch, num_rois, num_sampled_points, 3 + C = 133）
+        pooled_features[:, :, :, 0:3] -= roi_center.unsqueeze(dim=2)
+        # （batch, num_rois, num_sampled_points, 133） --> （batch * num_rois, num_sampled_points, 133）
+        pooled_features = pooled_features.view(-1, pooled_features.shape[-2], pooled_features.shape[-1])
+        # 上面完成平移操作后，下面完成旋转操作，使x方向朝向车头方向，y垂直于x，z向上
+        # （openpcdet中，x向前，y向左，z向上，x到y逆时针为正）
+        pooled_features[:, :, 0:3] = common_utils.rotate_points_along_z(
+            pooled_features[:, :, 0:3], -rois.view(-1, rois.shape[-1])[:, 6]
+        )
+        # 将proposal池化后没有点在内的proposal置0
+        pooled_features[pooled_empty_flag.view(-1) > 0] = 0
+        # adv
 
         return pooled_features
 
@@ -172,7 +174,7 @@ class PointRCNNHead(RoIHeadTemplate):
         )
         # 在训练模式时，需要为每个生成的proposal匹配到与之对应的GT_box
         if self.training:
-            targets_dict = self.assign_targets(batch_dict)
+            targets_dict = self.assign_targets(batch_dict) # 包含canonical transformation操作
             batch_dict['rois'] = targets_dict['rois']
             batch_dict['roi_labels'] = targets_dict['roi_labels']
 
@@ -203,17 +205,27 @@ class PointRCNNHead(RoIHeadTemplate):
         rcnn_reg = self.reg_layers(shared_features).transpose(1, 2).contiguous().squeeze(dim=1)  # (B, C)
 
         if not self.training:
-
+            # 相对坐标转绝对坐标
             batch_cls_preds, batch_box_preds = self.generate_predicted_boxes(
                 batch_size=batch_dict['batch_size'], rois=batch_dict['rois'], cls_preds=rcnn_cls, box_preds=rcnn_reg
             )
 
-            batch_dict['batch_cls_preds'] = batch_cls_preds
+            batch_dict['batch_cls_preds'] = batch_cls_preds # batch_dict['batch_cls_preds']维度改变：[16384, 1] --> [1, 100， 1]
             batch_dict['batch_box_preds'] = batch_box_preds
             batch_dict['cls_preds_normalized'] = False
+
+            # adv
+            batch_dict['rcnn_cls'] = rcnn_cls
+            batch_dict['rcnn_reg'] = rcnn_reg
+            # adv
         else:
             targets_dict['rcnn_cls'] = rcnn_cls
             targets_dict['rcnn_reg'] = rcnn_reg
+
+            # adv
+            batch_dict['rcnn_cls'] = rcnn_cls
+            batch_dict['rcnn_reg'] = rcnn_reg
+            # adv
 
             self.forward_ret_dict = targets_dict
         return batch_dict

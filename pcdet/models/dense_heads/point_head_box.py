@@ -162,6 +162,11 @@ class PointHeadBox(PointHeadTemplate):
             batch_dict['batch_index'] = batch_dict['point_coords'][:, 0]
             # loss计算中，是否需要对类别预测结果进行normalized
             batch_dict['cls_preds_normalized'] = False
+
+            # adv -----------------
+            batch_dict['batch_cls_preds-PointHeadBox'] = point_cls_preds
+            # adv -----------------
+
         # 第一阶段生成的预测结果放入前向传播字典
         self.forward_ret_dict = ret_dict
 

@@ -62,17 +62,31 @@ def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, ac
         # 2.梯度清零
         optimizer.zero_grad()
 
+        # adv attack --------------------------
+        model.zero_grad()
+        batch['points'] = torch.tensor(batch['points']).cuda()
+        batch['points'].requires_grad = True
+        # adv attack --------------------------
+
+
         # 3.模型前向传播
         loss, tb_dict, disp_dict = model_func(model, batch)
 
         forward_timer = time.time()
         cur_forward_time = forward_timer - data_timer
 
-        # 4.损失反向传播
-        loss.backward()
-        clip_grad_norm_(model.parameters(), optim_cfg.GRAD_NORM_CLIP)
-        # 5.梯度更新
-        optimizer.step()
+        # # 4.损失反向传播
+        # loss.backward()
+        # clip_grad_norm_(model.parameters(), optim_cfg.GRAD_NORM_CLIP)
+        # # 5.梯度更新
+        # optimizer.step()
+
+        # adv attack --------------------------
+        # loss_adv =
+        print('iteration {}'.format(cur_it))
+        print(batch['points'].grad)
+        # adv attack --------------------------
+
 
         # 累计迭代次数+1
         accumulated_iter += 1

@@ -77,6 +77,8 @@ class RoIHeadTemplate(nn.Module):
         roi_scores = batch_box_preds.new_zeros((batch_size, nms_config.NMS_POST_MAXSIZE))
         # 用0初始化所有的roi的类别     shape : （batch, 512） 训练时为512个roi，测试时为100个roi
         roi_labels = batch_box_preds.new_zeros((batch_size, nms_config.NMS_POST_MAXSIZE), dtype=torch.long)
+        # adv 用0初始化所有的roi多个类别的置信度     shape : （batch, 512） 训练时为512个roi，测试时为100个roi
+        roi_cls_logit = batch_cls_preds.new_zeros((batch_size, nms_config.NMS_POST_MAXSIZE, 3))
         # 逐帧计算每帧中的roi
         for index in range(batch_size):
             if batch_dict.get('batch_index', None) is not None:
@@ -111,6 +113,9 @@ class RoIHeadTemplate(nn.Module):
             roi_scores[index, :len(selected)] = cur_roi_scores[selected]
             # 从所有预测结果中选取经过nms操作后得到的box对应类别存入roi中
             roi_labels[index, :len(selected)] = cur_roi_labels[selected]
+            # 从所有预测结果中选取经过nms操作后得到的box对应多类别logit存入roi中
+            roi_cls_logit[index, :len(selected), :] = cls_preds[selected]
+
         # 处理结果，成字典形式并返回
         # 将生成的proposal放入字典中  shape (batch, num_of_roi, 7)
         batch_dict['rois'] = rois
@@ -120,7 +125,8 @@ class RoIHeadTemplate(nn.Module):
         batch_dict['roi_labels'] = roi_labels + 1
         # True
         batch_dict['has_class_labels'] = True if batch_cls_preds.shape[-1] > 1 else False
-
+        # adv
+        batch_dict['roi_cls_logit'] = roi_cls_logit
         batch_dict.pop('batch_index', None)
         return batch_dict
 
@@ -128,20 +134,22 @@ class RoIHeadTemplate(nn.Module):
         # 从字典中取出当前batch-size大小
         batch_size = batch_dict['batch_size']
         # with torch.no_grad():，强制之后的内容不进行计算图构建。
-        with torch.no_grad():
-            """
-            targets_dict={
-            'rois': batch_rois,                 roi的box的7个参数                    shape（batch， 128, 7）
-            'gt_of_rois': batch_gt_of_rois,     roi对应的GTbox的8个参数，包含类别      shape（batch， 128, 8）
-            'gt_iou_of_rois': batch_roi_ious,   roi个对应GTbox的最大iou数值           shape（batch， 128）
-            'roi_scores': batch_roi_scores,     roi box的类别预测分数                shape（batch， 128）
-            'roi_labels': batch_roi_labels,     roi box的类别预测结果              shape（batch， 128）
-            'reg_valid_mask': reg_valid_mask,   需要计算回归损失的roi            shape（batch， 128）
-            'rcnn_cls_labels': batch_cls_labels 计算前背景损失的roi             shape（batch， 128）
-            }
-            """
-            # 完成128个proposal的选取和正负proposal分配
-            targets_dict = self.proposal_target_layer.forward(batch_dict)
+        # adv
+        # with torch.no_grad():
+        """
+        targets_dict={
+        'rois': batch_rois,                 roi的box的7个参数                    shape（batch， 128, 7）
+        'gt_of_rois': batch_gt_of_rois,     roi对应的GTbox的8个参数，包含类别      shape（batch， 128, 8）
+        'gt_iou_of_rois': batch_roi_ious,   roi个对应GTbox的最大iou数值           shape（batch， 128）
+        'roi_scores': batch_roi_scores,     roi box的类别预测分数                shape（batch， 128）
+        'roi_labels': batch_roi_labels,     roi box的类别预测结果              shape（batch， 128）
+        'reg_valid_mask': reg_valid_mask,   需要计算回归损失的roi            shape（batch， 128）
+        'rcnn_cls_labels': batch_cls_labels 计算前背景损失的roi             shape（batch， 128）
+        }
+        """
+        # 完成128个proposal的选取和正负proposal分配
+        targets_dict = self.proposal_target_layer.forward(batch_dict)
+        # adv
 
         # 完成匹配到的GT转换到CCS坐标系
         rois = targets_dict['rois']  # (Batch, 128, 7)

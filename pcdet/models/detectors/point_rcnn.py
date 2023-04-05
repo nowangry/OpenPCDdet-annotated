@@ -12,8 +12,12 @@ class PointRCNN(Detector3DTemplate):
         PointHeadBox
         PointRCNNHead
         """
+        cnt = 0
         for cur_module in self.module_list:
             batch_dict = cur_module(batch_dict)
+            cnt += 1
+            # if (cnt >= 2):
+            #     break
 
         if self.training:
             loss, tb_dict, disp_dict = self.get_training_loss()
@@ -24,7 +28,12 @@ class PointRCNN(Detector3DTemplate):
             return ret_dict, tb_dict, disp_dict
         else:
             pred_dicts, recall_dicts = self.post_processing(batch_dict)
-            return pred_dicts, recall_dicts
+            # return pred_dicts, recall_dicts
+            # print('test pointrcnn return')
+            # print("打印键值pointrcnn")
+            # for key in batch_dict:
+            #     print(key)  # 打印key
+            return pred_dicts, batch_dict # adv
 
     def get_training_loss(self):
         disp_dict = {}
@@ -32,4 +41,6 @@ class PointRCNN(Detector3DTemplate):
         loss_rcnn, tb_dict = self.roi_head.get_loss(tb_dict)  # 第二阶段的loss
 
         loss = loss_point + loss_rcnn
+        for key in disp_dict:
+            print(key) # 打印key
         return loss, tb_dict, disp_dict
