@@ -18,7 +18,8 @@ class BasicBlock2D(nn.Module):
                               out_channels=out_channels,
                               **kwargs)
         self.bn = nn.BatchNorm2d(out_channels)
-        self.relu = nn.ReLU(inplace=True)
+        # self.relu = nn.ReLU(inplace=True)
+        self.relu = nn.ReLU(inplace=False)  # adv
 
     def forward(self, features):
         """

@@ -6,7 +6,7 @@ class PointRCNN(Detector3DTemplate):
         super().__init__(model_cfg=model_cfg, num_class=num_class, dataset=dataset)
         self.module_list = self.build_networks()
 
-    def forward(self, batch_dict):
+    def forward(self, batch_dict, return_loss=True, **kwargs):
         """
         PointNet2MSG
         PointHeadBox
@@ -19,7 +19,26 @@ class PointRCNN(Detector3DTemplate):
             # if (cnt >= 2):
             #     break
 
-        if self.training:
+
+        ## adv =========================================================================================================
+        cfg = batch_dict['cfg']
+        if cfg.is_adv_eval or cfg.is_innocent_eval:
+            pred_dicts, recall_dicts = self.post_processing(batch_dict)
+            return pred_dicts, batch_dict
+        elif cfg.adv_flag:  # adv
+            if return_loss and (not cfg['is_eval_after_attack']):
+                loss, tb_dict, disp_dict = self.get_training_loss()
+                return loss
+            elif (not return_loss) and (cfg['is_eval_after_attack']):
+                pred_dicts, recall_dicts = self.post_processing(batch_dict)
+                return pred_dicts, batch_dict
+            else:
+                loss, tb_dict, disp_dict = self.get_training_loss()
+                pred_dicts, recall_dicts = self.post_processing(batch_dict)
+                return loss, pred_dicts, batch_dict
+        ## adv =========================================================================================================
+
+        elif self.training:
             loss, tb_dict, disp_dict = self.get_training_loss()
 
             ret_dict = {

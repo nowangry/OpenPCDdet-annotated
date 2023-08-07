@@ -29,7 +29,13 @@ class ResidualCoder(object):
         # 截断anchors的[dx,dy,dz]，每个anchor_box的l, w, h数值如果小于1e-5则为1e-5
         anchors[:, 3:6] = torch.clamp_min(anchors[:, 3:6], min=1e-5)
         # 截断boxes的[dx,dy,dz] 每个GT_box的l, w, h数值如果小于1e-5则为1e-5
-        boxes[:, 3:6] = torch.clamp_min(boxes[:, 3:6], min=1e-5)
+        # boxes[:, 3:6] = torch.clamp_min(boxes[:, 3:6], min=1e-5)
+        # TODO: 截断操作不可微
+        # 用以下代替
+        clamp_min_mask = torch.zeros_like(boxes, dtype=torch.bool)
+        clamp_min_mask[:, 3:6] = (boxes[:, 3:6] < 1e-5)
+        boxes = boxes - clamp_min_mask * boxes.clone().detach() + clamp_min_mask * 1e-5
+
         # If split_size_or_sections is an integer type, then tensor will be split into equally sized chunks (if possible).
         # Last chunk will be smaller if the tensor size along the given dimension dim is not divisible by split_size.
 

@@ -42,7 +42,7 @@ class RoIHeadTemplate(nn.Module):
         fc_layers = nn.Sequential(*fc_layers)
         return fc_layers
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def proposal_layer(self, batch_dict, nms_config):
         """
         Args:
@@ -189,7 +189,7 @@ class RoIHeadTemplate(nn.Module):
 
         return targets_dict
 
-    def get_box_reg_layer_loss(self, forward_ret_dict):
+    def get_box_reg_layer_loss(self, forward_ret_dict, disp_dict=None):
         loss_cfgs = self.model_cfg.LOSS_CONFIG
         code_size = self.box_coder.code_size  # 7
         # (batch * 128, )#每帧点云中，有128个roi，只需要对iou大于0.55的roi计算loss
@@ -224,12 +224,21 @@ class RoIHeadTemplate(nn.Module):
             """
             reg_targets = self.box_coder.encode_torch(
                 gt_boxes3d_ct.view(rcnn_batch_size, code_size), rois_anchor
-            )
+            )  ## TODO: 不可微
             # 计算第二阶段的回归残差损失 [B, M, 7]
             rcnn_loss_reg = self.reg_loss_func(
                 rcnn_reg.view(rcnn_batch_size, -1).unsqueeze(dim=0),
                 reg_targets.unsqueeze(dim=0),
             )
+            # TODO: adv
+            '''
+            with torch.autograd.set_detect_anomaly(True):
+                grad_voxels = \
+                    torch.autograd.grad(rcnn_loss_reg.sum(), disp_dict['voxels'], retain_graph=True,
+                                        create_graph=False)[0]
+                print('grad_voxels.shape: {}'.format(grad_voxels.shape))
+            '''
+
             # 这里只计算3D iou大于0.55的roi_box的loss
             rcnn_loss_reg = (rcnn_loss_reg.view(rcnn_batch_size, -1) * fg_mask.unsqueeze(dim=-1).float()).sum() / max(
                 fg_sum, 1)
@@ -325,18 +334,25 @@ class RoIHeadTemplate(nn.Module):
         tb_dict = {'rcnn_loss_cls': rcnn_loss_cls.item()}
         return rcnn_loss_cls, tb_dict
 
-    def get_loss(self, tb_dict=None):
+    def get_loss(self, tb_dict=None, disp_dict=None):
         tb_dict = {} if tb_dict is None else tb_dict
         rcnn_loss = 0
         rcnn_loss_cls, cls_tb_dict = self.get_box_cls_layer_loss(self.forward_ret_dict)
         rcnn_loss += rcnn_loss_cls
         tb_dict.update(cls_tb_dict)
 
-        rcnn_loss_reg, reg_tb_dict = self.get_box_reg_layer_loss(self.forward_ret_dict)
+        rcnn_loss_reg, reg_tb_dict = self.get_box_reg_layer_loss(self.forward_ret_dict, disp_dict)
         rcnn_loss += rcnn_loss_reg
         tb_dict.update(reg_tb_dict)
         tb_dict['rcnn_loss'] = rcnn_loss.item()
-        return rcnn_loss, tb_dict
+
+        if disp_dict is None:
+            return rcnn_loss, tb_dict
+        else:
+            disp_dict = {}
+            disp_dict['rcnn_loss_cls'] = rcnn_loss_cls
+            disp_dict['rcnn_loss_reg'] = rcnn_loss_reg
+            return rcnn_loss, tb_dict, disp_dict
 
     def generate_predicted_boxes(self, batch_size, rois, cls_preds, box_preds):
         """

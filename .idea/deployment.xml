@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="jqwu@202.120.57.161:22 password (5)" exclude=".svn;.cvs;.idea;.DS_Store;.git;.hg;*.hprof;*.pyc;*.so;*.txt" remoteFilesAllowedToDisappearOnAutoupload="false" showNewOnSourceInSync="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="jqwu@202.120.57.161:22 password (7)" exclude=".svn;.cvs;.idea;.DS_Store;.git;.hg;*.hprof;*.pyc;*.so;*.txt" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" showNewOnSourceInSync="false">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="jqwu@202.120.57.161:22 password">
         <serverdata>
           <mappings>
             <mapping deploy="/home/jqwu/Codes/OpenPCDdet-annotated" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="jqwu@202.120.57.161:22 password (1)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/jqwu/Codes/OpenPCDdet-annotated" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
@@ -44,10 +38,31 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="jqwu@202.120.57.161:22 password (project level)">
+      <paths name="jqwu@202.120.57.161:22 password (6)">
         <serverdata>
           <mappings>
             <mapping deploy="/home/jqwu/Codes/OpenPCDdet-annotated" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="jqwu@202.120.57.161:22 password (7)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/jqwu/Codes/OpenPCDdet-annotated" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="jqwu@202.120.57.161:22 password (8)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="jqwu@202.120.57.161:22 password (9)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

@@ -137,7 +137,8 @@ class PointHeadBox(PointHeadTemplate):
         ret_dict = {'point_cls_preds': point_cls_preds,
                     'point_box_preds': point_box_preds}
         # 如果在训练模式下，需要根据GTBox来生成对应的前背景点，用于点云的前背景分割，给后面计算前背景分类loss
-        if self.training:
+        # if self.training:
+        if self.training: ## adv
             targets_dict = self.assign_targets(batch_dict)
             # 将一个batch中所有点的GT类别结果放入字典中 shape (batch * 16384)
             ret_dict['point_cls_labels'] = targets_dict['point_cls_labels']

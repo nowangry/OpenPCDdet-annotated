@@ -1,5 +1,15 @@
 CLASS_NAMES: ['Car', 'Pedestrian', 'Cyclist']
 IS_ADV: True
+is_point_adv: True
+#IS_ADV: False
+# 测试
+is_innocent_eval: False
+is_adv_eval: False
+adv_eval_dir: r''
+is_eval_after_attack: False
+
+adv_flag: True
+#adv_flag: False
 
 DATA_CONFIG:
     _BASE_CONFIG_: cfgs/dataset_configs/kitti_dataset.yaml

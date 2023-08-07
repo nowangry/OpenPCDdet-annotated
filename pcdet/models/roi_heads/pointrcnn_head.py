@@ -173,7 +173,7 @@ class PointRCNNHead(RoIHeadTemplate):
             batch_dict, nms_config=self.model_cfg.NMS_CONFIG['TRAIN' if self.training else 'TEST']
         )
         # 在训练模式时，需要为每个生成的proposal匹配到与之对应的GT_box
-        if self.training:
+        if self.training:  # adv
             targets_dict = self.assign_targets(batch_dict) # 包含canonical transformation操作
             batch_dict['rois'] = targets_dict['rois']
             batch_dict['roi_labels'] = targets_dict['roi_labels']
@@ -217,6 +217,7 @@ class PointRCNNHead(RoIHeadTemplate):
             # adv
             batch_dict['rcnn_cls'] = rcnn_cls
             batch_dict['rcnn_reg'] = rcnn_reg
+            self.forward_ret_dict = targets_dict
             # adv
         else:
             targets_dict['rcnn_cls'] = rcnn_cls

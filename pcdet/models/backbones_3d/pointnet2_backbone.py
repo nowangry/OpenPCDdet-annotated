@@ -71,7 +71,8 @@ class PointNet2MSG(nn.Module):
         # batch_size
         batch_size = batch_dict['batch_size']
         # (batch_size * 16384, 5)
-        points = batch_dict['points']
+        # points = batch_dict['points']
+        points = batch_dict['points'].clone() ## adv
         # 得到每个点云的batch索引，和所有的点云的xyz、intensity数据
         batch_idx, xyz, features = self.break_up_pc(points)
         # 创建一个全0的xyz_batch_cnt，用于存放每个batch中总点云个数是多少
