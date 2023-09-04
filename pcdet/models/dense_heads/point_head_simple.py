@@ -60,7 +60,7 @@ class PointHeadSimple(PointHeadTemplate):
         tb_dict.update(tb_dict_1)
         return point_loss, tb_dict
 
-    def forward(self, batch_dict):
+    def forward(self, batch_dict, **kwargs):
         """
         Args:
             batch_dict:
@@ -104,6 +104,9 @@ class PointHeadSimple(PointHeadTemplate):
         point_cls_scores = torch.sigmoid(point_cls_preds)
         batch_dict['point_cls_scores'], _ = point_cls_scores.max(dim=-1)
         # 训练模型下，需要对关键点预测进行target assignment, 前景为1, 背景为0
+        if 'cfg' in kwargs:
+            cfg = kwargs['cfg']
+
         if self.training:
             targets_dict = self.assign_targets(batch_dict)
             # 存储所有关键点属于前背景的mask

@@ -123,7 +123,7 @@ class VoxelBackBone8x(nn.Module):
             'x_conv4': 64
         }
 
-    def forward(self, batch_dict):
+    def forward(self, batch_dict, **kwargs):
         """
         Args:
             batch_dict:

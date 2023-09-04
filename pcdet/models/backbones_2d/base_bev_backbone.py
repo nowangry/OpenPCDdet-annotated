@@ -81,7 +81,7 @@ class BaseBEVBackbone(nn.Module):
 
         self.num_bev_features = c_in
 
-    def forward(self, data_dict):
+    def forward(self, data_dict, **kwargs):
         """
         Args:
             data_dict:
@@ -100,7 +100,7 @@ class BaseBEVBackbone(nn.Module):
             分支一: (batch,C,200,176)
             分支二: (batch,2C,100,88)
             """
-            x = self.blocks[i](x)
+            x = self.blocks[i](x)  # (1, 64, 496, 432)
 
             stride = int(spatial_features.shape[2] / x.shape[2])
             ret_dict['spatial_features_%dx' % stride] = x

@@ -157,7 +157,7 @@ class PVRCNNHead(RoIHeadTemplate):
                           - (local_roi_size.unsqueeze(dim=1) / 2)
         return roi_grid_points
 
-    def forward(self, batch_dict):
+    def forward(self, batch_dict, **kwargs):
         """
         :param input_data: inputs dict
         :return:
@@ -167,6 +167,9 @@ class PVRCNNHead(RoIHeadTemplate):
         targets_dict = self.proposal_layer(
             batch_dict, nms_config=self.model_cfg.NMS_CONFIG['TRAIN' if self.training else 'TEST']
         )
+        if 'cfg' in kwargs:
+            cfg = kwargs['cfg']
+
         # 训练模式下, 需要对选取的roi进行target assignment，并将ROI对应的GTBox转换到CCS坐标系下
         if self.training:
             targets_dict = batch_dict.get('roi_targets_dict', None)
@@ -203,7 +206,7 @@ class PVRCNNHead(RoIHeadTemplate):
         # (B, C)      rcnn_reg  proposal的box refinement结果 (batch * 128,  7)
         rcnn_reg = self.reg_layers(shared_features).transpose(1, 2).contiguous().squeeze(dim=1)
         # 推理模式下，根据微调生成预测结果
-        if not self.training:
+        if not self.training or ('cfg' in kwargs and cfg.get('get_refined_box_when_training', False)):
             batch_cls_preds, batch_box_preds = self.generate_predicted_boxes(
                 batch_size=batch_dict['batch_size'], rois=batch_dict['rois'], cls_preds=rcnn_cls, box_preds=rcnn_reg
             )

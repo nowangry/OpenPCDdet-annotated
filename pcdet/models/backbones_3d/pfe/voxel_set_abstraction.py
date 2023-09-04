@@ -363,7 +363,7 @@ class VoxelSetAbstraction(nn.Module):
         )
         return pooled_features
 
-    def forward(self, batch_dict):
+    def forward(self, batch_dict, **kwargs):
         """
         Args:
             batch_dict:

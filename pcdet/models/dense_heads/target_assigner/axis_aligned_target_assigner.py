@@ -12,7 +12,7 @@ class AxisAlignedTargetAssigner(object):
         anchor_generator_cfg = model_cfg.ANCHOR_GENERATOR_CONFIG
         # 为预测box找对应anchor的参数
         anchor_target_cfg = model_cfg.TARGET_ASSIGNER_CONFIG
-        # 编码box的7个残差参数(x, y, z, w, l, h, θ) --> pcdet.utils.box_coder_utils.ResidualCoder
+        # 编码box的7个残差参数(x, y, z, w, l, h, θ) --> pcdet.torchie_utils.box_coder_utils.ResidualCoder
         self.box_coder = box_coder
         # 在PointPillars中指定正负样本的时候由BEV视角计算GT和先验框的iou，不需要进行z轴上的高度的匹配，
         # 想法是：1、点云中的物体都在同一个平面上，没有物体在Z轴发生重叠的情况

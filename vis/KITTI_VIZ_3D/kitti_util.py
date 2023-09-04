@@ -49,7 +49,7 @@ class Object3d(object):
 
 
 class Calibration(object):
-    """ Calibration matrices and utils
+    """ Calibration matrices and torchie_utils
         3d XYZ in <label>.txt are in rect camera coord.
         2d box xy are in image2 coord
         Points in <lidar>.bin are in Velodyne coord.

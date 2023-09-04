@@ -1,5 +1,7 @@
 import copy
+import os.path
 import pickle
+from pathlib import Path
 
 import numpy as np
 from skimage import io
@@ -11,7 +13,7 @@ from ..dataset import DatasetTemplate
 
 
 class KittiDataset(DatasetTemplate):
-    def __init__(self, dataset_cfg, class_names, training=True, root_path=None, logger=None):
+    def __init__(self, dataset_cfg, class_names, training=True, root_path=None, logger=None, cfg=None):
         """
         Args:
             root_path:
@@ -34,6 +36,8 @@ class KittiDataset(DatasetTemplate):
         split_dir = self.root_path / 'ImageSets' / (self.split + '.txt')
         # 得到选取的.txt文件下的序列号，组成sample_id_list
         self.sample_id_list = [x.strip() for x in open(split_dir).readlines()] if split_dir.exists() else None
+
+        self.cfg = cfg
 
         # 创建用于存放kitti信息的空列表
         self.kitti_infos = []
@@ -71,8 +75,14 @@ class KittiDataset(DatasetTemplate):
         # 　变量存储到类中
         self.kitti_infos.extend(kitti_infos)
 
+        # adv: subsample 数据集
+        if self.cfg is not None and 'subsample_num' in self.cfg:
+            import random
+            random.seed(100)
+            self.kitti_infos = random.sample(self.kitti_infos, self.cfg.subsample_num)
+
         if self.logger is not None:
-            self.logger.info('Total samples for KITTI dataset: %d' % (len(kitti_infos)))
+            self.logger.info('Total samples for KITTI dataset: %d' % (len(self.kitti_infos)))
 
     def set_split(self, split):
         """
@@ -105,8 +115,17 @@ class KittiDataset(DatasetTemplate):
         Returns:
               np.array(N, 4): point cloud.
         """
-        # /data/kitti/training/velodyne/xxxxxx.bin
-        lidar_file = self.root_split_path / 'velodyne' / ('%s.bin' % idx)
+        if self.cfg is not None and 'IS_ADV' in self.cfg and self.cfg.is_adv_eval:
+            lidar_file = Path(os.path.join(self.cfg.save_dir, '%s-final_adv.bin' % idx))
+            if not lidar_file.exists():
+                lidar_file = Path(os.path.join(self.cfg.save_dir, '%s.bin' % idx))
+        elif self.cfg is not None and 'IS_ADV' in self.cfg and self.cfg.transfer_attack_dir:
+            lidar_file = Path(os.path.join(self.cfg.transfer_attack_dir, '%s-final_adv.bin' % idx))
+            if not lidar_file.exists():
+                lidar_file = Path(os.path.join(self.cfg.transfer_attack_dir, '%s.bin' % idx))
+        else:
+            # /data/kitti/training/velodyne/xxxxxx.bin
+            lidar_file = self.root_split_path / 'velodyne' / ('%s.bin' % idx)
         # 不存在直接报错
         assert lidar_file.exists()
         # numpy读取bin文件

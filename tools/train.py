@@ -4,7 +4,7 @@ import datetime
 import glob
 import os
 from pathlib import Path
-from test import repeat_eval_ckpt
+from tools.test import repeat_eval_ckpt
 
 import torch
 import torch.nn as nn

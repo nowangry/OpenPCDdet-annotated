@@ -54,7 +54,7 @@ class AnchorHeadSingle(AnchorHeadTemplate):
         # 初始化分类卷积权重
         nn.init.normal_(self.conv_box.weight, mean=0, std=0.001)
 
-    def forward(self, data_dict):
+    def forward(self, data_dict, **kwargs):
         # 从字典中取出经过backbone处理过的信息
         # spatial_features_2d 维度 （batch_size, C, W, H）
         spatial_features_2d = data_dict['spatial_features_2d']
@@ -97,7 +97,8 @@ class AnchorHeadSingle(AnchorHeadTemplate):
             self.forward_ret_dict.update(targets_dict)
 
         # 如果不是训练模式，则直接生成进行box的预测，在PV-RCNN和Voxel-RCNN中在训练时候也要生成bbox用于refinement
-        if not self.training or self.predict_boxes_when_training:
+        # if not self.training or self.predict_boxes_when_training:
+        if not self.training or self.predict_boxes_when_training or ('cfg' in kwargs and kwargs['cfg'].get('get_refined_box_when_training', False)):
             # 根据预测结果解码生成最终结果
             batch_cls_preds, batch_box_preds = self.generate_predicted_boxes(
                 batch_size=data_dict['batch_size'],

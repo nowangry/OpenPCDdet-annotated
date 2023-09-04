@@ -153,7 +153,7 @@ class RepLKNetStage(nn.Module):
 
     def __init__(self, channels, num_blocks, stage_lk_size, drop_path,
                  small_kernel, dw_ratio=1, ffn_ratio=4,
-                 use_checkpoint=False,  # train with torch.utils.checkpoint to save memory
+                 use_checkpoint=False,  # train with torch.torchie_utils.checkpoint to save memory
                  small_kernel_merged=False):
         super().__init__()
         self.use_checkpoint = use_checkpoint

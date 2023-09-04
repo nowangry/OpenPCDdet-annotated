@@ -20,20 +20,7 @@ def statistics_info(cfg, ret_dict, metric, disp_dict):
         '(%d, %d) / %d' % (metric['recall_roi_%s' % str(min_thresh)], metric['recall_rcnn_%s' % str(min_thresh)], metric['gt_num'])
 
 
-def save_origin_points(cfg, points, points_innocent_ori, points_adv, token, dir_save_adv):
-    voxel_range = cfg.voxel_generator.range
-    points_out_of_range = []
-    for i in range(points.shape[0]):
-        if point_in_range(points[i, :], voxel_range):
-            continue
-        else:
-            points_out_of_range.append(points[i, :])
-    points_conbined_innocent = np.concatenate([points_out_of_range, points_innocent_ori], axis=0)
-    points_conbined_adv = np.concatenate([points_out_of_range, points_adv], axis=0)
-    points_conbined_innocent.tofile(os.path.join(dir_save_adv, token + '-conbined_innocent_ori.bin'))
-    points_conbined_adv.tofile(os.path.join(dir_save_adv, token + '-conbined_adv.bin'))
-
-def FGSM_Attack(model, batch_dict):
+def FGSM_Attack_debug(model, batch_dict):
     cfg = batch_dict['cfg']
     Epsilon = 0.2
     # dir_save_adv = cfg.FGSM.save_dir
@@ -68,8 +55,6 @@ def FGSM_Attack(model, batch_dict):
 
         model.zero_grad()
         with torch.autograd.set_detect_anomaly(True):
-            # grad_points = \
-            #     torch.autograd.grad(loss, batch_dict['points'], retain_graph=False, create_graph=False)[0]
             grad_voxels = \
                 torch.autograd.grad(loss, batch_dict['voxels'], retain_graph=False, create_graph=False)[0]
             print('grad_voxels.shape: {}'.format(grad_voxels.shape))
@@ -88,6 +73,7 @@ def FGSM_Attack(model, batch_dict):
     # return pred_dicts, batch_dict
 
 from det3d.torchie.utils.config import Config
+from tools.Lib.adv_utils import *
 def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, save_to_file=False, result_dir=None, **kwargs):
     result_dir.mkdir(parents=True, exist_ok=True)
 
@@ -106,6 +92,17 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
     class_names = dataset.class_names
     det_annos = []
 
+
+    # debug
+    # if (result_dir / 'det_annos.npy').exists():
+    #     det_annos = np.load(result_dir / 'det_annos.npy', allow_pickle=True).tolist()
+    #
+    #     result_str, result_dict = dataset.evaluation(
+    #         det_annos, class_names,
+    #         eval_metric=cfg.MODEL.POST_PROCESSING.EVAL_METRIC,
+    #         output_path=final_output_dir
+    #     )
+
     logger.info('*************** EPOCH %s EVALUATION *****************' % epoch_id)
     if dist_test:
         num_gpus = torch.cuda.device_count()
@@ -115,69 +112,87 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
                 device_ids=[local_rank],
                 broadcast_buffers=False
         )
-    # model.eval()
-    model.train()  # adv
+    if 'IS_ADV' in cfg and cfg.IS_ADV and not cfg.is_adv_eval and not cfg.transfer_adv: # and 'IOU' not in cfg:
+        model.train()  # adv
+        os.makedirs(cfg.save_dir, exist_ok=True)
+    else:
+        model.eval()
     if cfg.LOCAL_RANK == 0:
         progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval', dynamic_ncols=True)
     start_time = time.time()
+
+    def force_cudnn_initialization():
+        s = 32
+        dev = torch.device('cuda')
+        torch.nn.functional.conv2d(torch.zeros(s, s, s, s, device=dev), torch.zeros(s, s, s, s, device=dev))
+    torch.cuda.empty_cache()
+    force_cudnn_initialization()
+
     for i, batch_dict in enumerate(dataloader):
         load_data_to_gpu(batch_dict)
 
         # Adv -----------------------------------------------------------------------
-        # config_file = r'./cfgs/adv/nusc_centerpoint_voxelnet_0075voxel_fix_bn_z-adv-FGSM_CoorAdjust.py'
-        # cfg = Config.fromfile(config_file)
-        # cfg = kwargs['cfg']
         batch_dict['cfg'] = cfg
-        FGSM_Attack(model, batch_dict)
+        if 'IS_ADV' in cfg and cfg.is_adv_eval == False and cfg.transfer_adv == False:  # 生成对抗样本
+            device = batch_dict['voxels'].device
+            if 'is_adv_points' not in cfg:  # Voxel Attack
+                if 'FGSM' in cfg:
+                    cfg.logger.info('=== FGSM ===')
+                    cfg.logger.info('attack parameters:')
+                    cfg.logger.info(cfg.FGSM)
+                    if 'PointPipl' in cfg.FGSM.get('strategy', ''):
+                        FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                    else:
+                        FGSM_Attack(model, batch_dict, device, cfg=cfg)
+                elif 'PGD' in cfg:
+                    cfg.logger.info('=== PGD ===')
+                    cfg.logger.info('attack parameters:')
+                    cfg.logger.info(cfg.PGD)
+                    if 'light' in cfg.PGD.get('strategy', ''):
+                        cfg.logger.info("=== Basic Framework ===")
+                        PGD_Attack_light(model, batch_dict, device, cfg=cfg)
+                    elif 'PointPipl' in cfg.PGD.get('strategy', ''):
+                        cfg.logger.info("=== PointPipl Framework ===")
+                        PGD_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                    else:
+                        PGD_Attack(model, batch_dict, device, cfg=cfg)
+                elif 'IOU' in cfg:
+                    cfg.logger.info('=== IOU ===')
+                    cfg.logger.info('attack parameters:')
+                    cfg.logger.info(cfg.IOU)
+                    if 'PointPipl' in cfg.IOU.get('strategy', ''):
+                        cfg.logger.info("=== PointPipl Framework ===")
+                        IOU_Attack_iter_PointPipl(model, batch_dict, device, cfg=cfg)
+                    else:
+                        IOU_Attack_iter(model, batch_dict, device, cfg=cfg)
+                elif 'MI_FGSM' in cfg:
+                    cfg.logger.info('=== MI_FGSM ===')
+                    cfg.logger.info('attack parameters:')
+                    cfg.logger.info(cfg.MI_FGSM)
+                    if 'light' in cfg.MI_FGSM.get('strategy', ''):
+                        cfg.logger.info("=== Basic Framework ===")
+                        MI_FGSM_Attack_light(model, batch_dict, device, cfg=cfg)
+                    elif 'PointPipl' in cfg.MI_FGSM.get('strategy', ''):
+                        cfg.logger.info("=== PointPipl Framework ===")
+                        MI_FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                    else:
+                        MI_FGSM_Attack(model, batch_dict, device, cfg=cfg)
+                elif 'AdaptiveEPS' in cfg:
+                    cfg.logger.info('=== AdaptiveEPS ===')
+                    cfg.logger.info('attack parameters:')
+                    cfg.logger.info(cfg.AdaptiveEPS)
+                    if 'light' in cfg.AdaptiveEPS.strategy:
+                        cfg.logger.info("=== Basic Framework ===")
+                        AdaptiveEPS_MI_Attack_light(model, batch_dict, device, cfg=cfg)
+                    elif 'PointPipl' in cfg.AdaptiveEPS.get('strategy', ''):
+                        cfg.logger.info("=== PointPipl Framework ===")
+                        AdaptiveEPS_MI_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                    else:
+                        AdaptiveEPS_MI_Attack(model, batch_dict, device, cfg=cfg)
 
+            progress_bar.update()
+            continue
         # Adv -----------------------------------------------------------------------
-        # torch.autograd.set_detect_anomaly(True)
-        # with torch.set_grad_enabled(cfg.IS_ADV):
-        #     load_data_to_gpu(batch_dict)
-        #     batch_dict['points'].requires_grad = True
-        #     pred_dicts, ret_dict = model(batch_dict)
-        #     model.zero_grad()
-
-            # # RPN loss for PointRCNN
-            # loss_rpn_cls = batch_dict['batch_cls_preds'].sum()
-            # loss_rpn_cls.backward()
-            # print(batch_dict['points'].grad)
-            # grad = torch.autograd.grad(loss_rpn_cls, batch_dict['points'], retain_graph=False, create_graph=False)[0]
-            # print(grad)
-
-            # grad = torch.autograd.grad(loss_rpn_cls, batch_dict['points'], retain_graph=False, create_graph=False)[0]
-
-            # # RCNN loss for PointRCNN
-            # loss_rcnn_cls = batch_dict['rcnn_cls'].sum()
-            # loss_rcnn_cls.backward()
-            # loss_adv = loss_rpn_cls + loss_rcnn_cls
-            # loss_adv.backward()
-
-            # # loss for PointPillar
-            # loss_adv_pred= pred_dicts[0]['pred_scores'].sum()
-            # loss_adv_pred.backward()
-
-
-            # loss for centerPoint
-
-
-
-            # inputs = batch_dict['points'].detach()
-            #
-            # Epsilon = 0.1
-            # adv_inputs = inputs + Epsilon * inputs.grad.sign()
-            #
-            # benign_pc_dir = r'/data/dataset_wujunqi/KITTI/object/training/velodyne'
-            # adv_pc_dir = r'/data/dataset_wujunqi/KITTI/object/training/velodyne-adv'
-            #
-            # for root, _, file_names in os.walk(benign_pc_dir):
-            #     pass
-            # adv_pc_path = os.path.join(adv_pc_dir, file_names[i] + '.bin')
-            # adv_inputs.detach().cpu().numpy().tofile(adv_pc_path)  # 保存对抗点云
-
-        # Adv -----------------------------------------------------------------------
-
-
         with torch.no_grad():
             pred_dicts, ret_dict = model(batch_dict)
         disp_dict = {}
@@ -188,12 +203,16 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
             output_path=final_output_dir if save_to_file else None
         )
         det_annos += annos
+
         if cfg.LOCAL_RANK == 0:
             progress_bar.set_postfix(disp_dict)
             progress_bar.update()
 
     if cfg.LOCAL_RANK == 0:
         progress_bar.close()
+
+    if 'IS_ADV' in cfg and cfg.is_adv_eval == False:
+        return {}
 
     if dist_test:
         rank, world_size = common_utils.get_dist_info()
@@ -232,6 +251,11 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
     with open(result_dir / 'result.pkl', 'wb') as f:
         pickle.dump(det_annos, f)
 
+    # debug
+    np.save(result_dir / 'det_annos.npy', det_annos)
+    # if (result_dir / 'det_annos.npy').exists():
+    #     det_annos = np.load(result_dir / 'det_annos.npy', allow_pickle=True).item()
+
     result_str, result_dict = dataset.evaluation(
         det_annos, class_names,
         eval_metric=cfg.MODEL.POST_PROCESSING.EVAL_METRIC,
@@ -243,6 +267,39 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
 
     logger.info('Result is save to %s' % result_dir)
     logger.info('****************Evaluation done.*****************')
+
+    np.save(result_dir / 'result_dict.npy', result_dict)
+    # if cfg.is_adv_eval and (result_dir / 'result_dict.npy').exists():
+    #     result_dict = np.load(result_dir / 'result_dict.npy', allow_pickle=True).item()
+    #     logger_adv_eval = cfg.logger_adv_eval
+    #     difficulty_list = ['easy', 'moderate', 'hard']
+    #     # metric_list = ['bbox', 'bev', '3d', 'aos']
+    #     metric_list = ['bev', '3d']
+    #     stat_dict_R40_bev = {
+    #         'Car': [],
+    #         'Pedestrian': [],
+    #         'Cyclist': [],
+    #     }
+    #     stat_dict_R40_3d = {
+    #         'Car': [],
+    #         'Pedestrian': [],
+    #         'Cyclist': [],
+    #     }
+    #     for metr in ['bev', '3d']:
+    #         for class_name in class_names:
+    #             for key, value in result_dict.items():
+    #                 if 'R40' not in key:
+    #                     continue
+    #                 if class_name in key:
+    #                     if 'bev' in key and 'bev' in metr:
+    #                         stat_dict_R40_bev[class_name].append(value)
+    #                     elif '3d' in key and '3d' in metr:
+    #                         stat_dict_R40_3d[class_name].append(value)
+    #
+    #             logger_adv_eval.info(class_name + '_bev/R40_mean: {:.2f}'.format(np.array(stat_dict_R40_bev[class_name]).mean()))
+    #             logger_adv_eval.info(class_name + '_3d/R40_mean: {:.2f}'.format(np.array(stat_dict_R40_3d[class_name]).mean()))
+
+
     return ret_dict
 
 

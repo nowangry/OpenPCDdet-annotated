@@ -1,7 +1,7 @@
 import itertools
 import logging
 import os
-# from det3d.utils.config_tool import get_downsample_factor
+# from det3d.torchie_utils.config_tool import get_downsample_factor
 
 # adv ---------------------------------------
 # python dist_test.py ../configs/adv/nusc_centerpoint_voxelnet_0075voxel_fix_bn_z_adv_eval.py --work_dir ../work_dirs/ADV/PGD_CoorAdjust/eps_0.10-eps_iter_0.015-num_steps_20  --checkpoint  ../work_dirs/nusc_centerpoint_voxelnet_0075voxel_fix_bn_z/centerpoint_voxel_1440-epoch_20.pth --speed_test

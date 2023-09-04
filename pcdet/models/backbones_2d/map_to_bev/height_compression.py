@@ -9,7 +9,7 @@ class HeightCompression(nn.Module):
         # 高度的特征数
         self.num_bev_features = self.model_cfg.NUM_BEV_FEATURES
 
-    def forward(self, batch_dict):
+    def forward(self, batch_dict, **kwargs):
         """
         Args:
             batch_dict:

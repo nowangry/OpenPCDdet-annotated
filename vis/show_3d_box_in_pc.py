@@ -215,12 +215,12 @@ def draw_projected_box3d(image, qs, color=(255, 255, 255), thickness=2):
 
 
 if __name__ == '__main__':
-    img_id = 5
+    img_id = 1
 
-    velo = '/home/nathan/OpenPCDet/data/kitti/training/velodyne/%06d.bin' % img_id
-    calib_file = '/home/nathan/OpenPCDet/data/kitti/training/calib/%06d.txt' % img_id
-    label = '/home/nathan/OpenPCDet/data/kitti/training/label_2/%06d.txt' % img_id
-    img = '/home/nathan/OpenPCDet/data/kitti/training/image_2/%06d.png' % img_id
+    velo = '/data/dataset_wujunqi/KITTI/object/training/velodyne/%06d.bin' % img_id
+    calib_file = '/data/dataset_wujunqi/KITTI/object/training/calib/%06d.txt' % img_id
+    label = '/data/dataset_wujunqi/KITTI/object/training/label_2/%06d.txt' % img_id
+    img = '/data/dataset_wujunqi/KITTI/object/training/image_2/%06d.png' % img_id
 
     points = np.fromfile(velo, dtype=np.float32).reshape(-1, 4)
     calib = get_calib(calib_file)

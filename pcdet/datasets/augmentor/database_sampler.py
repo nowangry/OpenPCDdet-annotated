@@ -74,7 +74,7 @@ class DataBaseSampler(object):
         self.__dict__.update(d)
 
     def __del__(self):
-        if self.use_shared_memory:
+        if hasattr(self, 'use_shared_memory') and self.use_shared_memory:
             self.logger.info('Deleting GT database from shared memory')
             cur_rank, num_gpus = common_utils.get_dist_info()
             sa_key = self.sampler_cfg.DB_DATA_PATH[0]

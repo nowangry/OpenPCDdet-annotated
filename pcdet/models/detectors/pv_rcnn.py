@@ -18,25 +18,36 @@ class PVRCNN(Detector3DTemplate):
     """
     def forward(self, batch_dict, return_loss=False, **kwargs):
         for cur_module in self.module_list:
-            batch_dict = cur_module(batch_dict)
+            # print(cur_module)
+            if 'cfg' in kwargs and kwargs['cfg'].get('get_refined_box_when_training', False):
+                batch_dict = cur_module(batch_dict, **kwargs)
+            else:
+                batch_dict = cur_module(batch_dict)
 
         ## adv =========================================================================================================
         cfg = batch_dict['cfg']
-        if cfg.is_adv_eval or cfg.is_innocent_eval:
-            pred_dicts, recall_dicts = self.post_processing(batch_dict)
-            return pred_dicts, batch_dict
-        elif cfg.adv_flag:  # adv
-            if return_loss and (not cfg['is_eval_after_attack']):
-                disp_dict = {}
-                disp_dict['voxels'] = batch_dict['voxels']
-                loss, tb_dict, disp_dict = self.get_training_loss(disp_dict)
-                return loss
-            elif (not return_loss) and (cfg['is_eval_after_attack']):
-                pred_dicts, recall_dicts = self.post_processing(batch_dict)
-                return pred_dicts, batch_dict
-            else:
-                pred_dicts, recall_dicts = self.post_processing(batch_dict)
-                return pred_dicts, recall_dicts
+        if 'IS_ADV' in cfg and len(kwargs):
+            # if cfg.is_adv_eval or cfg.is_innocent_eval:
+            #     pred_dicts, recall_dicts = self.post_processing(batch_dict)
+            #     return pred_dicts, batch_dict
+            if cfg.adv_flag:  # adv
+                if return_loss and (not kwargs['is_eval_after_attack']):
+                    disp_dict = {}
+                    disp_dict['voxels'] = batch_dict['voxels']
+                    loss, tb_dict, disp_dict = self.get_training_loss(disp_dict)
+                    return loss
+                elif (not return_loss) and (kwargs['is_eval_after_attack']):
+                    pred_dicts, recall_dicts = self.post_processing(batch_dict)
+                    return pred_dicts, batch_dict
+                elif return_loss and kwargs['is_eval_after_attack']:
+                    disp_dict = {}
+                    disp_dict['voxels'] = batch_dict['voxels']
+                    loss, tb_dict, disp_dict = self.get_training_loss(disp_dict)
+                    pred_dicts, recall_dicts = self.post_processing(batch_dict)
+                    return loss, pred_dicts
+                else:
+                    pred_dicts, recall_dicts = self.post_processing(batch_dict)
+                    return pred_dicts, recall_dicts
         ## adv =========================================================================================================
 
         if self.training:

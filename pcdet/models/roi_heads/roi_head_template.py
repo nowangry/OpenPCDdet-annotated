@@ -224,7 +224,7 @@ class RoIHeadTemplate(nn.Module):
             """
             reg_targets = self.box_coder.encode_torch(
                 gt_boxes3d_ct.view(rcnn_batch_size, code_size), rois_anchor
-            )  ## TODO: 不可微
+            )  ## TODO: 不可微,
             # 计算第二阶段的回归残差损失 [B, M, 7]
             rcnn_loss_reg = self.reg_loss_func(
                 rcnn_reg.view(rcnn_batch_size, -1).unsqueeze(dim=0),
@@ -315,8 +315,8 @@ class RoIHeadTemplate(nn.Module):
         if loss_cfgs.CLS_LOSS == 'BinaryCrossEntropy':
             # shape （batch *128, 1）--> （batch *128, ）
             rcnn_cls_flat = rcnn_cls.view(-1)
-            batch_loss_cls = F.binary_cross_entropy(torch.sigmoid(rcnn_cls_flat), rcnn_cls_labels.float(),
-                                                    reduction='none')
+            batch_loss_cls = F.binary_cross_entropy(torch.sigmoid(rcnn_cls_flat), rcnn_cls_labels.float().clone().detach(),
+                                                    reduction='none')  # TODO: rcnn_cls_labels 增加 .clone().detach()
             # 生成前背景mask
             cls_valid_mask = (rcnn_cls_labels >= 0).float()
             # 求loss值，并根据前背景总数进行正则化

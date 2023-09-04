@@ -637,11 +637,11 @@ def do_coco_style_eval(gt_annos, dt_annos, current_classes, overlap_ranges,
 
 
 def get_official_eval_result(gt_annos, dt_annos, current_classes, PR_detail_dict=None):
-    overlap_0_7 = np.array([[0.7, 0.5, 0.5, 0.7,
-                             0.5, 0.7], [0.7, 0.5, 0.5, 0.7, 0.5, 0.7],
+    overlap_0_7 = np.array([[0.7, 0.5, 0.5, 0.7, 0.5, 0.7],
+                            [0.7, 0.5, 0.5, 0.7, 0.5, 0.7],
                             [0.7, 0.5, 0.5, 0.7, 0.5, 0.7]])
-    overlap_0_5 = np.array([[0.7, 0.5, 0.5, 0.7,
-                             0.5, 0.5], [0.5, 0.25, 0.25, 0.5, 0.25, 0.5],
+    overlap_0_5 = np.array([[0.7, 0.5, 0.5, 0.7, 0.5, 0.5],
+                            [0.5, 0.25, 0.25, 0.5, 0.25, 0.5],
                             [0.5, 0.25, 0.25, 0.5, 0.25, 0.5]])
     min_overlaps = np.stack([overlap_0_7, overlap_0_5], axis=0)  # [2, 3, 5]
     class_to_name = {
@@ -689,7 +689,7 @@ def get_official_eval_result(gt_annos, dt_annos, current_classes, PR_detail_dict
                                  f"{mAPbev[j, 1, i]:.4f}, "
                                  f"{mAPbev[j, 2, i]:.4f}"))
             result += print_str((f"3d   AP:{mAP3d[j, 0, i]:.4f}, "
-                                 f"{mAP3d[j, 1, i]:.4f}, "
+                                 f"{mAP3d[j, 1, i]:.4f}, "  # mAP3d[class id, difficulty, IoU threshold]
                                  f"{mAP3d[j, 2, i]:.4f}"))
 
             if compute_aos:
@@ -704,6 +704,8 @@ def get_official_eval_result(gt_annos, dt_annos, current_classes, PR_detail_dict
             result += print_str(
                 (f"{class_to_name[curcls]} "
                  "AP_R40@{:.2f}, {:.2f}, {:.2f}:".format(*min_overlaps[i, :, j])))
+            if i == 0:
+                result += print_str('# -----------------------------------------------------------------------------')
             result += print_str((f"bbox AP:{mAPbbox_R40[j, 0, i]:.4f}, "
                                  f"{mAPbbox_R40[j, 1, i]:.4f}, "
                                  f"{mAPbbox_R40[j, 2, i]:.4f}"))
@@ -743,6 +745,17 @@ def get_official_eval_result(gt_annos, dt_annos, current_classes, PR_detail_dict
                 ret_dict['%s_image/moderate_R40' % class_to_name[curcls]] = mAPbbox_R40[j, 1, 0]
                 ret_dict['%s_image/hard_R40' % class_to_name[curcls]] = mAPbbox_R40[j, 2, 0]
 
+    ret_all = {
+        'mAPbbox': mAPbbox,
+        'mAPbev': mAPbev,
+        'mAP3d': mAP3d,
+        'mAPaos': mAPaos,
+        'mAPbbox_R40': mAPbbox_R40,
+        'mAPbev_R40': mAPbev_R40,
+        'mAP3d_R40': mAP3d_R40,
+        'mAPaos_R40': mAPaos_R40,
+    }
+    ret_dict['ret_all'] = ret_all
     return result, ret_dict
 
 

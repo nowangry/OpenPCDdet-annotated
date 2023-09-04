@@ -95,8 +95,8 @@ for imgfile in os.listdir(imgdir):
         padded_img = resize(padded_img)
         #   单张图片预测格式
 
-        # boxes_cls = utils.do_detect(model, padded_img, 0.4, 0.4, True)
-        # boxes_cls = utils.nms(boxes_cls, 0.4)
+        # boxes_cls = torchie_utils.do_detect(model, padded_img, 0.4, 0.4, True)
+        # boxes_cls = torchie_utils.nms(boxes_cls, 0.4)
 
         # boxes = []  # 定义对特定类别的boxes
         # for box in boxes_cls:
@@ -134,7 +134,7 @@ for imgfile in os.listdir(imgdir):
 
             boxes_cls_attack = utils.do_detect(
                 model, images_attack, 0.4, 0.4, True)
-            # boxes_cls_attack = utils.nms(boxes_cls_attack, 0.4)
+            # boxes_cls_attack = torchie_utils.nms(boxes_cls_attack, 0.4)
             boxes_attack = []  # 定义对特定类别的boxes
             for box in boxes_cls_attack:
                 cls_id = box[6]
@@ -153,7 +153,7 @@ for imgfile in os.listdir(imgdir):
             # pre_dir = os.path.join(
             #     savedir, 'patched_pre/', pre_name)
 
-            # utils.plot_boxes(images_attack, boxes_attack, pre_dir,
+            # torchie_utils.plot_boxes(images_attack, boxes_attack, pre_dir,
             #                  class_names=class_names)  # 这里画出来的预测框是所有的目标，并不是只含有plane
 
             txtpath_write = os.path.abspath(os.path.join(
