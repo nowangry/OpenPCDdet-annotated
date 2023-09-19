@@ -4,284 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da44b04f-ddf7-4896-950b-6ba6162715e9" name="Changes" comment="pv-rcnn adv">
-      <change afterPath="$PROJECT_DIR$/det3d/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/bbox/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/bbox/box_np_ops.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/bbox/box_torch_ops.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/bbox/geometry.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/input/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/input/voxel_generator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/sampler/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/sampler/preprocess.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/sampler/sample_ops.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/utils/center_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/utils/circle_nms_jit.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/utils/dist_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/utils/misc.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/core/utils/scatter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/custom.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/dataset_factory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/dataset_wrappers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/loader/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/loader/build_loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/loader/sampler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/nuscenes/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/nuscenes/nusc_common.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/nuscenes/nuscenes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/pipelines/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/pipelines/compose.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/pipelines/formating.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/pipelines/loading.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/pipelines/preprocess.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/pipelines/test_aug.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/registry.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/utils/create_gt_database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/utils/distributed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/utils/eval.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/utils/oss.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/waymo/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/waymo/waymo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/waymo/waymo_common.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/waymo/waymo_converter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/datasets/waymo/waymo_decoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/backbones/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/backbones/scn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/bbox_heads/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/bbox_heads/center_head.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/detectors/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/detectors/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/detectors/point_pillars.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/detectors/single_stage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/detectors/two_stage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/detectors/voxelnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/losses/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/losses/centernet_loss.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/necks/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/necks/rpn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/readers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/readers/dynamic_voxel_encoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/readers/pillar_encoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/readers/voxel_encoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/registry.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/roi_heads/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/roi_heads/roi_head.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/roi_heads/roi_head_template.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/roi_heads/target_assigner/proposal_target_layer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/second_stage/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/second_stage/bird_eye_view.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/conv_module.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/conv_ws.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/finetune_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/misc.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/norm.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/scale.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/models/utils/weight_init.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/dcn/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/dcn/deform_conv.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/dcn/setup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/dcn/src/deform_conv_cuda.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/dcn/src/deform_conv_cuda_kernel.cu" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/dcn/src/deform_pool_cuda.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/dcn/src/deform_pool_cuda_kernel.cu" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/iou3d_nms_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/setup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/src/iou3d_cpu.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/src/iou3d_cpu.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/src/iou3d_nms.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/src/iou3d_nms.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/src/iou3d_nms_api.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/iou3d_nms/src/iou3d_nms_kernel.cu" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/point_cloud/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/point_cloud/bev_ops.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/ops/point_cloud/point_cloud_ops.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/solver/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/solver/background.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/solver/fastai_optim.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/solver/learning_schedules.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/solver/learning_schedules_fastai.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/solver/optim.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/apis/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/apis/env.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/apis/train.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/cnn/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/cnn/alexnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/cnn/resnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/cnn/vgg.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/cnn/weight_init.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/handlers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/handlers/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/handlers/json_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/handlers/pickle_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/handlers/yaml_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/io.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/fileio/parse.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/parallel/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/parallel/_functions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/parallel/collate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/parallel/data_container.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/parallel/data_parallel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/parallel/distributed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/parallel/scatter_gather.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/checkpoint.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/checkpoint.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/closure.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/hook.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/iter_timer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/logger/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/logger/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/logger/pavi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/logger/tensorboard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/logger/text.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/lr_updater.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/memory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/optimizer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/hooks/sampler_seed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/log_buffer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/parallel_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/priority.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/trainer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/torchie/trainer/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/buildtools/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/buildtools/command.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/buildtools/pybind11_build.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/check.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/checkpoint.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/config_tool.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/find.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/flops_counter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/imports.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/print_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/registry.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/det3d/utils/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/CAM/Grad_CAM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/CAM/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/CAM/models/resnet50-19c8e357.pth" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/CAM/my_models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/CAM/pictures/n02118333_27_fox.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/angle_json/FangDa.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/angle_json/angle_xie.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/angle_json/angle_xie_zheng.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/angle_json/angle_zheng.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/angle_json/car_sample.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/angle_json/car_sample_v1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/angle_json/view_angle.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/attention/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/attention/curvature_attention.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/attention/density_attention.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/attention/normal_attention.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/attention/project_attention.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/histogram.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/make_video.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/Scatter_plot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/curve_plot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/heatmap_ASR_permutation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR div P_Chamfer.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR div modification_rate.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_Chamfer.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_L1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_L2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/mAPs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/modification_rate.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/util.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/stat_gradient.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/stat_permutation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/stat_points.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/test1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/visual_utily.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/visualize_and_save_for_nuScenes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/visualize_and_save_for_waymo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/visualize_and_save_samples.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/visualize_sample-Waymo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/visualize_sample-nuScenes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/analysis/yuanzhu00000.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-AdaptiveEPS.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-AdaptiveEPS_light.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-FGSM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-IOU.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-MI_FGSM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-MI_FGSM_light.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-PGD.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-PGD_light.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-AdaptiveEPS.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-AdaptiveEPS_PointPipl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-AdaptiveEPS_light.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-FGSM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-FGSM_PointPipl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU_PointPipl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM_PointPipl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM_light.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-PGD.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-PGD_PointPipl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-PGD_light.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_OppoPSel_v1.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_OppoPSel_v2.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_PointPipl.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_eval.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_light_323.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_light_323_eval.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/adv_eval.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/adv_generate_pv_rcnn.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/adv_generate_pv_rcnn_PointPipl.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PointPillar/AdaptiveEPS_323.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PointPillar/AdaptiveEPS_323_OppoPSel_v1.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PointPillar/AdaptiveEPS_323_OppoPSel_v2.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PointPillar/AdaptiveEPS_light_323.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PointPillar/adv_eval.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scripts/PointPillar/adv_generate_pointpillar.sh" afterDir="false" />
+    <list default="true" id="da44b04f-ddf7-4896-950b-6ba6162715e9" name="Changes" comment="transfer adv">
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-VMI_FGSM.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-VMI_FGSM_light.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pointpillar/pointpillar-adv-reVoxelization.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM_light.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-reVoxelization.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/test_attack_tools.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/OpenPCDdet-annotated.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OpenPCDdet-annotated.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/det3d/core/input/voxel_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/det3d/core/input/voxel_generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/det3d/ops/point_cloud/point_cloud_ops.py" beforeDir="false" afterPath="$PROJECT_DIR$/det3d/ops/point_cloud/point_cloud_ops.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/datasets/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/datasets/augmentor/database_sampler.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/augmentor/database_sampler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pcdet/datasets/kitti/kitti_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/kitti/kitti_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/datasets/kitti/kitti_object_eval_python/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/datasets/kitti/kitti_object_eval_python/eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_2d/base_bev_backbone.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_2d/base_bev_backbone.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_2d/map_to_bev/height_compression.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_2d/map_to_bev/height_compression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_3d/pfe/voxel_set_abstraction.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_3d/pfe/voxel_set_abstraction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/backbones_3d/spconv_backbone.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/backbones_3d/spconv_backbone.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_single.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/anchor_head_single.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/point_head_simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/axis_aligned_target_assigner.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner/axis_aligned_target_assigner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/detectors/pointpillar.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/detectors/pointpillar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/detectors/pv_rcnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/detectors/pv_rcnn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/roi_heads/pvrcnn_head.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/roi_heads/pvrcnn_head.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcdet/models/roi_heads/roi_head_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcdet/models/roi_heads/roi_head_template.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/revlk.py" beforeDir="false" afterPath="$PROJECT_DIR$/revlk.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/GeneticAlgorithm/TFNS.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/GeneticAlgorithm/TFNS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/cfgs/adv/nusc_centerpoint_voxelnet_0075voxel_fix_bn_z-adv-FGSM_CoorAdjust.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/adv/nusc_centerpoint_voxelnet_0075voxel_fix_bn_z-adv-FGSM_CoorAdjust.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR div P_Chamfer.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR div P_Chamfer.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR div modification_rate.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR div modification_rate.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/ASR.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_Chamfer.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_Chamfer.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_L1.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_L1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_L2.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/P_L2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/mAPs.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/mAPs.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/modification_rate.png" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/save_figures/modification_rate.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/analysis/paper_figures/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/analysis/paper_figures/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/eval_utils/eval_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/eval_utils/eval_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/scripts/dist_train.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/dist_train.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_OppoPSel_v1.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_OppoPSel_v1.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_PointPipl.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/AdaptiveEPS_323_PointPipl.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/scripts/PV-RCNN/adv_eval.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/adv_eval.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/scripts/PV-RCNN/adv_generate_pv_rcnn.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/PV-RCNN/adv_generate_pv_rcnn.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/scripts/PointPillar/adv_generate_pointpillar.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tools/scripts/PointPillar/adv_generate_pointpillar.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vis/KITTI_VIZ_3D/kitti_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/vis/KITTI_VIZ_3D/kitti_util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vis/show_3d_box_in_pc.py" beforeDir="false" afterPath="$PROJECT_DIR$/vis/show_3d_box_in_pc.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -348,12 +104,18 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Projects/Pycharm/VOTR-adv&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.mappings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.symlinks&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.date&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Projects/Pycharm/OpenPCDdet-annotated/tools/cfgs/adv_pointpillar&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;proofread&quot;
   }
 }</component>
   <component name="PyDebuggerOptionsProvider">
@@ -361,11 +123,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\scripts\PV-RCNN" />
+      <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\cfgs\adv_pointpillar" />
       <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\cfgs\adv_pv_rcnn" />
+      <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\scripts\PV-RCNN" />
       <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\scripts\PointPillar" />
       <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\scripts" />
-      <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\cfgs\adv_pointpillar" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\tools\scripts\PointPillar" />
@@ -375,29 +137,7 @@
       <recent name="D:\Projects\Pycharm\OpenPCDdet-annotated\EvolutionaryAlgorithms\data\inputs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test-adv-PV_RCNN-transfer_adv">
-    <configuration name="11111111111" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="OpenPCDdet-annotated" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/11111111111.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.test-adv-PV_RCNN-FGSM-torch">
     <configuration name="3d_scatter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OpenPCDdet-annotated" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -590,7 +330,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="curve_plot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="OpenPCDdet-annotated" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="curve_plot" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="OpenPCDdet-annotated" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -777,7 +539,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="CUDA_VISIBLE_DEVICES" value="0" />
+        <env name="CUDA_VISIBLE_DEVICES" value="3" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools" />
@@ -879,6 +641,29 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/test.py" />
       <option name="PARAMETERS" value="--cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-FGSM.py --evaluate_adv" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test-adv-PV_RCNN-FGSM-torch" type="PythonConfigurationType" factoryName="Python" singleton="false">
+      <module name="OpenPCDdet-annotated" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="CUDA_VISIBLE_DEVICES" value="3" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/test.py" />
+      <option name="PARAMETERS" value="--cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-FGSM.py --is_torch_adv" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -1047,6 +832,52 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test-adv-PV_RCNN-VMI_FGSM" type="PythonConfigurationType" factoryName="Python" singleton="false">
+      <module name="OpenPCDdet-annotated" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="CUDA_VISIBLE_DEVICES" value="0" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/test.py" />
+      <option name="PARAMETERS" value="--cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM.py" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test-adv-PV_RCNN-VMI_FGSM_light" type="PythonConfigurationType" factoryName="Python" singleton="false">
+      <module name="OpenPCDdet-annotated" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="CUDA_VISIBLE_DEVICES" value="3" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/test.py" />
+      <option name="PARAMETERS" value="--cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM_light.py --subsample_num 323" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="test-adv-PV_RCNN-transfer_adv" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="OpenPCDdet-annotated" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1208,6 +1039,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test_attack_tools" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="OpenPCDdet-annotated" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/test_attack_tools.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="test_trimesh" type="PythonConfigurationType" factoryName="Python" singleton="false">
       <module name="OpenPCDdet-annotated" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1262,9 +1115,12 @@
       <item itemvalue="Python.test-adv-PointPillar-AdaptiveEPS" />
       <item itemvalue="Python.test-PointPillar" />
       <item itemvalue="Python.test-adv-PV_RCNN-FGSM" />
+      <item itemvalue="Python.test-adv-PV_RCNN-FGSM-torch" />
       <item itemvalue="Python.test-adv-PV_RCNN-transfer_adv" />
       <item itemvalue="Python.test-adv-PV_RCNN-FGSM_PointPipl" />
       <item itemvalue="Python.test-adv-PV_RCNN-PGD" />
+      <item itemvalue="Python.test-adv-PV_RCNN-VMI_FGSM" />
+      <item itemvalue="Python.test-adv-PV_RCNN-VMI_FGSM_light" />
       <item itemvalue="Python.test-adv-PV_RCNN-PGD_PointPipl" />
       <item itemvalue="Python.test-adv-PV_RCNN-IOU" />
       <item itemvalue="Python.test-adv-PV_RCNN-AdaptiveEPS" />
@@ -1288,19 +1144,19 @@
       <item itemvalue="Python.GA_test" />
       <item itemvalue="Python.DA-base" />
       <item itemvalue="Python.DA-base-v1" />
+      <item itemvalue="Python.test_attack_tools" />
       <item itemvalue="Python.show_3d_box_in_pc" />
       <item itemvalue="Python.curve_plot" />
       <item itemvalue="Python.eval_utils" />
       <item itemvalue="Python.3d_scatter" />
-      <item itemvalue="Python.11111111111" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.curve_plot" />
+        <item itemvalue="Python.test_attack_tools" />
         <item itemvalue="Python.show_3d_box_in_pc" />
         <item itemvalue="Python.eval_utils" />
         <item itemvalue="Python.3d_scatter" />
-        <item itemvalue="Python.11111111111" />
       </list>
     </recent_temporary>
   </component>
@@ -1391,7 +1247,11 @@
       <workItem from="1693441505488" duration="5304000" />
       <workItem from="1693645355177" duration="619000" />
       <workItem from="1693728258021" duration="839000" />
-      <workItem from="1693790018642" duration="6056000" />
+      <workItem from="1693790018642" duration="90627000" />
+      <workItem from="1694528877366" duration="5044000" />
+      <workItem from="1694654050596" duration="10570000" />
+      <workItem from="1694705310330" duration="6520000" />
+      <workItem from="1695024477746" duration="6129000" />
     </task>
     <task id="LOCAL-00001" summary="add  pointpillars last node">
       <created>1680683838236</created>
@@ -1414,7 +1274,14 @@
       <option name="project" value="LOCAL" />
       <updated>1691428406404</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="transfer adv">
+      <created>1693796383641</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1693796383641</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1434,7 +1301,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add  pointpillars last node" />
     <MESSAGE value="pv-rcnn adv" />
-    <option name="LAST_COMMIT_MESSAGE" value="pv-rcnn adv" />
+    <MESSAGE value="transfer adv" />
+    <option name="LAST_COMMIT_MESSAGE" value="transfer adv" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1648,12 +1516,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>154</line>
+          <line>169</line>
           <option name="timeStamp" value="479" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/test.py</url>
-          <line>415</line>
+          <line>450</line>
           <option name="timeStamp" value="481" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1673,12 +1541,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>1362</line>
+          <line>1815</line>
           <option name="timeStamp" value="500" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>1399</line>
+          <line>1852</line>
           <option name="timeStamp" value="504" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
@@ -1688,17 +1556,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/eval_utils/eval_utils.py</url>
-          <line>271</line>
-          <option name="timeStamp" value="514" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tools/eval_utils/eval_utils.py</url>
           <line>96</line>
           <option name="timeStamp" value="519" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/eval_utils/eval_utils.py</url>
-          <line>258</line>
+          <line>274</line>
           <option name="timeStamp" value="522" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1734,22 +1597,22 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <condition expression="total_loss &lt; -100000000.0" language="Python" />
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>974</line>
+          <line>1427</line>
           <option name="timeStamp" value="548" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>432</line>
+          <line>583</line>
           <option name="timeStamp" value="555" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>408</line>
+          <line>559</line>
           <option name="timeStamp" value="559" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>398</line>
+          <line>549</line>
           <option name="timeStamp" value="563" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
@@ -1759,17 +1622,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>187</line>
+          <line>291</line>
           <option name="timeStamp" value="577" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>485</line>
+          <line>636</line>
           <option name="timeStamp" value="578" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
-          <line>502</line>
+          <line>653</line>
           <option name="timeStamp" value="579" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1779,18 +1642,54 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/test.py</url>
-          <line>343</line>
+          <line>377</line>
           <option name="timeStamp" value="581" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tools/test.py</url>
-          <line>332</line>
+          <line>366</line>
           <option name="timeStamp" value="582" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tools/eval_utils/eval_utils.py</url>
-          <line>114</line>
-          <option name="timeStamp" value="583" />
+          <url>file://$PROJECT_DIR$/tools/test_attack_tools.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="592" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
+          <line>1041</line>
+          <option name="timeStamp" value="593" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pcdet/datasets/processor/data_processor.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="594" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pcdet/datasets/processor/data_processor.py</url>
+          <line>35</line>
+          <option name="timeStamp" value="595" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tools/Lib/paper_figures/curve_plot.py</url>
+          <line>583</line>
+          <option name="timeStamp" value="596" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <condition expression="len(txt_list) == 0" language="Python" />
+          <url>file://$PROJECT_DIR$/tools/analysis/paper_figures/util.py</url>
+          <line>139</line>
+          <option name="timeStamp" value="599" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tools/Lib/paper_figures/curve_plot.py</url>
+          <line>870</line>
+          <option name="timeStamp" value="601" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tools/Lib/adv_utils.py</url>
+          <line>244</line>
+          <option name="timeStamp" value="602" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1801,6 +1700,11 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="work_dir" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_PGD_light.coverage" NAME="test-adv-PV_RCNN-PGD_light Coverage Results" MODIFIED="1691779003624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
@@ -1811,9 +1715,10 @@
     <SUITE FILE_PATH="coverage/openpcdet$main.coverage" NAME="main Coverage Results" MODIFIED="1640140230580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PointRCNN.coverage" NAME="test-adv-PointRCNN Coverage Results" MODIFIED="1691425177971" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_FGSM_PointPipl.coverage" NAME="test-adv-PV_RCNN-FGSM_PointPipl Coverage Results" MODIFIED="1693240241013" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_attack_tools.coverage" NAME="test_attack_tools Coverage Results" MODIFIED="1693967450311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$revlk.coverage" NAME="revlk Coverage Results" MODIFIED="1647594523610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$GA_TSP_Attack_trimesh.coverage" NAME="GA_TSP_Attack-trimesh Coverage Results" MODIFIED="1664097407643" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
-    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_PointPillar.coverage" NAME="test-PointPillar Coverage Results" MODIFIED="1692328531689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_PointPillar.coverage" NAME="test-PointPillar Coverage Results" MODIFIED="1694534196084" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PointPillar_FGSM.coverage" NAME="test-adv-PointPillar-FGSM Coverage Results" MODIFIED="1692956661798" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$3d_scatter.coverage" NAME="3d_scatter Coverage Results" MODIFIED="1649662453222" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$show_3d_box_in_pc.coverage" NAME="show_3d_box_in_pc Coverage Results" MODIFIED="1692692768808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis" />
@@ -1823,11 +1728,12 @@
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_AdaptiveEPS.coverage" NAME="test-adv-PV_RCNN-AdaptiveEPS Coverage Results" MODIFIED="1692194798509" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PointPillar_AdaptiveEPS.coverage" NAME="test-adv-PointPillar-AdaptiveEPS Coverage Results" MODIFIED="1693127002476" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/openpcdet$anchor_generator.coverage" NAME="anchor_generator Coverage Results" MODIFIED="1640073540519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcdet/models/dense_heads/target_assigner" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_VMI_FGSM_light.coverage" NAME="test-adv-PV_RCNN-VMI_FGSM_light Coverage Results" MODIFIED="1693992861186" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$GA_TSP_eval.coverage" NAME="GA_TSP_eval Coverage Results" MODIFIED="1664391458591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/openpcdet$BEV.coverage" NAME="BEV Coverage Results" MODIFIED="1641433119961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$train.coverage" NAME="train Coverage Results" MODIFIED="1647929890268" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$train_adv_PointRCNN.coverage" NAME="train-adv-PointRCNN Coverage Results" MODIFIED="1680849695667" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
-    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_transfer_adv.coverage" NAME="test-adv-PV_RCNN-transfer_adv Coverage Results" MODIFIED="1693795165070" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_transfer_adv.coverage" NAME="test-adv-PV_RCNN-transfer_adv Coverage Results" MODIFIED="1694053073483" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_PV_RCNN.coverage" NAME="test-PV_RCNN Coverage Results" MODIFIED="1692118842860" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$demo.coverage" NAME="demo Coverage Results" MODIFIED="1647931396366" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$eval_utils.coverage" NAME="eval_utils Coverage Results" MODIFIED="1691778326130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/eval_utils" />
@@ -1835,6 +1741,7 @@
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$GA_TSP_Attack.coverage" NAME="GA_TSP_Attack-openmesh Coverage Results" MODIFIED="1663315543816" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PointPillar_PGD.coverage" NAME="test-adv-PointPillar-PGD Coverage Results" MODIFIED="1693022459622" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PointPillar.coverage" NAME="test-adv-PointPillar Coverage Results" MODIFIED="1662567727637" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_VMI_FGSM.coverage" NAME="test-adv-PV_RCNN-VMI_FGSM Coverage Results" MODIFIED="1693988645061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN.coverage" NAME="test-PV_RCNN Coverage Results" MODIFIED="1691601920324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$GA_TSP_Attack_trimesh_v2.coverage" NAME="GA_TSP_Attack-trimesh-v2 Coverage Results" MODIFIED="1665393915561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_PGD_PointPipl.coverage" NAME="test-adv-PV_RCNN-PGD_PointPipl Coverage Results" MODIFIED="1693322230711" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
@@ -1845,7 +1752,7 @@
     <SUITE FILE_PATH="coverage/openpcdet$train.coverage" NAME="train Coverage Results" MODIFIED="1645431247670" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$test_adv_PV_RCNN_IOU.coverage" NAME="test-adv-PV_RCNN-IOU Coverage Results" MODIFIED="1692807684093" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$draw3Dbox2img.coverage" NAME="draw3Dbox2img Coverage Results" MODIFIED="1646817887785" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/vis/KITTI_VIZ_3D" />
-    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$curve_plot.coverage" NAME="curve_plot Coverage Results" MODIFIED="1693364226882" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/Lib/paper_figures" />
+    <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$curve_plot.coverage" NAME="curve_plot 覆盖结果" MODIFIED="1694706408388" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/Lib/paper_figures" />
     <SUITE FILE_PATH="coverage/openpcdet$demo.coverage" NAME="demo Coverage Results" MODIFIED="1644995315452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$GA_test.coverage" NAME="GA_test Coverage Results" MODIFIED="1663334423369" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools" />
     <SUITE FILE_PATH="coverage/OpenPCDdet_annotated$open3d_vis_utils.coverage" NAME="open3d_vis_utils Coverage Results" MODIFIED="1645585855859" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tools/visual_utils" />

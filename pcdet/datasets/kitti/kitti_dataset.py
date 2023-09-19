@@ -119,7 +119,7 @@ class KittiDataset(DatasetTemplate):
             lidar_file = Path(os.path.join(self.cfg.save_dir, '%s-final_adv.bin' % idx))
             if not lidar_file.exists():
                 lidar_file = Path(os.path.join(self.cfg.save_dir, '%s.bin' % idx))
-        elif self.cfg is not None and 'IS_ADV' in self.cfg and self.cfg.transfer_attack_dir:
+        elif self.cfg is not None and 'transfer_attack_dir' in self.cfg and self.cfg.transfer_attack_dir:
             lidar_file = Path(os.path.join(self.cfg.transfer_attack_dir, '%s-final_adv.bin' % idx))
             if not lidar_file.exists():
                 lidar_file = Path(os.path.join(self.cfg.transfer_attack_dir, '%s.bin' % idx))

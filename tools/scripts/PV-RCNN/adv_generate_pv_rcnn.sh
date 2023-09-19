@@ -19,5 +19,27 @@
 #CUDA_VISIBLE_DEVICES=1 python test.py --subsample_num 323 --eps 0.20 --eps_iter 0.03 --num_steps 10 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU.py
 #CUDA_VISIBLE_DEVICES=1 python test.py --subsample_num 323 --eps 0.20 --eps_iter 0.03 --num_steps 10 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU.py --evaluate_adv
 
-CUDA_VISIBLE_DEVICES=2 python test.py --eps 0.20 --eps_iter 0.2 --num_steps 1 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU.py
-CUDA_VISIBLE_DEVICES=2 python test.py --eps 0.20 --eps_iter 0.2 --num_steps 1 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 2 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU.py --evaluate_adv
+#CUDA_VISIBLE_DEVICES=2 python test.py --eps 0.20 --eps_iter 0.2 --num_steps 1 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU.py
+#CUDA_VISIBLE_DEVICES=2 python test.py --eps 0.20 --eps_iter 0.2 --num_steps 1 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 2 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-IOU.py --evaluate_adv
+
+
+## MI-FGSM L2_dim01
+#CUDA_VISIBLE_DEVICES=0 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM.py --L_norm L2_dim01
+#CUDA_VISIBLE_DEVICES=1 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM_light.py --L_norm L2_dim01
+#CUDA_VISIBLE_DEVICES=2 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-MI_FGSM_PointPipl.py --L_norm L2_dim01
+
+## VMI-FGSM
+#CUDA_VISIBLE_DEVICES=1 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM.py
+#CUDA_VISIBLE_DEVICES=1 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM.py --evaluate_adv
+
+#CUDA_VISIBLE_DEVICES=0 python ./test.py --subsample_num 323 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM.py
+#CUDA_VISIBLE_DEVICES=0 python ./test.py --subsample_num 323 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM.py --evaluate_adv
+
+## VMI-FGSM light
+#CUDA_VISIBLE_DEVICES=1 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM_light.py
+#CUDA_VISIBLE_DEVICES=1 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-VMI_FGSM_light.py --evaluate_adv
+
+
+### is_reVoxelization
+CUDA_VISIBLE_DEVICES=0 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-reVoxelization.py
+CUDA_VISIBLE_DEVICES=0 python ./test.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-reVoxelization.py --evaluate_adv

@@ -30,3 +30,5 @@ CUDA_VISIBLE_DEVICES=0 python test.py --subsample_num 323 --strategy PGD-filterO
 #CUDA_VISIBLE_DEVICES=1 python test.py --subsample_num 323 --strategy PGD-filterOnce --fixedEPS 0.5 --attach_rate 0.4 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-AdaptiveEPS.py
 #CUDA_VISIBLE_DEVICES=1 python test.py --subsample_num 323 --strategy PGD-filterOnce --fixedEPS 0.5 --attach_rate 0.5 --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt ../checkpoints/pv_rcnn_8369.pth --batch_size 1 --cfg_pyfile cfgs/adv_pv_rcnn/pv_rcnn-voxels_adv-AdaptiveEPS.py
 #
+
+

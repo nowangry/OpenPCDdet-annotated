@@ -14,18 +14,17 @@ IS_ADV = True
 adv_flag = True
 
 
-MI_FGSM = dict(
+VMI_FGSM = dict(
     eps=0.2,
     eps_iter=0.03,
     num_steps=10,
     decay=1.0,
-    # L_norm='L1',
-    L_norm='L2',
-    # L_norm='L2_dim01',
-    strategy='',
-    # strategy='light',
+    beta=3.0/2,
+    N=20,
+    # strategy='',
+    strategy='light',
 )
-save_dir = r'/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/MI_FGSM'
+save_dir = r'/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/VMI_FGSM'
 # adv ------------------------------------------------------------------------------------------------------------------
 
 

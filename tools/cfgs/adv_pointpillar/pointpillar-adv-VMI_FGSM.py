@@ -14,31 +14,23 @@ IS_ADV = True
 adv_flag = True
 
 
-MI_FGSM = dict(
+VMI_FGSM = dict(
     eps=0.2,
     eps_iter=0.03,
     num_steps=10,
     decay=1.0,
-    # L_norm='L1',
-    L_norm='L2',
-    # L_norm='L2_dim01',
+    beta=3.0/2,
+    N=20,
     strategy='',
     # strategy='light',
 )
-save_dir = r'/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/MI_FGSM'
+save_dir = r'/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/VMI_FGSM'
 # adv ------------------------------------------------------------------------------------------------------------------
 
 
 voxel_generator = dict(
-    range=[0, -40, -3, 70.4, 40, 1],
-    voxel_size=[0.05, 0.05, 0.1],
-    max_points_in_voxel=5,
+    range=[0, -39.68, -3, 69.12, 39.68, 1],
+    voxel_size=[0.16, 0.16, 4],
+    max_points_in_voxel=32,
     max_voxel_num=[40000, 40000],
 )
-# POINT_CLOUD_RANGE: [0, -40, -3, 70.4, 40, 1]
-# voxel_generator = dict(
-#     range=[-54, -54, -5.0, 54, 54, 3.0],
-#     voxel_size=[0.075, 0.075, 0.2],
-#     max_points_in_voxel=10,
-#     max_voxel_num=[120000, 160000],
-# )

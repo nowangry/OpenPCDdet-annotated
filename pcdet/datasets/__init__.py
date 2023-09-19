@@ -48,7 +48,7 @@ def build_dataloader(dataset_cfg, class_names, batch_size, dist, root_path=None,
                      logger=None, training=True, merge_all_iters_to_one_epoch=False, total_epochs=0,
                      cfg=None):
 
-    if ('is_adv_eval' in cfg and cfg.is_adv_eval) or 'is_adv_eval' in cfg:
+    if ('is_adv_eval' in cfg and cfg.is_adv_eval) or ('transfer_attack_dir' in cfg and cfg.transfer_attack_dir) or True:
         dataset = __all__[dataset_cfg.DATASET](
             dataset_cfg=dataset_cfg,
             class_names=class_names,

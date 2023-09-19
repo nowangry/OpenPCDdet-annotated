@@ -186,7 +186,8 @@ def get_stat_result_from_txt_KITTI_bev(dir_root, floder_format, fixedEPS_list, a
                     elif 'dist_hausdorff_list: mean=' in line:
                         break
 
-    mAPs = (mAPs_Cars + mAPs_Pedestrian + mAPs_Cyclist) / 3.0
+    # mAPs = (mAPs_Cars + mAPs_Pedestrian + mAPs_Cyclist) / 3.0
+    mAPs = mAPs_Cars
     return mAPs, modification_rate, P_L1, P_L2, P_Linf, P_Chamfer
 
 def get_stat_result_from_txt_waymo(dir_root, floder_format, fixedEPS_list, attach_rate_list):

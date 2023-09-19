@@ -1,7 +1,7 @@
 import numpy as np
 from det3d.ops.point_cloud.point_cloud_ops import points_to_voxel, points_to_voxel_for_iterAttack, \
-    points_to_voxel_mark_index, points_to_voxel_for_iterAttack_momentum
-
+    points_to_voxel_mark_index, points_to_voxel_for_iterAttack_momentum, \
+    points_to_voxel_for_iterAttack_momentum_GV, points_to_voxel_for_iterAttack_momentum_V
 
 class VoxelGenerator:
     def __init__(self, voxel_size, point_cloud_range, max_num_points, max_voxels=20000):
@@ -71,6 +71,46 @@ class VoxelGenerator:
             max_voxels,
             points_innocent_ori,
             momentum,
+        )
+
+    def generate_for_iterAttack_momentum_GV(self, points, max_voxels=-1, points_innocent_ori=np.array([]),
+                                         momentum=np.array([]), GV_grad=np.array([]), grad_points=np.array([]),
+                                         points_adv=np.array([]), v=np.array([]),
+        ):
+        if max_voxels == -1:
+            max_voxels = self._max_voxels
+
+        return points_to_voxel_for_iterAttack_momentum_GV(
+            points,
+            self._voxel_size,
+            self._point_cloud_range,
+            self._max_num_points,
+            True,
+            max_voxels,
+            points_innocent_ori,
+            momentum,
+            GV_grad,
+            grad_points,
+            points_adv,
+            v,
+        )
+
+    def generate_for_iterAttack_momentum_V(self, points, max_voxels=-1, points_innocent_ori=np.array([]),
+                                         momentum=np.array([]), v=np.array([]),
+        ):
+        if max_voxels == -1:
+            max_voxels = self._max_voxels
+
+        return points_to_voxel_for_iterAttack_momentum_V(
+            points,
+            self._voxel_size,
+            self._point_cloud_range,
+            self._max_num_points,
+            True,
+            max_voxels,
+            points_innocent_ori,
+            momentum,
+            v,
         )
 
     @property

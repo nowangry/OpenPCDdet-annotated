@@ -23,6 +23,8 @@ def parse_config():
     ## adv
     parser.add_argument('--cfg_file', type=str, default=None, help='specify the config for training')
     parser.add_argument('--cfg_pyfile', type=str, default=None, help='specify the .py config for training')
+    parser.add_argument('--is_torch_adv', action='store_true', default=False)
+
     # adv eval
     parser.add_argument('--evaluate_adv', action='store_true', default=False, help='whether to evaluate ADV examples')
     parser.add_argument('--transfer_adv', action='store_true', default=False, help='whether to perform transfer attack')
@@ -37,6 +39,10 @@ def parse_config():
     parser.add_argument('--num_steps', type=int, default=None, help='specify num_steps for IOU-ADV')
     parser.add_argument('--eps', type=float, default=None, help='specify eps for IOU-ADV')
     parser.add_argument('--eps_iter', type=float, default=None, help='specify eps_iter for IOU-ADV')
+
+    ## MI-FGSM
+    parser.add_argument('--L_norm', type=str, default=None, help='specify L_norm for MI-FGSM')
+
 
     parser.add_argument('--batch_size', type=int, default=None, required=False, help='batch size for training')
     parser.add_argument('--workers', type=int, default=4, help='number of workers for dataloader')
@@ -109,9 +115,13 @@ def parse_config():
             cfg.adv_alg = 'IOU'
 
         elif 'MI_FGSM' in cfg:
+            if args.subsample_num is not None:
+                cfg.MI_FGSM.subsample_num = args.subsample_num
+            if args.L_norm is not None:
+                cfg.MI_FGSM.L_norm = args.L_norm
             cfg_adv = cfg.MI_FGSM
             folder = '{}eps_{}-eps_iter_{}-num_steps_{}-decay_{}-L_norm_{}{}'.format(
-                'stragety_{}-'.format(cfg.MI_FGSM.get('strategy', False)) if cfg.MI_FGSM.get('strategy', False) else '',
+                'stragety_{}-'.format(cfg_adv.get('strategy', False)) if cfg_adv.get('strategy', False) else '',
                 cfg_adv.eps, cfg_adv.eps_iter,
                 cfg_adv.num_steps,
                 cfg_adv.decay,
@@ -121,6 +131,24 @@ def parse_config():
             cfg.exp_name = 'MI_FGSM-' + folder
             cfg.save_dir = os.path.join(cfg.save_dir, folder)
             cfg.adv_alg = 'MI_FGSM'
+
+        elif 'VMI_FGSM' in cfg:
+            if args.subsample_num is not None:
+                cfg.VMI_FGSM.subsample_num = args.subsample_num
+            cfg_adv = cfg.VMI_FGSM
+            folder = '{}eps_{}-eps_iter_{}-num_steps_{}-decay_{}-beta_{}-N_{}{}'.format(
+                'stragety_{}-'.format(cfg_adv.get('strategy', False)) if cfg_adv.get('strategy', False) else '',
+                cfg_adv.eps,
+                cfg_adv.eps_iter,
+                cfg_adv.num_steps,
+                cfg_adv.decay,
+                cfg_adv.beta,
+                cfg_adv.N,
+                '-n_{}'.format(cfg_adv.get('subsample_num', False)) if cfg_adv.get('subsample_num', False) else '',
+            )
+            cfg.exp_name = 'VMI_FGSM-' + folder
+            cfg.save_dir = os.path.join(cfg.save_dir, folder)
+            cfg.adv_alg = 'VMI_FGSM'
 
         elif 'AdaptiveEPS' in cfg:
             if args.fixedEPS is not None:
@@ -142,6 +170,12 @@ def parse_config():
             cfg.exp_name = 'AdaptiveEPS-' + folder
             cfg.save_dir = os.path.join(cfg.save_dir, folder)
             cfg.adv_alg = 'AdaptiveEPS'
+        elif 'is_reVoxelization' in cfg:
+            folder = 'reVoxelization'
+            cfg.exp_name = 'reVoxelization'
+            cfg.save_dir = os.path.join(cfg.save_dir, folder)
+            cfg.adv_alg = 'reVoxelization'
+
 
         args.eval_tag = Path(cfg.adv_alg) / cfg.exp_name
         cfg.dataset_type = 'KITTI'
@@ -342,6 +376,7 @@ def main():
     args, cfg = parse_config()
     if cfg.transfer_adv:
         transfer_main(args, cfg)
+        return
 
     if args.launcher == 'none':
         dist_test = False
@@ -412,7 +447,7 @@ def main():
         else:
             eval_single_ckpt(model, test_loader, args, eval_output_dir, logger, epoch_id, dist_test=dist_test)
 
-    if 'IS_ADV' in cfg and cfg.IS_ADV and cfg.is_adv_eval:
+    if cfg.get('IS_ADV', False) and cfg.get('is_adv_eval', False) and cfg.get('is_reVoxelization', False):
         if cfg.save_dir:
             cfg.dataset_type = 'KITTI'
             from tools.analysis.stat_permutation import stat_L_permutations_all_logger

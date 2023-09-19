@@ -1,6 +1,10 @@
 '''
 测试
 '''
+is_reVoxelization = True
+save_dir = r'/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/reVoxelization'
+
+
 is_innocent_eval = False  # 测试干净样本
 is_eval_after_attack = False
 is_adv_eval = False  # 测试对抗样本
@@ -11,23 +15,8 @@ is_evaluate_ASR = False
 
 # 生成对抗样本
 IS_ADV = True
+
 adv_flag = True
-
-
-MI_FGSM = dict(
-    eps=0.2,
-    eps_iter=0.03,
-    num_steps=10,
-    decay=1.0,
-    # L_norm='L1',
-    L_norm='L2',
-    # L_norm='L2_dim01',
-    strategy='',
-    # strategy='light',
-)
-save_dir = r'/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/MI_FGSM'
-# adv ------------------------------------------------------------------------------------------------------------------
-
 
 voxel_generator = dict(
     range=[0, -40, -3, 70.4, 40, 1],

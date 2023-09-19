@@ -135,60 +135,76 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
         batch_dict['cfg'] = cfg
         if 'IS_ADV' in cfg and cfg.is_adv_eval == False and cfg.transfer_adv == False:  # 生成对抗样本
             device = batch_dict['voxels'].device
-            if 'is_adv_points' not in cfg:  # Voxel Attack
-                if 'FGSM' in cfg:
-                    cfg.logger.info('=== FGSM ===')
-                    cfg.logger.info('attack parameters:')
-                    cfg.logger.info(cfg.FGSM)
-                    if 'PointPipl' in cfg.FGSM.get('strategy', ''):
-                        FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
-                    else:
-                        FGSM_Attack(model, batch_dict, device, cfg=cfg)
-                elif 'PGD' in cfg:
-                    cfg.logger.info('=== PGD ===')
-                    cfg.logger.info('attack parameters:')
-                    cfg.logger.info(cfg.PGD)
-                    if 'light' in cfg.PGD.get('strategy', ''):
-                        cfg.logger.info("=== Basic Framework ===")
-                        PGD_Attack_light(model, batch_dict, device, cfg=cfg)
-                    elif 'PointPipl' in cfg.PGD.get('strategy', ''):
-                        cfg.logger.info("=== PointPipl Framework ===")
-                        PGD_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
-                    else:
-                        PGD_Attack(model, batch_dict, device, cfg=cfg)
-                elif 'IOU' in cfg:
-                    cfg.logger.info('=== IOU ===')
-                    cfg.logger.info('attack parameters:')
-                    cfg.logger.info(cfg.IOU)
-                    if 'PointPipl' in cfg.IOU.get('strategy', ''):
-                        cfg.logger.info("=== PointPipl Framework ===")
-                        IOU_Attack_iter_PointPipl(model, batch_dict, device, cfg=cfg)
-                    else:
-                        IOU_Attack_iter(model, batch_dict, device, cfg=cfg)
-                elif 'MI_FGSM' in cfg:
-                    cfg.logger.info('=== MI_FGSM ===')
-                    cfg.logger.info('attack parameters:')
-                    cfg.logger.info(cfg.MI_FGSM)
-                    if 'light' in cfg.MI_FGSM.get('strategy', ''):
-                        cfg.logger.info("=== Basic Framework ===")
-                        MI_FGSM_Attack_light(model, batch_dict, device, cfg=cfg)
-                    elif 'PointPipl' in cfg.MI_FGSM.get('strategy', ''):
-                        cfg.logger.info("=== PointPipl Framework ===")
-                        MI_FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
-                    else:
-                        MI_FGSM_Attack(model, batch_dict, device, cfg=cfg)
-                elif 'AdaptiveEPS' in cfg:
-                    cfg.logger.info('=== AdaptiveEPS ===')
-                    cfg.logger.info('attack parameters:')
-                    cfg.logger.info(cfg.AdaptiveEPS)
-                    if 'light' in cfg.AdaptiveEPS.strategy:
-                        cfg.logger.info("=== Basic Framework ===")
-                        AdaptiveEPS_MI_Attack_light(model, batch_dict, device, cfg=cfg)
-                    elif 'PointPipl' in cfg.AdaptiveEPS.get('strategy', ''):
-                        cfg.logger.info("=== PointPipl Framework ===")
-                        AdaptiveEPS_MI_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
-                    else:
-                        AdaptiveEPS_MI_Attack(model, batch_dict, device, cfg=cfg)
+            if 'FGSM' in cfg:
+                cfg.logger.info('=== FGSM ===')
+                cfg.logger.info('attack parameters:')
+                cfg.logger.info(cfg.FGSM)
+                if 'PointPipl' in cfg.FGSM.get('strategy', ''):
+                    FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                elif cfg.is_torch_adv:
+                    FGSM_Attack_torch(model, batch_dict, device, cfg=cfg)
+                else:
+                    FGSM_Attack(model, batch_dict, device, cfg=cfg)
+            elif 'PGD' in cfg:
+                cfg.logger.info('=== PGD ===')
+                cfg.logger.info('attack parameters:')
+                cfg.logger.info(cfg.PGD)
+                if 'light' in cfg.PGD.get('strategy', ''):
+                    cfg.logger.info("=== Basic Framework ===")
+                    PGD_Attack_light(model, batch_dict, device, cfg=cfg)
+                elif 'PointPipl' in cfg.PGD.get('strategy', ''):
+                    cfg.logger.info("=== PointPipl Framework ===")
+                    PGD_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                else:
+                    PGD_Attack(model, batch_dict, device, cfg=cfg)
+            elif 'IOU' in cfg:
+                cfg.logger.info('=== IOU ===')
+                cfg.logger.info('attack parameters:')
+                cfg.logger.info(cfg.IOU)
+                if 'PointPipl' in cfg.IOU.get('strategy', ''):
+                    cfg.logger.info("=== PointPipl Framework ===")
+                    IOU_Attack_iter_PointPipl(model, batch_dict, device, cfg=cfg)
+                else:
+                    IOU_Attack_iter(model, batch_dict, device, cfg=cfg)
+            elif 'MI_FGSM' in cfg:
+                cfg.logger.info('=== MI_FGSM ===')
+                cfg.logger.info('attack parameters:')
+                cfg.logger.info(cfg.MI_FGSM)
+                if 'light' in cfg.MI_FGSM.get('strategy', ''):
+                    cfg.logger.info("=== Basic Framework ===")
+                    MI_FGSM_Attack_light(model, batch_dict, device, cfg=cfg)
+                elif 'PointPipl' in cfg.MI_FGSM.get('strategy', ''):
+                    cfg.logger.info("=== PointPipl Framework ===")
+                    MI_FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                else:
+                    MI_FGSM_Attack(model, batch_dict, device, cfg=cfg)
+            elif 'VMI_FGSM' in cfg:
+                cfg.logger.info('=== VMI_FGSM ===')
+                cfg.logger.info('attack parameters:')
+                cfg.logger.info(cfg.VMI_FGSM)
+                if 'light' in cfg.VMI_FGSM.get('strategy', ''):
+                    cfg.logger.info("=== Basic Framework ===")
+                    VMI_FGSM_Attack_light(model, batch_dict, device, cfg=cfg)
+                elif 'PointPipl' in cfg.VMI_FGSM.get('strategy', ''):
+                    cfg.logger.info("=== PointPipl Framework ===")
+                    VMI_FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                else:
+                    VMI_FGSM_Attack(model, batch_dict, device, cfg=cfg)
+            elif 'AdaptiveEPS' in cfg:
+                cfg.logger.info('=== AdaptiveEPS ===')
+                cfg.logger.info('attack parameters:')
+                cfg.logger.info(cfg.AdaptiveEPS)
+                if 'light' in cfg.AdaptiveEPS.strategy:
+                    cfg.logger.info("=== Basic Framework ===")
+                    AdaptiveEPS_MI_Attack_light(model, batch_dict, device, cfg=cfg)
+                elif 'PointPipl' in cfg.AdaptiveEPS.get('strategy', ''):
+                    cfg.logger.info("=== PointPipl Framework ===")
+                    AdaptiveEPS_MI_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                else:
+                    AdaptiveEPS_MI_Attack(model, batch_dict, device, cfg=cfg)
+            elif 'is_reVoxelization' in cfg and cfg.is_reVoxelization:
+                cfg.logger.info('=== reVoxelization ===')
+                reVoxelization(model, batch_dict, device, cfg=cfg)
 
             progress_bar.update()
             continue
@@ -269,37 +285,6 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
     logger.info('****************Evaluation done.*****************')
 
     np.save(result_dir / 'result_dict.npy', result_dict)
-    # if cfg.is_adv_eval and (result_dir / 'result_dict.npy').exists():
-    #     result_dict = np.load(result_dir / 'result_dict.npy', allow_pickle=True).item()
-    #     logger_adv_eval = cfg.logger_adv_eval
-    #     difficulty_list = ['easy', 'moderate', 'hard']
-    #     # metric_list = ['bbox', 'bev', '3d', 'aos']
-    #     metric_list = ['bev', '3d']
-    #     stat_dict_R40_bev = {
-    #         'Car': [],
-    #         'Pedestrian': [],
-    #         'Cyclist': [],
-    #     }
-    #     stat_dict_R40_3d = {
-    #         'Car': [],
-    #         'Pedestrian': [],
-    #         'Cyclist': [],
-    #     }
-    #     for metr in ['bev', '3d']:
-    #         for class_name in class_names:
-    #             for key, value in result_dict.items():
-    #                 if 'R40' not in key:
-    #                     continue
-    #                 if class_name in key:
-    #                     if 'bev' in key and 'bev' in metr:
-    #                         stat_dict_R40_bev[class_name].append(value)
-    #                     elif '3d' in key and '3d' in metr:
-    #                         stat_dict_R40_3d[class_name].append(value)
-    #
-    #             logger_adv_eval.info(class_name + '_bev/R40_mean: {:.2f}'.format(np.array(stat_dict_R40_bev[class_name]).mean()))
-    #             logger_adv_eval.info(class_name + '_3d/R40_mean: {:.2f}'.format(np.array(stat_dict_R40_3d[class_name]).mean()))
-
-
     return ret_dict
 
 
