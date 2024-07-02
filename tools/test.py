@@ -72,21 +72,29 @@ def parse_config():
         cfg.update(pycfg)
 
         if 'FGSM' in cfg:
-            if cfg.FGSM.get('strategy', ''):
-                folder = 'strategy_{}-Epsilon_{}'.format(cfg.FGSM.strategy, cfg.FGSM.Epsilon)
-            else:
-                folder = 'Epsilon_{}'.format(cfg.FGSM.Epsilon)
+            if args.subsample_num is not None:
+                cfg.FGSM.subsample_num = args.subsample_num
+            if args.strategy is not None:
+                cfg.FGSM.strategy = args.strategy
+            folder = '{}Epsilon_{}{}'.format(
+                'stragety_{}-'.format(cfg.FGSM.get('strategy', False)) if cfg.FGSM.get('strategy', False) else '',
+                cfg.FGSM.Epsilon,
+                '-n_{}'.format(cfg.FGSM.get('subsample_num', False)) if cfg.FGSM.get('subsample_num', False) else '',)
             cfg.exp_name = 'FGSM-' + folder
             cfg.save_dir = os.path.join(cfg.save_dir, folder)
             cfg.adv_alg = 'FGSM'
 
         elif 'PGD' in cfg:
+            if args.subsample_num is not None:
+                cfg.PGD.subsample_num = args.subsample_num
+            if args.strategy is not None:
+                cfg.PGD.strategy = args.strategy
             folder = '{}eps_{}-eps_iter_{}-num_steps_{}{}{}'.format(
                 'stragety_{}-'.format(cfg.PGD.get('strategy', False)) if cfg.PGD.get('strategy', False) else '',
                 cfg.PGD.eps, cfg.PGD.eps_iter,
                 cfg.PGD.num_steps,
                 '-randStart' if cfg.PGD.random_start else '',
-                '-n_{}-'.format(cfg.PGD.get('subsample_num', False)) if cfg.PGD.get('subsample_num', False) else '',
+                '-n_{}'.format(cfg.PGD.get('subsample_num', False)) if cfg.PGD.get('subsample_num', False) else '',
             )
             cfg.exp_name = 'PGD-' + folder
             cfg.save_dir = os.path.join(cfg.save_dir, folder)
@@ -102,6 +110,8 @@ def parse_config():
                 cfg.IOU.eps_iter = args.eps_iter
             if args.subsample_num is not None:
                 cfg.IOU.subsample_num = args.subsample_num
+            if args.strategy is not None:
+                cfg.IOU.strategy = args.strategy
             folder = '{}eps_{}-eps_iter_{}-num_steps_{}-Lambda_{}-iou_{}-score_{}{}'.format(
                 'stragety_{}-'.format(cfg.IOU.get('strategy', False)) if cfg.IOU.get('strategy', False) else '',
                 cfg.IOU.eps, cfg.IOU.eps_iter,
@@ -119,6 +129,8 @@ def parse_config():
                 cfg.MI_FGSM.subsample_num = args.subsample_num
             if args.L_norm is not None:
                 cfg.MI_FGSM.L_norm = args.L_norm
+            if args.strategy is not None:
+                cfg.MI_FGSM.strategy = args.strategy
             cfg_adv = cfg.MI_FGSM
             folder = '{}eps_{}-eps_iter_{}-num_steps_{}-decay_{}-L_norm_{}{}'.format(
                 'stragety_{}-'.format(cfg_adv.get('strategy', False)) if cfg_adv.get('strategy', False) else '',
@@ -135,6 +147,8 @@ def parse_config():
         elif 'VMI_FGSM' in cfg:
             if args.subsample_num is not None:
                 cfg.VMI_FGSM.subsample_num = args.subsample_num
+            if args.strategy is not None:
+                cfg.VMI_FGSM.strategy = args.strategy
             cfg_adv = cfg.VMI_FGSM
             folder = '{}eps_{}-eps_iter_{}-num_steps_{}-decay_{}-beta_{}-N_{}{}'.format(
                 'stragety_{}-'.format(cfg_adv.get('strategy', False)) if cfg_adv.get('strategy', False) else '',
@@ -159,17 +173,34 @@ def parse_config():
                 cfg.AdaptiveEPS.strategy = args.strategy
             if args.subsample_num is not None:
                 cfg.AdaptiveEPS.subsample_num = args.subsample_num
+            if args.strategy is not None:
+                cfg.AdaptiveEPS.strategy = args.strategy
             folder = 'strategy_{}-eps_{}-num_steps_{}-fixedEPS_{}-attach_rate_{}{}'.format(
                 cfg.AdaptiveEPS.strategy,
                 cfg.AdaptiveEPS.eps,
                 cfg.AdaptiveEPS.num_steps,
                 cfg.AdaptiveEPS.fixedEPS,
                 cfg.AdaptiveEPS.attach_rate,
-                '-n_{}-'.format(cfg.AdaptiveEPS.get('subsample_num', False)) if cfg.AdaptiveEPS.get('subsample_num', False) else '',
+                '-n_{}'.format(cfg.AdaptiveEPS.get('subsample_num', False)) if cfg.AdaptiveEPS.get('subsample_num', False) else '',
               )
             cfg.exp_name = 'AdaptiveEPS-' + folder
             cfg.save_dir = os.path.join(cfg.save_dir, folder)
             cfg.adv_alg = 'AdaptiveEPS'
+        elif 'SlowLiDAR' in cfg:
+            if args.strategy is not None:
+                cfg.SlowLiDAR.strategy = args.strategy
+            if args.subsample_num is not None:
+                cfg.SlowLiDAR.subsample_num = args.subsample_num
+            folder = 'strategy_{}-eps_{}-eps_iter_{}-num_steps_{}{}'.format(
+                cfg.SlowLiDAR.strategy,
+                cfg.SlowLiDAR.eps,
+                cfg.SlowLiDAR.eps_iter,
+                cfg.SlowLiDAR.num_steps,
+                '-n_{}'.format(cfg.SlowLiDAR.get('subsample_num', False)) if cfg.SlowLiDAR.get('subsample_num', False) else '',
+              )
+            cfg.exp_name = 'SlowLiDAR-' + folder
+            cfg.save_dir = os.path.join(cfg.save_dir, folder)
+            cfg.adv_alg = 'SlowLiDAR'
         elif 'is_reVoxelization' in cfg:
             folder = 'reVoxelization'
             cfg.exp_name = 'reVoxelization'
@@ -193,6 +224,7 @@ def parse_config():
     # 更新
     cfg.is_adv_eval = args.evaluate_adv
     cfg.transfer_adv = args.transfer_adv
+    cfg.is_torch_adv = args.is_torch_adv
 
     if args.subsample_num is not None:
         cfg.subsample_num = args.subsample_num
@@ -290,13 +322,13 @@ def repeat_eval_ckpt(model, test_loader, args, eval_output_dir, logger, ckpt_dir
 def transfer_main(args, cfg):
     if 'pv_rcnn' in args.cfg_file:
         cfg.transfer_attack_dirs = {
-            'FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/FGSM/Epsilon_0.2',
-            'PGD': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/eps_0.2-eps_iter_0.03-num_steps_10-randStart',
-            'PGD_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-randStart',
-            'MI_FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
-            'MI_FGSM_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
-            'IOU': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/IOU/eps_0.2-eps_iter_0.2-num_steps_1-Lambda_0.1-iou_0.1-score_0.1',
-            'AdaptiveEPS': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/AdaptiveEPS/strategy_PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.5-attach_rate_0.3',
+            # 'FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/FGSM/Epsilon_0.2',
+            # 'PGD': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            # 'PGD_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            # 'MI_FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            # 'MI_FGSM_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            # 'IOU': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/IOU/eps_0.2-eps_iter_0.2-num_steps_1-Lambda_0.1-iou_0.1-score_0.1',
+            # 'AdaptiveEPS': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/AdaptiveEPS/strategy_PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.5-attach_rate_0.3',
             'AdaptiveEPS_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/AdaptiveEPS/strategy_light-PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.5-attach_rate_0.5',
         }
     elif 'pointpillar' in args.cfg_file:
@@ -310,6 +342,48 @@ def transfer_main(args, cfg):
             'AdaptiveEPS': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/AdaptiveEPS/strategy_PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.3-attach_rate_0.2',
             'AdaptiveEPS_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/AdaptiveEPS/strategy_light-PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.3-attach_rate_0.2',
         }
+    elif 'pointrcnn' in args.cfg_file:
+        # cfg.transfer_attack_dirs = {
+        #     'FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/FGSM/Epsilon_0.2',
+        #     'PGD': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/PGD/eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+        #     'PGD_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/PGD/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+        #     'MI_FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/MI_FGSM/eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+        #     'MI_FGSM_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/MI_FGSM/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+        #     'IOU': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/IOU/eps_0.2-eps_iter_0.2-num_steps_1-Lambda_0.1-iou_0.1-score_0.1',
+        #     'AdaptiveEPS': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/AdaptiveEPS/strategy_PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.3-attach_rate_0.2',
+        #     'AdaptiveEPS_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/AdaptiveEPS/strategy_light-PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.3-attach_rate_0.2',
+        # }
+        cfg.transfer_attack_dirs = {
+            'FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/FGSM/Epsilon_0.2',
+            'PGD': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            'PGD_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            'MI_FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            'MI_FGSM_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            'IOU': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/IOU/eps_0.2-eps_iter_0.2-num_steps_1-Lambda_0.1-iou_0.1-score_0.1',
+            'AdaptiveEPS': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/AdaptiveEPS/strategy_PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.5-attach_rate_0.3',
+            'AdaptiveEPS_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/AdaptiveEPS/strategy_light-PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.5-attach_rate_0.5',
+        }
+    elif 'voxel_rcnn_car' in args.cfg_file:
+        cfg.transfer_attack_dirs = {
+            # 'FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/FGSM/Epsilon_0.2',
+            # 'PGD': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/PGD/eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            # 'PGD_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/PGD/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            # 'MI_FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/MI_FGSM/eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            # 'MI_FGSM_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/MI_FGSM/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            # 'IOU': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/IOU/eps_0.2-eps_iter_0.2-num_steps_1-Lambda_0.1-iou_0.1-score_0.1',
+            # 'AdaptiveEPS': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/AdaptiveEPS/strategy_PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.3-attach_rate_0.2',
+            'AdaptiveEPS_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PV_RCNN-adv/AdaptiveEPS/strategy_light-PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.3-attach_rate_0.2',
+        }
+        # cfg.transfer_attack_dirs = {
+            # 'FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/FGSM/Epsilon_0.2',
+            # 'PGD': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            # 'PGD_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/PGD/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-randStart',
+            # 'MI_FGSM': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            # 'MI_FGSM_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/MI_FGSM/stragety_light-eps_0.2-eps_iter_0.03-num_steps_10-decay_1.0-L_norm_L2',
+            # 'IOU': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/IOU/eps_0.2-eps_iter_0.2-num_steps_1-Lambda_0.1-iou_0.1-score_0.1',
+            # 'AdaptiveEPS': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/AdaptiveEPS/strategy_PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.5-attach_rate_0.3',
+            # 'AdaptiveEPS_light': '/data/dataset_wujunqi/Outputs/GSVA/KITTI/PointPillar-adv/AdaptiveEPS/strategy_light-PGD-filterOnce-eps_0.5-num_steps_10-fixedEPS_0.5-attach_rate_0.5',
+        # }
 
     for key_adv in cfg.transfer_attack_dirs:
         cfg.transfer_attack_dir = cfg.transfer_attack_dirs[key_adv]
@@ -447,7 +521,7 @@ def main():
         else:
             eval_single_ckpt(model, test_loader, args, eval_output_dir, logger, epoch_id, dist_test=dist_test)
 
-    if cfg.get('IS_ADV', False) and cfg.get('is_adv_eval', False) and cfg.get('is_reVoxelization', False):
+    if cfg.get('IS_ADV', False) and cfg.get('is_adv_eval', False) and not cfg.get('is_reVoxelization', False):
         if cfg.save_dir:
             cfg.dataset_type = 'KITTI'
             from tools.analysis.stat_permutation import stat_L_permutations_all_logger

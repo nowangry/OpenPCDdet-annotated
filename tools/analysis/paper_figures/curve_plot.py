@@ -885,7 +885,7 @@ def curve_PCSel_opposite_v1_waymo_pillar():
 if __name__ == '__main__':
     # plot_doubleY()
 
-    # curve_PCSel_nuscenes_voxel()
+    curve_PCSel_nuscenes_voxel()
     # curve_PCSel_nuscenes_pillar()
     # curve_PCSel_waymo_voxel()
     # curve_PCSel_waymo_pillar()

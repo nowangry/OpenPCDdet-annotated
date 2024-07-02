@@ -1205,7 +1205,7 @@ def IOU_Attack(model, example, device, **kwargs):
     return predictions
 
 
-def IOU_Attack_iter(model, example, device, **kwargs):
+def   IOU_Attack_iter(model, example, device, **kwargs):
     cfg = kwargs['cfg']
     eps = cfg.IOU.eps
     eps_iter = cfg.IOU.eps_iter
@@ -3379,6 +3379,88 @@ def AdaptiveEPS_MI_Attack_cuda(model, example, device, **kwargs):
         predictions = model(example, return_loss=False, **kwargs, is_eval_after_attack=True)
     return predictions
 
+
+
+from tools.SlowLiDAR.dist_lib.dist_metric import L2Dist, ChamferDist, HausdorffDist
+from tools.SlowLiDAR.attack_lib.attack_utils import total_loss
+from tools.SlowLiDAR.processing.postprocessing import filter_pred
+
+
+def SlowLiDAR_voxel_light(model, example, device, **kwargs):
+    cfg = kwargs['cfg']
+    eps = cfg.SlowLiDAR.eps
+    eps_iter = cfg.SlowLiDAR.eps_iter
+    num_steps = cfg.SlowLiDAR.num_steps
+    strategy = cfg.SlowLiDAR.strategy
+    dir_save_adv = cfg.SlowLiDAR.save_dir
+    cls_threshold = 0.05
+    nms_iou_threshold = 0.1
+    nms_top = 3000
+
+    # voxel to point
+    voxel_innocent_ori = example['voxels'].clone()
+    example['voxels'].requires_grad = True
+    perm_mask = permutation_mask(example['voxels'].shape, example['num_points'])
+    # ori_data = torch.masked_select(voxel_innocent_ori, perm_mask).view(1, -1, 3)
+
+    for n_step in range(num_steps):
+        if n_step == 0:
+            if cfg.SlowLiDAR.random_start:
+                # Starting at a uniformly random point
+                permutation = torch.empty_like(example['voxels']).uniform_(-eps, eps) * perm_mask
+                example['voxels'] = example['voxels'] + permutation
+
+        # Calculate loss
+        # losses = model(example, return_loss=True, **kwargs, is_eval_after_attack=False)
+        predictions = model(example, return_loss=False, **kwargs, is_eval_after_attack=True)
+        # before_corners, after_corners = filter_pred(pred, cls_threshold, nms_iou_threshold, nms_top)
+
+        # compute loss and backward
+        pred_boxes = predictions[0]['box3d_lidar'][:, [0, 1, 2, 3, 4, 5, -1]]  # N * 7
+        # pred_scores = predictions[0]['scores']  # N
+        # pre_labels = predictions[0]['label_preds']
+        # adv_data = torch.masked_select(example['voxels'], perm_mask).view(1, -1, 3)
+        # loss = total_loss(predictions, pred_boxes, cls_threshold, ori_data, adv_data)
+        t1 = time.time()
+        loss = total_loss(predictions, pred_boxes, cls_threshold)
+        t_loss = time.time()
+        # Update adversarial images
+        grad = torch.autograd.grad(loss, example['voxels'],
+                                   retain_graph=False, create_graph=False)[0]
+        # mask voxel内空白的点、intensity、timestamp
+        permutation = eps_iter * grad.sign() * perm_mask
+        example['voxels'] = example['voxels'] + permutation * (-1.0)
+        delta = torch.clamp(example['voxels'] - voxel_innocent_ori, min=-eps, max=eps)
+        example['voxels'] = voxel_innocent_ori + delta
+        cfg.logger.info('Iter {}: detection_loss={:.6f}'.format(n_step, loss))
+
+        # light version
+        ## coordinate adjustment
+    points_adv, points_innocent_ori = voxel_to_point_numba_for_iterAttack(
+        example['voxels'].cpu().detach().numpy(),
+        example['num_points'].cpu().detach().numpy(),
+        voxel_innocent_ori.cpu().detach().numpy())
+    # point to voxel
+    voxels, coordinates, num_points = cfg.voxelization.voxel_generator.generate(points_adv)
+    save_to_example(example, voxels, coordinates, num_points, device)
+
+    # save
+    assert points_adv.shape == points_innocent_ori.shape
+    token = example['metadata'][0]['token']
+    points_adv.tofile(os.path.join(dir_save_adv, token + '.bin'))
+    points_innocent_ori.tofile(os.path.join(dir_save_adv, token + '-innocent_ori.bin'))
+    # points_innocent_v0.tofile(os.path.join(dir_save_adv, token + '-innocent.bin'))
+    # grad_points.tofile(os.path.join(dir_save_adv, token + '-innocent_gradient.bin'))
+    # save combined pointclouds
+    if "NuScenesDataset" in cfg.dataset_type:
+        save_origin_points(cfg,
+                           example['points'][0].detach().cpu().numpy().reshape(-1, example['points'][0].shape[1]),
+                           points_innocent_ori, points_adv,
+                           token, dir_save_adv)
+
+    with torch.no_grad():
+        predictions = model(example, return_loss=False, **kwargs, is_eval_after_attack=True)
+    return predictions
 
 from tools.GSDA_Attacker.loss_utils import _get_kappa_ori
 from tools.GSDA_Attacker.utility import *

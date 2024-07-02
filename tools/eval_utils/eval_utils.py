@@ -141,6 +141,8 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
                 cfg.logger.info(cfg.FGSM)
                 if 'PointPipl' in cfg.FGSM.get('strategy', ''):
                     FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                elif 'keypoints' in cfg.FGSM.get('strategy', ''):
+                    FGSM_Attack_PointPipl_KeyPoint(model, batch_dict, device, cfg=cfg)
                 elif cfg.is_torch_adv:
                     FGSM_Attack_torch(model, batch_dict, device, cfg=cfg)
                 else:
@@ -155,6 +157,8 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
                 elif 'PointPipl' in cfg.PGD.get('strategy', ''):
                     cfg.logger.info("=== PointPipl Framework ===")
                     PGD_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                elif 'keypoints' in cfg.PGD.get('strategy', ''):
+                    PGD_Attack_PointPipl_KeyPoint(model, batch_dict, device, cfg=cfg)
                 else:
                     PGD_Attack(model, batch_dict, device, cfg=cfg)
             elif 'IOU' in cfg:
@@ -164,6 +168,8 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
                 if 'PointPipl' in cfg.IOU.get('strategy', ''):
                     cfg.logger.info("=== PointPipl Framework ===")
                     IOU_Attack_iter_PointPipl(model, batch_dict, device, cfg=cfg)
+                elif 'keypoints' in cfg.IOU.get('strategy', ''):
+                    IOU_Attack_iter_PointPipl_KeyPoint(model, batch_dict, device, cfg=cfg)
                 else:
                     IOU_Attack_iter(model, batch_dict, device, cfg=cfg)
             elif 'MI_FGSM' in cfg:
@@ -176,6 +182,8 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
                 elif 'PointPipl' in cfg.MI_FGSM.get('strategy', ''):
                     cfg.logger.info("=== PointPipl Framework ===")
                     MI_FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                elif 'keypoints' in cfg.MI_FGSM.get('strategy', ''):
+                    MI_FGSM_Attack_PointPipl_KeyPoint(model, batch_dict, device, cfg=cfg)
                 else:
                     MI_FGSM_Attack(model, batch_dict, device, cfg=cfg)
             elif 'VMI_FGSM' in cfg:
@@ -188,6 +196,8 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
                 elif 'PointPipl' in cfg.VMI_FGSM.get('strategy', ''):
                     cfg.logger.info("=== PointPipl Framework ===")
                     VMI_FGSM_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                elif 'keypoints' in cfg.VMI_FGSM.get('strategy', ''):
+                    VMI_FGSM_Attack_PointPipl_KeyPoint(model, batch_dict, device, cfg=cfg)
                 else:
                     VMI_FGSM_Attack(model, batch_dict, device, cfg=cfg)
             elif 'AdaptiveEPS' in cfg:
@@ -200,8 +210,22 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
                 elif 'PointPipl' in cfg.AdaptiveEPS.get('strategy', ''):
                     cfg.logger.info("=== PointPipl Framework ===")
                     AdaptiveEPS_MI_Attack_PointPipl(model, batch_dict, device, cfg=cfg)
+                elif 'keypoints' in cfg.AdaptiveEPS.get('strategy', ''):
+                    AdaptiveEPS_MI_Attack_PointPipl_KeyPoint(model, batch_dict, device, cfg=cfg)
                 else:
-                    AdaptiveEPS_MI_Attack(model, batch_dict, device, cfg=cfg)
+                    # AdaptiveEPS_MI_Attack(model, batch_dict, device, cfg=cfg)
+                    AdaptiveEPS_MI_Attack_SparseAblation(model, batch_dict, device, cfg=cfg)
+            elif 'SlowLiDAR' in cfg:
+                    cfg.logger.info('=== SlowLiDAR ===')
+                    cfg.logger.info('attack parameters:')
+                    cfg.logger.info(cfg.SlowLiDAR)
+                    if 'perturbation' in cfg.SlowLiDAR.strategy:
+                        cfg.logger.info("=== Perturbation Attack ===")
+                        if 'light' in cfg.SlowLiDAR.strategy:
+                            predictions = SlowLiDAR_voxel_light(model, batch_dict, device, cfg=cfg)
+                        # else:
+                        #     predictions = SlowLiDAR_voxel(model, batch_dict, device, **kwargs)
+                    return predictions
             elif 'is_reVoxelization' in cfg and cfg.is_reVoxelization:
                 cfg.logger.info('=== reVoxelization ===')
                 reVoxelization(model, batch_dict, device, cfg=cfg)

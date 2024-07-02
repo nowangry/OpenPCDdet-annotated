@@ -386,7 +386,10 @@ class VoxelSetAbstraction(nn.Module):
         通过最远点采样，获取每一帧点云的关键点
         ===============================
         """
-        keypoints = self.get_sampled_points(batch_dict)
+        if 'keypoints' in batch_dict:
+            keypoints = batch_dict['keypoints']
+        else:
+            keypoints = self.get_sampled_points(batch_dict)  # keypoints: (N1 + N2 + ..., 4), where 4 indicates [bs_idx, x, y, z]
 
         """
         ============================

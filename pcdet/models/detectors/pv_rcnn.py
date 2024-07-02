@@ -7,9 +7,9 @@ class PVRCNN(Detector3DTemplate):
         self.module_list = self.build_networks()
 
     """
-    1、MeanVFE
-    2、VoxelBackBone8x
-    3、HeightCompression  高度方向堆叠
+    1、MeanVFE  求平均得到batch_dict['voxel_features']
+    2、VoxelBackBone8x  稀疏卷积
+    3、HeightCompression  高度方向堆叠，将密集的3D tensor reshape为2D鸟瞰图特征    
     4、VoxelSetAbstraction
     5、BaseBEVBackbone
     6、AnchorHeadSingle  第一阶段预测结果

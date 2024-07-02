@@ -119,6 +119,31 @@ class KittiDataset(DatasetTemplate):
             lidar_file = Path(os.path.join(self.cfg.save_dir, '%s-final_adv.bin' % idx))
             if not lidar_file.exists():
                 lidar_file = Path(os.path.join(self.cfg.save_dir, '%s.bin' % idx))
+            if 'keypoints' in str(lidar_file):
+                print('str(lidar_file):{}'.format(str(lidar_file)))
+                try:
+                    points_adv = np.fromfile(str(lidar_file), dtype=np.float32).reshape(-1, 5)[:, 1:]
+                    print('points_adv.shape:{}'.format(points_adv.shape))
+
+                    points_adv.tofile(str(lidar_file))
+                    points_innocent_ori = np.fromfile(str(lidar_file).replace('.bin', '-innocent_ori.bin'), dtype=np.float32).reshape(-1, 5)[:, 1:]
+                    points_innocent_ori.tofile(str(lidar_file).replace('.bin', '-innocent_ori.bin'))
+                    keypoints_adv = np.fromfile(str(lidar_file).replace('.bin', '-keypoints_adv.bin'),
+                                                      dtype=np.float32).reshape(-1, 4)[:, 1:]
+                    keypoints_adv.tofile(str(lidar_file).replace('.bin', '-keypoints_adv.bin'))
+                except:
+                    points_adv = np.fromfile(str(lidar_file), dtype=np.float32).reshape(-1, 4)[:, 1:]
+                    print('points_adv.shape:{}'.format(points_adv.shape))
+
+                    points_adv.tofile(str(lidar_file))
+                    points_innocent_ori = np.fromfile(str(lidar_file).replace('.bin', '-innocent_ori.bin'),
+                                                      dtype=np.float32).reshape(-1, 4)[:, 1:]
+                    points_innocent_ori.tofile(str(lidar_file).replace('.bin', '-innocent_ori.bin'))
+                    keypoints_adv = np.fromfile(str(lidar_file).replace('.bin', '-keypoints_adv.bin'),
+                                                dtype=np.float32).reshape(-1, 3)[:, 1:]
+                    keypoints_adv.tofile(str(lidar_file).replace('.bin', '-keypoints_adv.bin'))
+                    print('points_adv.shape:{}'.format(points_adv.shape))
+                return points_adv
         elif self.cfg is not None and 'transfer_attack_dir' in self.cfg and self.cfg.transfer_attack_dir:
             lidar_file = Path(os.path.join(self.cfg.transfer_attack_dir, '%s-final_adv.bin' % idx))
             if not lidar_file.exists():
